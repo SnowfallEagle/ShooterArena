@@ -1,0 +1,10 @@
+# Folders
+.vs
+Binaries
+Build
+DerivedDataCache
+Intermediate
+Saved
+
+# File formats
+*.sln
