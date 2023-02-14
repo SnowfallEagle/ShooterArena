@@ -7,11 +7,10 @@
 #include "MSPlayerController.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MYSHOOTER_API AMSPlayerController : public APlayerController
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
 };

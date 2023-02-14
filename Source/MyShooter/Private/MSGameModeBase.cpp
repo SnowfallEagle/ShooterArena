@@ -8,7 +8,3 @@ AMSGameModeBase::AMSGameModeBase()
     DefaultPawnClass = AMSCharacter::StaticClass();
     PlayerControllerClass = AMSPlayerController::StaticClass();
 }
-
-void AMSGameModeBase::BeginPlay(int a, int b, int c, int d, int adsd, int fdfd)
-{
-}
