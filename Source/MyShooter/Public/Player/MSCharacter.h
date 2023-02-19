@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/MSCharacterMovementComponent.h"
 #include "MSCharacter.generated.h"
 
 class UCameraComponent;
@@ -21,29 +22,32 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USpringArmComponent* SpringArmComponent;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
-    bool bRunning = false;
+    bool bWantsToRun = false;
+    bool bMovingForward = true;
 
 public:
-    // Sets default values for this character's properties
-    AMSCharacter();
+    AMSCharacter(const FObjectInitializer& ObjInit);
 
-    // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    bool IsRunning() const { return bWantsToRun && bMovingForward && !GetVelocity().IsZero(); }
+
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    float GetMovementDirection() const;
+
 protected:
-    // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
 private:
-    FORCEINLINE void MoveForward(float Amount) { AddMovementInput(GetActorForwardVector(), Amount); }
+    void MoveForward(float Amount);
     FORCEINLINE void MoveRight(float Amount) { AddMovementInput(GetActorRightVector(), Amount); }
 
     FORCEINLINE void LookUp(float Amount) { AddControllerPitchInput(Amount); }
     FORCEINLINE void TurnAround(float Amount) { AddControllerYawInput(Amount); }
 
-    FORCEINLINE void Run(float Amount) { bRunning = Amount > 0.0f; }
+    FORCEINLINE void OnStartRunning() { bWantsToRun = true; }
+    FORCEINLINE void OnEndRunning() { bWantsToRun = false; }
 };

@@ -7,7 +7,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
-AMSCharacter::AMSCharacter()
+AMSCharacter::AMSCharacter(const FObjectInitializer& ObjInit) :
+    Super(ObjInit.SetDefaultSubobjectClass<UMSCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
     // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
@@ -30,7 +31,6 @@ void AMSCharacter::BeginPlay()
 void AMSCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -41,10 +41,34 @@ void AMSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     PlayerInputComponent->BindAxis("MoveForward", this, &AMSCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AMSCharacter::MoveRight);
 
-    PlayerInputComponent->BindAxis("Run", this, &AMSCharacter::Run);
+    PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AMSCharacter::OnStartRunning);
+    PlayerInputComponent->BindAction("Run", IE_Released, this, &AMSCharacter::OnEndRunning);
 
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMSCharacter::Jump);
 
     PlayerInputComponent->BindAxis("LookUp", this, &AMSCharacter::LookUp);
     PlayerInputComponent->BindAxis("TurnAround", this, &AMSCharacter::TurnAround);
+}
+
+void AMSCharacter::MoveForward(float Amount)
+{
+    bMovingForward = Amount > 0.0f;
+    AddMovementInput(GetActorForwardVector(), Amount);
+}
+
+float AMSCharacter::GetMovementDirection() const
+{
+    const FVector Velocity = GetVelocity();
+    if (Velocity.IsZero())
+    {
+        return 0.0f; 
+    }
+
+    const FVector ForwardVector = GetActorForwardVector();
+    const FVector VelocityNormal = Velocity.GetSafeNormal();
+
+    const float AngleBetween = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(ForwardVector, VelocityNormal)));
+    const FVector CrossProduct = FVector::CrossProduct(ForwardVector, VelocityNormal);
+
+    return CrossProduct.IsZero() ? AngleBetween : AngleBetween * FMath::Sign(CrossProduct.Z);
 }
