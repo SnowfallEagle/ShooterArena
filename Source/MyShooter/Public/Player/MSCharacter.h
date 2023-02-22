@@ -33,6 +33,15 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
     UAnimMontage* DeathAnimMontage;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Damage")
+    float LifeSpanOnDeath = 5.0f;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Damage")
+    FVector2D LandedDamageVelocity = FVector2D(900.0f, 1200.0f);
+
+    UPROPERTY(EditDefaultsOnly, Category = "Damage")
+    FVector2D LandedDamage = FVector2D(10.0f, 100.0f);
+
 private:
     bool bWantsToRun = false;
     bool bMovingForward = true;
@@ -41,7 +50,6 @@ public:
     AMSCharacter(const FObjectInitializer& ObjInit);
 
     virtual void Tick(float DeltaTime) override;
-
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
     UFUNCTION(BlueprintCallable, Category = "Movement")
@@ -65,4 +73,7 @@ private:
 
     void OnDeath();
     void OnHealthChanged(float NewHealth);
+
+    UFUNCTION()
+    void OnGroundLanded(const FHitResult& HitResult);
 };

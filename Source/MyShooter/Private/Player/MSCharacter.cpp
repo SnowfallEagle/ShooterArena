@@ -41,6 +41,8 @@ void AMSCharacter::BeginPlay()
 
     // Set health text first time
     OnHealthChanged(HealthComponent->GetHealth());
+
+    LandedDelegate.AddDynamic(this, &AMSCharacter::OnGroundLanded);
 }
 
 void AMSCharacter::Tick(float DeltaTime)
@@ -51,6 +53,8 @@ void AMSCharacter::Tick(float DeltaTime)
 void AMSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+    check(PlayerInputComponent);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &AMSCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AMSCharacter::MoveRight);
@@ -94,7 +98,7 @@ void AMSCharacter::OnDeath()
     PlayAnimMontage(DeathAnimMontage);
 
     GetCharacterMovement()->DisableMovement();
-    SetLifeSpan(5.0f);
+    SetLifeSpan(LifeSpanOnDeath);
 
     if (Controller)
     {
@@ -105,4 +109,18 @@ void AMSCharacter::OnDeath()
 void AMSCharacter::OnHealthChanged(float NewHealth)
 {
     HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.f"), NewHealth)));
+}
+
+void AMSCharacter::OnGroundLanded(const FHitResult& HitResult)
+{
+    const float ZFallVelocity = -GetVelocity().Z;
+    if (ZFallVelocity < LandedDamageVelocity.X)
+    {
+        return;
+    }
+
+    const float Damage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, ZFallVelocity);
+    TakeDamage(Damage, FDamageEvent(), nullptr, nullptr);
+
+    UE_LOG(LogCharacter, Display, TEXT("%f"), Damage);
 }

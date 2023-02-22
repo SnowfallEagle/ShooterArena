@@ -6,8 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "MSHealthComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnDeath)
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
+DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class MYSHOOTER_API UMSHealthComponent : public UActorComponent
@@ -15,8 +15,8 @@ class MYSHOOTER_API UMSHealthComponent : public UActorComponent
     GENERATED_BODY()
 
 public:
-    FOnDeath OnDeath;
-    FOnHealthChanged OnHealthChanged;
+    FOnDeathSignature OnDeath;
+    FOnHealthChangedSignature OnHealthChanged;
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", meta = (ClampMin = "0.0", ClampMax = "1000.0"))
@@ -42,10 +42,10 @@ private:
 public:
     UMSHealthComponent();
 
-    FORCEINLINE float GetHealth() const { return Health; }
-
     UFUNCTION(BlueprintCallable)
     FORCEINLINE bool IsDead() const { return FMath::IsNearlyZero(Health); }
+
+    FORCEINLINE float GetHealth() const { return Health; }
 
 protected:
     virtual void BeginPlay() override;
