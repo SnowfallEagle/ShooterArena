@@ -9,6 +9,8 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class UTextRenderComponent;
+class UMSHealthComponent;
 
 UCLASS()
 class MYSHOOTER_API AMSCharacter : public ACharacter
@@ -22,6 +24,16 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USpringArmComponent* SpringArmComponent;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UMSHealthComponent* HealthComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UTextRenderComponent* HealthTextComponent;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animation")
+    UAnimMontage* DeathAnimMontage;
+
+private:
     bool bWantsToRun = false;
     bool bMovingForward = true;
 
@@ -50,4 +62,7 @@ private:
 
     FORCEINLINE void OnStartRunning() { bWantsToRun = true; }
     FORCEINLINE void OnEndRunning() { bWantsToRun = false; }
+
+    void OnDeath();
+    void OnHealthChanged(float NewHealth);
 };

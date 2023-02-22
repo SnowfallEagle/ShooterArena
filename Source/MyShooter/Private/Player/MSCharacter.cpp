@@ -3,14 +3,16 @@
 #include "Player/MSCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/MSHealthComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Controller.h"
 
-// Sets default values
-AMSCharacter::AMSCharacter(const FObjectInitializer& ObjInit) :
-    Super(ObjInit.SetDefaultSubobjectClass<UMSCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+DEFINE_LOG_CATEGORY_STATIC(LogCharacter, All, All);
+
+AMSCharacter::AMSCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit.SetDefaultSubobjectClass<UMSCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
-    // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
@@ -19,21 +21,33 @@ AMSCharacter::AMSCharacter(const FObjectInitializer& ObjInit) :
 
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArmComponent);
+
+    HealthComponent = CreateDefaultSubobject<UMSHealthComponent>("HealthComponent");
+
+    HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
+    HealthTextComponent->SetupAttachment(GetRootComponent());
 }
 
-// Called when the game starts or when spawned
 void AMSCharacter::BeginPlay()
 {
     Super::BeginPlay();
+
+    check(HealthComponent);
+    check(HealthTextComponent);
+    check(GetCharacterMovement());
+
+    HealthComponent->OnDeath.AddUObject(this, &AMSCharacter::OnDeath);
+    HealthComponent->OnHealthChanged.AddUObject(this, &AMSCharacter::OnHealthChanged);
+
+    // Set health text first time
+    OnHealthChanged(HealthComponent->GetHealth());
 }
 
-// Called every frame
 void AMSCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 }
 
-// Called to bind functionality to input
 void AMSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -50,18 +64,12 @@ void AMSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     PlayerInputComponent->BindAxis("TurnAround", this, &AMSCharacter::TurnAround);
 }
 
-void AMSCharacter::MoveForward(float Amount)
-{
-    bMovingForward = Amount > 0.0f;
-    AddMovementInput(GetActorForwardVector(), Amount);
-}
-
 float AMSCharacter::GetMovementDirection() const
 {
     const FVector Velocity = GetVelocity();
     if (Velocity.IsZero())
     {
-        return 0.0f; 
+        return 0.0f;
     }
 
     const FVector ForwardVector = GetActorForwardVector();
@@ -71,4 +79,30 @@ float AMSCharacter::GetMovementDirection() const
     const FVector CrossProduct = FVector::CrossProduct(ForwardVector, VelocityNormal);
 
     return CrossProduct.IsZero() ? AngleBetween : AngleBetween * FMath::Sign(CrossProduct.Z);
+}
+
+void AMSCharacter::MoveForward(float Amount)
+{
+    bMovingForward = Amount > 0.0f;
+    AddMovementInput(GetActorForwardVector(), Amount);
+}
+
+void AMSCharacter::OnDeath()
+{
+    UE_LOG(LogCharacter, Display, TEXT("Player %s is dead"), *GetName());
+
+    PlayAnimMontage(DeathAnimMontage);
+
+    GetCharacterMovement()->DisableMovement();
+    SetLifeSpan(5.0f);
+
+    if (Controller)
+    {
+        Controller->ChangeState(NAME_Spectating);
+    }
+}
+
+void AMSCharacter::OnHealthChanged(float NewHealth)
+{
+    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.f"), NewHealth)));
 }
