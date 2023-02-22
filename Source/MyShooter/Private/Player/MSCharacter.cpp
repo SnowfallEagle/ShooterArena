@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "Weapon/MSWeapon.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogCharacter, All, All);
 
@@ -38,11 +39,12 @@ void AMSCharacter::BeginPlay()
 
     HealthComponent->OnDeath.AddUObject(this, &AMSCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &AMSCharacter::OnHealthChanged);
-
     // Set health text first time
     OnHealthChanged(HealthComponent->GetHealth());
 
     LandedDelegate.AddDynamic(this, &AMSCharacter::OnGroundLanded);
+
+    SpawnWeapon();
 }
 
 void AMSCharacter::Tick(float DeltaTime)
@@ -123,4 +125,14 @@ void AMSCharacter::OnGroundLanded(const FHitResult& HitResult)
     TakeDamage(Damage, FDamageEvent(), nullptr, nullptr);
 
     UE_LOG(LogCharacter, Display, TEXT("%f"), Damage);
+}
+
+void AMSCharacter::SpawnWeapon()
+{
+    AMSWeapon* Weapon = GetWorld()->SpawnActor<AMSWeapon>(WeaponClass);
+    if (Weapon)
+    {
+        FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, false);
+        Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
+    }
 }
