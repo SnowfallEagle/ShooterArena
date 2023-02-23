@@ -19,6 +19,7 @@ AMSCharacter::AMSCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit.Se
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
     SpringArmComponent->SetupAttachment(GetRootComponent());
     SpringArmComponent->bUsePawnControlRotation = true;
+    SpringArmComponent->SocketOffset = FVector(0.0f, 60.0f, 100.0f);
 
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArmComponent);
@@ -27,6 +28,7 @@ AMSCharacter::AMSCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit.Se
 
     HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
     HealthTextComponent->SetupAttachment(GetRootComponent());
+    HealthTextComponent->SetOnlyOwnerSee(true);
 }
 
 void AMSCharacter::BeginPlay()
@@ -132,7 +134,7 @@ void AMSCharacter::SpawnWeapon()
     AMSWeapon* Weapon = GetWorld()->SpawnActor<AMSWeapon>(WeaponClass);
     if (Weapon)
     {
-        FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, false);
+        FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
         Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
     }
 }
