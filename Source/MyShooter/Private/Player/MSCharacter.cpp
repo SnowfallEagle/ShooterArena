@@ -3,12 +3,13 @@
 #include "Player/MSCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
-#include "Components/MSHealthComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/MSWeaponComponent.h"
+#include "Components/MSHealthComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include "Weapon/MSWeapon.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogCharacter, All, All);
 
@@ -29,6 +30,8 @@ AMSCharacter::AMSCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit.Se
     HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
     HealthTextComponent->SetupAttachment(GetRootComponent());
     HealthTextComponent->SetOnlyOwnerSee(true);
+
+    WeaponComponent = CreateDefaultSubobject<UMSWeaponComponent>("WeaponComponent");
 }
 
 void AMSCharacter::BeginPlay()
@@ -38,6 +41,7 @@ void AMSCharacter::BeginPlay()
     check(HealthComponent);
     check(HealthTextComponent);
     check(GetCharacterMovement());
+    check(GetCapsuleComponent());
 
     HealthComponent->OnDeath.AddUObject(this, &AMSCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &AMSCharacter::OnHealthChanged);
@@ -45,8 +49,6 @@ void AMSCharacter::BeginPlay()
     OnHealthChanged(HealthComponent->GetHealth());
 
     LandedDelegate.AddDynamic(this, &AMSCharacter::OnGroundLanded);
-
-    SpawnWeapon();
 }
 
 void AMSCharacter::Tick(float DeltaTime)
@@ -59,17 +61,18 @@ void AMSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     check(PlayerInputComponent);
+    check(WeaponComponent);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &AMSCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AMSCharacter::MoveRight);
+    PlayerInputComponent->BindAxis("LookUp", this, &AMSCharacter::LookUp);
+    PlayerInputComponent->BindAxis("TurnAround", this, &AMSCharacter::TurnAround);
 
     PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AMSCharacter::OnStartRunning);
     PlayerInputComponent->BindAction("Run", IE_Released, this, &AMSCharacter::OnEndRunning);
-
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMSCharacter::Jump);
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UMSWeaponComponent::Fire);
 
-    PlayerInputComponent->BindAxis("LookUp", this, &AMSCharacter::LookUp);
-    PlayerInputComponent->BindAxis("TurnAround", this, &AMSCharacter::TurnAround);
 }
 
 float AMSCharacter::GetMovementDirection() const
@@ -108,6 +111,8 @@ void AMSCharacter::OnDeath()
     {
         Controller->ChangeState(NAME_Spectating);
     }
+
+    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 }
 
 void AMSCharacter::OnHealthChanged(float NewHealth)
@@ -127,14 +132,4 @@ void AMSCharacter::OnGroundLanded(const FHitResult& HitResult)
     TakeDamage(Damage, FDamageEvent(), nullptr, nullptr);
 
     UE_LOG(LogCharacter, Display, TEXT("%f"), Damage);
-}
-
-void AMSCharacter::SpawnWeapon()
-{
-    AMSWeapon* Weapon = GetWorld()->SpawnActor<AMSWeapon>(WeaponClass);
-    if (Weapon)
-    {
-        FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-        Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
-    }
 }

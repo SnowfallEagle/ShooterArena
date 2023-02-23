@@ -11,7 +11,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UTextRenderComponent;
 class UMSHealthComponent;
-class AMSWeapon;
+class UMSWeaponComponent;
 
 UCLASS()
 class MYSHOOTER_API AMSCharacter : public ACharacter
@@ -31,6 +31,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UTextRenderComponent* HealthTextComponent;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UMSWeaponComponent* WeaponComponent;
+
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
     UAnimMontage* DeathAnimMontage;
 
@@ -42,9 +45,6 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, Category = "Damage")
     FVector2D LandedDamage = FVector2D(10.0f, 100.0f);
-
-    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    TSubclassOf<AMSWeapon> WeaponClass;
 
 private:
     bool bWantsToRun = false;
@@ -80,6 +80,4 @@ private:
 
     UFUNCTION()
     void OnGroundLanded(const FHitResult& HitResult);
-
-    void SpawnWeapon();
 };
