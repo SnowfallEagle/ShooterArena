@@ -73,7 +73,7 @@ void AMSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMSCharacter::Jump);
     PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UMSWeaponComponent::StartFire);
     PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &UMSWeaponComponent::StopFire);
-
+    PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &UMSWeaponComponent::NextWeapon);
 }
 
 float AMSCharacter::GetMovementDirection() const
@@ -106,6 +106,7 @@ void AMSCharacter::OnDeath()
     PlayAnimMontage(DeathAnimMontage);
 
     GetCharacterMovement()->DisableMovement();
+    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
     SetLifeSpan(LifeSpanOnDeath);
 
     if (Controller)
@@ -113,7 +114,7 @@ void AMSCharacter::OnDeath()
         Controller->ChangeState(NAME_Spectating);
     }
 
-    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
+    WeaponComponent->StopFire();
 }
 
 void AMSCharacter::OnHealthChanged(float NewHealth)

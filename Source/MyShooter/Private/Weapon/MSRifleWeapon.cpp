@@ -42,6 +42,7 @@ void AMSRifleWeapon::MakeShot()
         const FVector SocketDirection = SocketTransform.GetRotation().GetForwardVector();
         const FVector SocketToImpact = HitResult.ImpactPoint - SocketTransform.GetLocation();
 
+        // TODO: Maybe find another way to handle it
         if (FVector::DotProduct(SocketDirection, SocketToImpact) >= 0.0f)
         {
             MakeDamage(HitResult);
@@ -73,3 +74,10 @@ bool AMSRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     return true;
 }
 
+void AMSRifleWeapon::MakeDamage(FHitResult& HitResult)
+{
+    if (AActor* Actor = HitResult.GetActor())
+    {
+        Actor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+    }
+}

@@ -15,24 +15,48 @@ class MYSHOOTER_API UMSWeaponComponent : public UActorComponent
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    TSubclassOf<AMSWeapon> WeaponClass;
+    TArray<TSubclassOf<AMSWeapon>> WeaponClasses;
 
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    FName WeaponAttachPointName = "WeaponSocket";
+    FName WeaponEquipSocketName = "WeaponSocket";
+
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    FName WeaponArmorySocketName = "ArmorySocket";
+
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    UAnimMontage* EquipAnimMontage;
 
 private:
     UPROPERTY()
     AMSWeapon* CurrentWeapon = nullptr;
+
+    UPROPERTY()
+    TArray<AMSWeapon*> Weapons;
+
+    int32 CurrentWeaponIndex = 0;
+
+    bool bEquipAnimInProgress;
 
 public:
     UMSWeaponComponent();
 
     void StartFire();
     void StopFire();
+    void NextWeapon();
 
 protected:
     virtual void BeginPlay() override;
+    virtual void EndPlay(EEndPlayReason::Type Reason) override;
 
 private:
-    void SpawnWeapon();
+    void SpawnWeapons();
+    void AttachWeaponToSocket(AMSWeapon* Weapon, USceneComponent* Mesh, const FName& SocketName);
+    void EquipWeapon(int32 WeaponIndex);
+
+    void PlayAnimMontage(UAnimMontage* AnimMontage);
+    void InitAnimations();
+    void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
+
+    bool CanEquip() const { return !bEquipAnimInProgress; }
+    bool CanFire() const { return CurrentWeapon && !bEquipAnimInProgress; }
 };

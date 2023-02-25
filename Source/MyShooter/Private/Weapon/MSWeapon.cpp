@@ -56,14 +56,6 @@ bool AMSWeapon::MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& Tra
     return true;
 }
 
-void AMSWeapon::MakeDamage(FHitResult& HitResult)
-{
-    if (AActor* Actor = HitResult.GetActor())
-    {
-        Actor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
-    }
-}
-
 AController* AMSWeapon::GetPlayerController() const
 {
     const ACharacter* Player = Cast<ACharacter>(GetOwner());

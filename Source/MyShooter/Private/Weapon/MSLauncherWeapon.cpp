@@ -2,7 +2,6 @@
 
 #include "Weapon/MSLauncherWeapon.h"
 #include "Weapon/MSProjectile.h"
-#include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 
 void AMSLauncherWeapon::StartFire()
@@ -36,12 +35,19 @@ void AMSLauncherWeapon::MakeShot()
     const FVector SocketDirection = SocketTransform.GetRotation().GetForwardVector();
     const FVector SocketToEnd = EndPoint - SocketTransform.GetLocation();
 
-    if (FVector::DotProduct(SocketDirection, SocketToEnd) >= 0.0f)
+    // TODO: Maybe find another way to handle it
+    if (FVector::DotProduct(SocketDirection, SocketToEnd) < 0.0f)
     {
-        const FTransform SpawnTransform(FRotator::ZeroRotator, GetMuzzleTransform().GetLocation());
-        AActor* Projectile = UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), ProjectileClass, SpawnTransform);
-        // TODO: Set projectile params
-        UGameplayStatics::FinishSpawningActor(Projectile, SpawnTransform);
+        return;
+    }
+
+    const FTransform SpawnTransform(FRotator::ZeroRotator, GetMuzzleTransform().GetLocation());
+    AMSProjectile* Projectile = World->SpawnActorDeferred<AMSProjectile>(ProjectileClass, SpawnTransform);
+    if (Projectile)
+    {
+        Projectile->SetShotDirection(SocketToEnd.GetSafeNormal());
+        Projectile->SetOwner(GetOwner());
+        Projectile->FinishSpawning(SpawnTransform);
     }
 }
 

@@ -11,3 +11,4 @@ AlignAfterOpenBracket: BlockIndent
 AllowShortFunctionsOnASingleLine: Inline
 PointerAlignment: Left
 ReferenceAlignment: Left
+Cpp11BracedListStyle: false
