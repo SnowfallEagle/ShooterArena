@@ -11,6 +11,11 @@ void AMSLauncherWeapon::StartFire()
 
 void AMSLauncherWeapon::MakeShot()
 {
+    if (IsAmmoEmpty())
+    {
+        return;
+    }
+
     UWorld* World = GetWorld();
     if (!World)
     {
@@ -49,5 +54,7 @@ void AMSLauncherWeapon::MakeShot()
         Projectile->SetOwner(GetOwner());
         Projectile->FinishSpawning(SpawnTransform);
     }
+
+    DecreaseAmmo();
 }
 

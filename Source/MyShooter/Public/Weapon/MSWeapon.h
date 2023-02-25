@@ -8,6 +8,21 @@
 
 class USkeletalMeshComponent;
 
+USTRUCT(BlueprintType)
+struct FAmmoData
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    int32 Bullets;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!bInfinite"))
+    int32 Clips;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    bool bInfinite;
+};
+
 UCLASS()
 class MYSHOOTER_API AMSWeapon : public AActor
 {
@@ -23,6 +38,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float TraceMaxDistance = 1500.0f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    FAmmoData DefaultAmmo = { 15, 10, false };
+
+private:
+    FAmmoData CurrentAmmo;
+
 public:
     AMSWeapon();
 
@@ -37,7 +58,14 @@ protected:
 
     bool MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& TraceEnd) const;
 
-    FTransform GetMuzzleTransform() { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
+    FORCEINLINE FTransform GetMuzzleTransform() { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
     AController* GetPlayerController() const;
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
+
+    void DecreaseAmmo();
+    void ChangeClip();
+    void LogAmmo();
+
+    FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }
+    FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets <= 0; }
 };

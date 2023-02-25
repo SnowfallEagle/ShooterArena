@@ -16,22 +16,12 @@ void AMSRifleWeapon::StopFire()
 
 void AMSRifleWeapon::MakeShot()
 {
-    UWorld* World = GetWorld();
-    if (!World)
-    {
-        return;
-    }
-
     FVector TraceStart;
     FVector TraceEnd;
-    if (!GetTraceData(TraceStart, TraceEnd))
-    {
-        return;
-    }
-
     FHitResult HitResult;
-    if (!MakeHit(HitResult, TraceStart, TraceEnd))
+    if (IsAmmoEmpty() || !GetTraceData(TraceStart, TraceEnd) || !MakeHit(HitResult, TraceStart, TraceEnd))
     {
+        StopFire();
         return;
     }
 
@@ -47,14 +37,16 @@ void AMSRifleWeapon::MakeShot()
         {
             MakeDamage(HitResult);
 
-            DrawDebugLine(World, SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-            DrawDebugSphere(World, HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f, 0, 1.0f);
+            DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
+            DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f, 0, 1.0f);
         }
     }
     else
     {
-        DrawDebugLine(World, SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
+        DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
     }
+
+    DecreaseAmmo();
 }
 
 bool AMSRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
