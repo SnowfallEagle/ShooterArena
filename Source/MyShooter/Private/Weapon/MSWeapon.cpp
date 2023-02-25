@@ -4,6 +4,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "TimerManager.h"
 #include "Gameframework/Character.h"
 #include "Gameframework/Controller.h"
 
@@ -22,48 +23,6 @@ void AMSWeapon::BeginPlay()
     Super::BeginPlay();
 
     check(WeaponMesh);
-}
-
-void AMSWeapon::Fire()
-{
-    MakeShot();
-}
-
-void AMSWeapon::MakeShot()
-{
-    UWorld* World = GetWorld();
-    if (!World)
-    {
-        return;
-    }
-
-    const FTransform SocketTransform = WeaponMesh->GetSocketTransform(MuzzleSocketName);
-
-    FVector TraceStart;
-    FVector TraceEnd;
-    FHitResult HitResult;
-    if (!MakeHit(HitResult, TraceStart, TraceEnd))
-    {
-        return;
-    }
-
-    if (HitResult.bBlockingHit)
-    {
-        const FVector SocketDirection = SocketTransform.GetRotation().GetForwardVector();
-        const FVector SocketToImpact = HitResult.ImpactPoint - SocketTransform.GetLocation();
-
-        if (FVector::DotProduct(SocketDirection, SocketToImpact) >= 0.0f)
-        {
-            MakeDamage(HitResult);
-
-            DrawDebugLine(World, SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-            DrawDebugSphere(World, HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f, 0, 1.0f);
-        }
-    }
-    else
-    {
-        DrawDebugLine(World, SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
-    }
 }
 
 bool AMSWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
@@ -86,11 +45,6 @@ bool AMSWeapon::MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& Tra
 {
     const UWorld* World = GetWorld();
     if (!World)
-    {
-        return false;
-    }
-
-    if (!GetTraceData(TraceStart, TraceEnd))
     {
         return false;
     }

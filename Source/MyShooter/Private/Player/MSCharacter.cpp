@@ -71,7 +71,8 @@ void AMSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AMSCharacter::OnStartRunning);
     PlayerInputComponent->BindAction("Run", IE_Released, this, &AMSCharacter::OnEndRunning);
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMSCharacter::Jump);
-    PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UMSWeaponComponent::Fire);
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UMSWeaponComponent::StartFire);
+    PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &UMSWeaponComponent::StopFire);
 
 }
 

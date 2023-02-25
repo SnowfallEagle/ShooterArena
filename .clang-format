@@ -8,6 +8,6 @@ AccessModifierOffset: -4
 SortIncludes: false
 AllowShortBlocksOnASingleLine: Never
 AlignAfterOpenBracket: BlockIndent
-# AllowShortFunctionsOnASingleLine: Inline
+AllowShortFunctionsOnASingleLine: Inline
 PointerAlignment: Left
 ReferenceAlignment: Left

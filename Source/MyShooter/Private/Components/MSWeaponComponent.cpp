@@ -35,10 +35,18 @@ void UMSWeaponComponent::SpawnWeapon()
     CurrentWeapon->SetOwner(Character);
 }
 
-void UMSWeaponComponent::Fire()
+void UMSWeaponComponent::StartFire()
 {
     if (CurrentWeapon)
     {
-        CurrentWeapon->Fire(); 
+        CurrentWeapon->StartFire(); 
+    }
+}
+
+void UMSWeaponComponent::StopFire()
+{
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->StopFire(); 
     }
 }

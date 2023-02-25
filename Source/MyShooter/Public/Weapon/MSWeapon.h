@@ -17,28 +17,31 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USkeletalMeshComponent* WeaponMesh;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
     FName MuzzleSocketName = "MuzzleSocket";
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
     float TraceMaxDistance = 1500.0f;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
     float DamageAmount = 10.0f;
 
 public:
     AMSWeapon();
 
-    virtual void Fire();
+    virtual void StartFire() {}
+    virtual void StopFire() {}
 
 protected:
     virtual void BeginPlay() override;
 
-    void MakeShot();
-    bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
+    virtual void MakeShot() {}
+    virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
+
     bool MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& TraceEnd) const;
     void MakeDamage(FHitResult& HitResult);
 
+    FTransform GetMuzzleTransform() { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
     AController* GetPlayerController() const;
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
 };

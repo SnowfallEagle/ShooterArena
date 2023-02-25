@@ -27,7 +27,8 @@ private:
 public:
     UMSWeaponComponent();
 
-    void Fire();
+    void StartFire();
+    void StopFire();
 
 protected:
     virtual void BeginPlay() override;
