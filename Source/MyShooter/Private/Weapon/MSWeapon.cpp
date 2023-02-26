@@ -23,6 +23,8 @@ void AMSWeapon::BeginPlay()
     Super::BeginPlay();
 
     check(WeaponMesh);
+    checkf(DefaultAmmo.Bullets > 0, TEXT("Bullets should be >= 0"));
+    checkf(DefaultAmmo.Clips > 0, TEXT("Clips should be >= 0"));
 
     CurrentAmmo = DefaultAmmo;
 }

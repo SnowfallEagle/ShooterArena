@@ -81,8 +81,5 @@ private:
 
     void ChangeClip();
     void OnEmptyClip() { ChangeClip(); }
-
-    template<typename T>
-    T* FindNotifyByClass(UAnimSequenceBase* Anim);
 };
 

@@ -5,6 +5,9 @@
 #include "GameFramework/Character.h"
 #include "Animations/MSEquipFinishedAnimNotify.h"
 #include "Animations/MSReloadFinishedAnimNotify.h"
+#include "Animations/AnimUtils.h"
+
+static constexpr int32 NumWeapons = 2;
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All);
 
@@ -16,6 +19,8 @@ UMSWeaponComponent::UMSWeaponComponent()
 void UMSWeaponComponent::BeginPlay()
 {
     Super::BeginPlay();
+
+    checkf(WeaponData.Num() == NumWeapons, TEXT("Character should hold %d weapons"), NumWeapons)
 
     InitAnimations();
     SpawnWeapons();
@@ -123,8 +128,8 @@ void UMSWeaponComponent::EquipWeapon(int32 WeaponIndex)
     CurrentReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;
 
     AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
-    PlayAnimMontage(EquipAnimMontage);
 
+    PlayAnimMontage(EquipAnimMontage);
     bEquipAnimInProgress = true;
 }
 
@@ -141,18 +146,28 @@ void UMSWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage)
 
 void UMSWeaponComponent::InitAnimations()
 {
-    auto EquipFinishedNotify = FindNotifyByClass<UMSEquipFinishedAnimNotify>(EquipAnimMontage);
+    auto EquipFinishedNotify = FAnimUtils::FindNotifyByClass<UMSEquipFinishedAnimNotify>(EquipAnimMontage);
     if (EquipFinishedNotify)
     {
         EquipFinishedNotify->OnNotified.AddUObject(this, &UMSWeaponComponent::OnEquipFinished);
     }
+    else
+    {
+        UE_LOG(LogWeaponComponent, Error, TEXT("Equip anim notify is not set"));
+        checkNoEntry();
+    }
 
     for (auto& OneWeaponData : WeaponData)
     {
-        auto ReloadFinishedNotify = FindNotifyByClass<UMSReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
+        auto ReloadFinishedNotify = FAnimUtils::FindNotifyByClass<UMSReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
         if (ReloadFinishedNotify)
         {
             ReloadFinishedNotify->OnNotified.AddUObject(this, &UMSWeaponComponent::OnReloadFinished);
+        }
+        else
+        {
+            UE_LOG(LogWeaponComponent, Error, TEXT("Reload anim notify is not set"));
+            checkNoEntry();
         }
     }
 }
@@ -193,22 +208,3 @@ void UMSWeaponComponent::ChangeClip()
     bReloadAnimInProgress = true;
 }
 
-template<typename T>
-T* UMSWeaponComponent::FindNotifyByClass(UAnimSequenceBase* Anim)
-{
-    if (!Anim)
-    {
-        return nullptr;
-    }
-
-    for (auto& NotifyEvent : Anim->Notifies)
-    {
-        T* AnimNotify = Cast<T>(NotifyEvent.Notify);
-        if (AnimNotify)
-        {
-            return AnimNotify;
-        }
-    }
-
-    return nullptr;
-}
