@@ -12,3 +12,5 @@ AllowShortFunctionsOnASingleLine: Inline
 PointerAlignment: Left
 ReferenceAlignment: Left
 Cpp11BracedListStyle: false
+AlwaysBreakTemplateDeclarations: Yes
+SpaceAfterTemplateKeyword: false

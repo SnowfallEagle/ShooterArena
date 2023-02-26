@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "MSWeapon.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
+
 class USkeletalMeshComponent;
 
 USTRUCT(BlueprintType)
@@ -27,6 +29,9 @@ UCLASS()
 class MYSHOOTER_API AMSWeapon : public AActor
 {
     GENERATED_BODY()
+
+public:
+    FOnClipEmptySignature OnClipEmpty;
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -50,6 +55,9 @@ public:
     virtual void StartFire() {}
     virtual void StopFire() {}
 
+    void ChangeClip();
+    FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
+
 protected:
     virtual void BeginPlay() override;
 
@@ -63,7 +71,6 @@ protected:
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
 
     void DecreaseAmmo();
-    void ChangeClip();
     void LogAmmo();
 
     FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }

@@ -5,8 +5,8 @@
 
 void AMSRifleWeapon::StartFire()
 {
-    MakeShot();
     GetWorldTimerManager().SetTimer(ShotTimer, this, &AMSRifleWeapon::MakeShot, TimeBetweenShots, true);
+    MakeShot();
 }
 
 void AMSRifleWeapon::StopFire()

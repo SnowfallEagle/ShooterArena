@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Animations/MSAnimNotify.h"
-#include "MSEquipFinishedAnimNotify.generated.h"
+#include "MSReloadFinishedAnimNotify.generated.h"
 
 UCLASS()
-class MYSHOOTER_API UMSEquipFinishedAnimNotify : public UMSAnimNotify
+class MYSHOOTER_API UMSReloadFinishedAnimNotify : public UMSAnimNotify
 {
     GENERATED_BODY()
 };
