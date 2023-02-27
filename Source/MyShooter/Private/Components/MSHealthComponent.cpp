@@ -15,6 +15,8 @@ void UMSHealthComponent::BeginPlay()
 {
     Super::BeginPlay();
 
+    checkf(MaxHealth > 0, TEXT("MaxHealth should be > 0"));
+
     if (AActor* ComponentOwner = GetOwner())
     {
         ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &UMSHealthComponent::OnTakeAnyDamage);

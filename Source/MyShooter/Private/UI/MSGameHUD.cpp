@@ -2,15 +2,25 @@
 
 #include "UI/MSGameHUD.h"
 #include "Engine/Canvas.h"
+#include "Blueprint/UserWidget.h"
 
 void AMSGameHUD::DrawHUD()
 {
     Super::DrawHUD();
-
-    DrawCrosshair();
 }
 
-void AMSGameHUD::DrawCrosshair()
+void AMSGameHUD::BeginPlay()
+{
+    Super::BeginPlay();
+
+    auto PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass);
+    if (PlayerHUDWidget)
+    {
+        PlayerHUDWidget->AddToViewport();
+    }
+}
+
+void AMSGameHUD::DrawCrosshair_DEPRECATED()
 {
     const TInterval<float> Center((float)Canvas->SizeX * 0.5f, (float)Canvas->SizeY * 0.5f);
 

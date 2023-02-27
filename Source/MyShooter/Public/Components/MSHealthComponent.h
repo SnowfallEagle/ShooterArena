@@ -19,7 +19,7 @@ public:
     FOnHealthChangedSignature OnHealthChanged;
 
 protected:
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", meta = (ClampMin = "0.0", ClampMax = "1000.0"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", meta = (ClampMin = "0.0001", ClampMax = "1000.0"))
     float MaxHealth = 100.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AutoHeal")
@@ -42,8 +42,11 @@ private:
 public:
     UMSHealthComponent();
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "Health")
     FORCEINLINE bool IsDead() const { return FMath::IsNearlyZero(Health); }
+
+    UFUNCTION(BlueprintCallable, Category = "Health")
+    FORCEINLINE float GetHealthPercent() const { return Health / MaxHealth; }
 
     FORCEINLINE float GetHealth() const { return Health; }
 

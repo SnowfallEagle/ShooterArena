@@ -25,6 +25,18 @@ struct FAmmoData
     bool bInfinite;
 };
 
+USTRUCT(BlueprintType)
+struct FWeaponUIData
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    UTexture2D* MainIcon;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    UTexture2D* CrosshairIcon;
+};
+
 UCLASS()
 class MYSHOOTER_API AMSWeapon : public AActor
 {
@@ -46,6 +58,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     FAmmoData DefaultAmmo = { 15, 10, false };
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    FWeaponUIData UIData;
+
 private:
     FAmmoData CurrentAmmo;
 
@@ -57,6 +72,8 @@ public:
 
     void ChangeClip();
     FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
+
+    const FWeaponUIData& GetUIData() const { return UIData; }
 
 protected:
     virtual void BeginPlay() override;

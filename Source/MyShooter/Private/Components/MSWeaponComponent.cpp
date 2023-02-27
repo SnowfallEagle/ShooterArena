@@ -68,6 +68,16 @@ void UMSWeaponComponent::NextWeapon()
     EquipWeapon(CurrentWeaponIndex);
 }
 
+bool UMSWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
+{
+    if (CurrentWeapon)
+    {
+        UIData = CurrentWeapon->GetUIData();
+        return true;
+    }
+    return false;
+}
+
 void UMSWeaponComponent::SpawnWeapons()
 {
     ACharacter* Character = Cast<ACharacter>(GetOwner());
