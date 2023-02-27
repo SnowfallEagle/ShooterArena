@@ -18,6 +18,12 @@ AMSWeapon::AMSWeapon()
     SetRootComponent(WeaponMesh);
 }
 
+void AMSWeapon::GetAmmoData(FAmmoData& InCurrentAmmo, FAmmoData& InDefaultAmmo) const
+{
+    InCurrentAmmo = CurrentAmmo;
+    InDefaultAmmo = DefaultAmmo;
+}
+
 void AMSWeapon::BeginPlay()
 {
     Super::BeginPlay();

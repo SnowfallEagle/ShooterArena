@@ -61,6 +61,7 @@ public:
     void Reload() { ChangeClip(); }
 
     bool GetWeaponUIData(FWeaponUIData& UIData) const;
+    bool GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const;
 
 protected:
     virtual void BeginPlay() override;

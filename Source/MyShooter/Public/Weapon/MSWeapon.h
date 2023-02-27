@@ -74,6 +74,7 @@ public:
     FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
 
     const FWeaponUIData& GetUIData() const { return UIData; }
+    void GetAmmoData(FAmmoData& InCurrentAmmo, FAmmoData& InDefaultAmmo) const;
 
 protected:
     virtual void BeginPlay() override;

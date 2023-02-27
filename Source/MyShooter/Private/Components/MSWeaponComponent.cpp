@@ -78,6 +78,17 @@ bool UMSWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
     return false;
 }
 
+bool UMSWeaponComponent::GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const
+{
+    if (!CurrentWeapon)
+    {
+        return false;
+    }
+
+    CurrentWeapon->GetAmmoData(CurrentAmmo, DefaultAmmo);
+    return true;
+}
+
 void UMSWeaponComponent::SpawnWeapons()
 {
     ACharacter* Character = Cast<ACharacter>(GetOwner());
