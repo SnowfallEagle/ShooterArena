@@ -89,7 +89,6 @@ protected:
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
 
     void DecreaseAmmo();
-    void LogAmmo();
 
     FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }
     FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets <= 0; }

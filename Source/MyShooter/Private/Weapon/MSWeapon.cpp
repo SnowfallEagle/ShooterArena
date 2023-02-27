@@ -96,7 +96,6 @@ void AMSWeapon::DecreaseAmmo()
     }
 
     --CurrentAmmo.Bullets;
-    LogAmmo();
 
     if (IsClipEmpty() && !IsAmmoEmpty())
     {
@@ -121,11 +120,4 @@ void AMSWeapon::ChangeClip()
     }
 
     CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-}
-
-void AMSWeapon::LogAmmo()
-{
-    FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.Bullets) + " / ";
-    AmmoInfo += CurrentAmmo.bInfinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
-    UE_LOG(LogWeapon, Display, TEXT("%s"), *AmmoInfo);
 }

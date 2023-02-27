@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Weapon/MSWeapon.h"
+#include "Core/CoreUtils.h"
 #include "MSPlayerHUDWidget.generated.h"
 
 UCLASS()
@@ -22,7 +23,16 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "UI")
     bool GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const;
 
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    bool IsPlayerAlive() const;
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    bool IsPlayerSpectating() const;
+
 private:
     template<typename T>
-    T* GetPlayerComponent() const;
+    T* GetPlayerComponent() const
+    {
+        return FCoreUtils::GetActorComponent<T>(GetOwningPlayerPawn());
+    }
 };

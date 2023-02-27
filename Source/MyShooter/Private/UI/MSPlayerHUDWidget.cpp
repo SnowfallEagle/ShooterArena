@@ -13,24 +13,23 @@ float UMSPlayerHUDWidget::GetHealthPercent() const
 bool UMSPlayerHUDWidget::GetWeaponUIData(FWeaponUIData& UIData) const
 {
     const auto WeaponComponent = GetPlayerComponent<UMSWeaponComponent>();
-    return WeaponComponent ? WeaponComponent->GetWeaponUIData(UIData) : false;
+    return WeaponComponent && WeaponComponent->GetWeaponUIData(UIData);
 }
 
 bool UMSPlayerHUDWidget::GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const
 {
     const auto WeaponComponent = GetPlayerComponent<UMSWeaponComponent>();
-    return WeaponComponent ? WeaponComponent->GetWeaponAmmoData(CurrentAmmo, DefaultAmmo) : false;
+    return WeaponComponent && WeaponComponent->GetWeaponAmmoData(CurrentAmmo, DefaultAmmo);
 }
 
-template<typename T>
-T* UMSPlayerHUDWidget::GetPlayerComponent() const
+bool UMSPlayerHUDWidget::IsPlayerAlive() const
 {
-    const APawn* Player = GetOwningPlayerPawn();
-    if (!Player)
-    {
-        return nullptr;
-    }
+    auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
+    return HealthComponent && !HealthComponent->IsDead();
+}
 
-    const auto Component = Player->GetComponentByClass(T::StaticClass());
-    return Cast<T>(Component);
+bool UMSPlayerHUDWidget::IsPlayerSpectating() const
+{
+    const auto Controller = GetOwningPlayer();
+    return Controller && Controller->GetStateName() == NAME_Spectating;
 }
