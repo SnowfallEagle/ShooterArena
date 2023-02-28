@@ -24,9 +24,14 @@ void AMSRifleWeapon::StopFire()
     GetWorldTimerManager().ClearTimer(ShotTimer);
 }
 
+void AMSRifleWeapon::OnEquipped()
+{
+    FlashlightComponent->OnEquipped();
+}
+
 void AMSRifleWeapon::OnUnequipped()
 {
-    FlashlightComponent->Toggle(false);
+    FlashlightComponent->OnUnequipped();
 }
 
 void AMSRifleWeapon::BeginPlay()

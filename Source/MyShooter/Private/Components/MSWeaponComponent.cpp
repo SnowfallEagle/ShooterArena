@@ -177,11 +177,6 @@ void UMSWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
     PlayAnimMontage(EquipAnimMontage);
     bEquipAnimInProgress = true;
-
-    if (CurrentWeapon)
-    {
-        CurrentWeapon->OnEquipped();
-    }
 }
 
 void UMSWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage)
@@ -232,6 +227,11 @@ void UMSWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
     }
 
     bEquipAnimInProgress = false;
+
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->OnEquipped();
+    }
 }
 
 void UMSWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)

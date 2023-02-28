@@ -18,6 +18,9 @@ public:
     FORCEINLINE void Toggle() { SetState(!bEnabled); }
     FORCEINLINE void Toggle(bool bInEnabled) { SetState(bInEnabled); }
 
+    void OnEquipped() { SetVisibility(bEnabled, true); }
+    void OnUnequipped() { SetVisibility(false, true); }
+
 protected:
     virtual void BeginPlay() override;
 
