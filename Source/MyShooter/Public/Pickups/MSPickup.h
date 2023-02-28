@@ -13,17 +13,30 @@ class MYSHOOTER_API AMSPickup : public AActor
 {
     GENERATED_BODY()
 
-public:
+protected:
     UPROPERTY(VisibleAnywhere, Category = "Pickup")
     USphereComponent* CollisionComponent;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Pickup")
+    float RespawnTime = 5.0f;
+
+private:
+    float RotationYaw; // TODO
+
 public:
     AMSPickup();
+
+public:
+    virtual void Tick(float DeltaTime) override;
 
 protected:
     virtual void BeginPlay() override;
     virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-public:
-    virtual void Tick(float DeltaTime) override;
+private:
+    virtual bool GivePickupTo(APawn* Pawn);
+
+    void Hide();
+    void Respawn();
+    FORCEINLINE void GenerateRotation() { RotationYaw = FMath::RandRange(100.0f, 200.0f) * (FMath::RandBool() ? 1.0f : -1.0f); }
 };

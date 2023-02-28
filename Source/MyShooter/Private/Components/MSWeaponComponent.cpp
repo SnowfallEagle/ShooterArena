@@ -22,7 +22,7 @@ void UMSWeaponComponent::BeginPlay()
 
     checkf(WeaponData.Num() == NumWeapons, TEXT("Character should hold %d weapons"), NumWeapons)
 
-    InitAnimations();
+        InitAnimations();
     SpawnWeapons();
     EquipWeapon(CurrentWeaponIndex);
 }
@@ -66,6 +66,19 @@ void UMSWeaponComponent::NextWeapon()
 
     CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
     EquipWeapon(CurrentWeaponIndex);
+}
+
+bool UMSWeaponComponent::TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips)
+{
+    for (auto Weapon : Weapons)
+    {
+        if (Weapon && Weapon->IsA(WeaponClass))
+        {
+            return Weapon->TryToAddAmmo(Clips);
+        }
+    }
+
+    return false;
 }
 
 bool UMSWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
@@ -229,3 +242,14 @@ void UMSWeaponComponent::ChangeClip()
     bReloadAnimInProgress = true;
 }
 
+void UMSWeaponComponent::OnEmptyClip(AMSWeapon* Weapon)
+{
+    if (CurrentWeapon == Weapon) // With reloading animation
+    {
+        ChangeClip();
+    }
+    else if (Weapon) // Without animation
+    {
+        Weapon->ChangeClip();
+    }
+}

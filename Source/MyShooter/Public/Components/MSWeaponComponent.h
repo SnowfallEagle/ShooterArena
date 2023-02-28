@@ -60,6 +60,8 @@ public:
     void NextWeapon();
     void Reload() { ChangeClip(); }
 
+    bool TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips);
+
     bool GetWeaponUIData(FWeaponUIData& UIData) const;
     bool GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const;
 
@@ -83,6 +85,6 @@ private:
     FORCEINLINE bool CanReload() const { return CurrentWeapon && CurrentWeapon->CanReload() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
 
     void ChangeClip();
-    void OnEmptyClip() { ChangeClip(); }
+    void OnEmptyClip(AMSWeapon* Weapon);
 };
 

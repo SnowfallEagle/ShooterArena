@@ -49,6 +49,9 @@ public:
     FORCEINLINE float GetHealthPercent() const { return Health / MaxHealth; }
 
     FORCEINLINE float GetHealth() const { return Health; }
+    FORCEINLINE bool IsHealthFull() const { return FMath::IsNearlyEqual(Health, MaxHealth); }
+
+    bool TryToAddHealth(float InHealth);
 
 protected:
     virtual void BeginPlay() override;

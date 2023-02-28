@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "MSWeapon.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnClipEmptySignature, AMSWeapon*);
 
 class USkeletalMeshComponent;
 
@@ -73,6 +73,8 @@ public:
     void ChangeClip();
     FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
 
+    bool TryToAddAmmo(int32 Clips);
+
     const FWeaponUIData& GetUIData() const { return UIData; }
     void GetAmmoData(FAmmoData& InCurrentAmmo, FAmmoData& InDefaultAmmo) const;
 
@@ -92,4 +94,5 @@ protected:
 
     FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }
     FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets <= 0; }
+    FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.Bullets == DefaultAmmo.Bullets && CurrentAmmo.Clips == DefaultAmmo.Clips; };
 };

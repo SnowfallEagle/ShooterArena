@@ -11,6 +11,18 @@ UMSHealthComponent::UMSHealthComponent()
     PrimaryComponentTick.bCanEverTick = false;
 }
 
+bool UMSHealthComponent::TryToAddHealth(float InHealth)
+{
+    if (IsDead() || IsHealthFull() || InHealth < 0.0f)
+    {
+        return false;
+    }
+
+    SetHealth(Health + InHealth);
+
+    return true;
+}
+
 void UMSHealthComponent::BeginPlay()
 {
     Super::BeginPlay();
@@ -54,7 +66,7 @@ void UMSHealthComponent::SetHealth(float InHealth)
             GetWorld()->GetTimerManager().ClearTimer(AutoHealTimer);
         }
     }
-    else if (FMath::IsNearlyEqual(Health, MaxHealth))
+    else if (IsHealthFull())
     {
         if (bAutoHeal)
         {

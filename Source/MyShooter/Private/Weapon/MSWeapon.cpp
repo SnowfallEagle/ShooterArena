@@ -100,7 +100,7 @@ void AMSWeapon::DecreaseAmmo()
     if (IsClipEmpty() && !IsAmmoEmpty())
     {
         StopFire();
-        OnClipEmpty.Broadcast();
+        OnClipEmpty.Broadcast(this);
     }
 }
 
@@ -115,9 +115,35 @@ void AMSWeapon::ChangeClip()
         }
 
         --CurrentAmmo.Clips;
-
-        UE_LOG(LogWeapon, Display, TEXT("--- Change Clip ---"));
     }
 
     CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+}
+
+bool AMSWeapon::TryToAddAmmo(int32 Clips)
+{
+    if (IsAmmoFull() || Clips <= 0)
+    {
+        return false;
+    }
+
+    bool bAmmoWasEmpty = IsAmmoEmpty();
+
+    int32 SumClips = CurrentAmmo.Clips + Clips;
+    if (SumClips > DefaultAmmo.Clips)
+    {
+        CurrentAmmo.Clips = DefaultAmmo.Clips;
+        CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+    }
+    else
+    {
+        CurrentAmmo.Clips = SumClips;
+    }
+
+    if (bAmmoWasEmpty)
+    {
+        OnClipEmpty.Broadcast(this);
+    }
+
+    return true;
 }
