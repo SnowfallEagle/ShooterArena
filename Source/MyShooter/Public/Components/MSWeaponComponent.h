@@ -58,7 +58,8 @@ public:
     void StartFire();
     void StopFire();
     void NextWeapon();
-    void Reload() { ChangeClip(); }
+    FORCEINLINE void Reload() { ChangeClip(); }
+    void ToggleFlashlight();
 
     bool TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips);
 

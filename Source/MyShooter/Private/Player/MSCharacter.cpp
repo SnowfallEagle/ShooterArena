@@ -75,6 +75,7 @@ void AMSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &UMSWeaponComponent::StopFire);
     PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &UMSWeaponComponent::NextWeapon);
     PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &UMSWeaponComponent::Reload);
+    PlayerInputComponent->BindAction("ToggleFlashlight", IE_Pressed, WeaponComponent, &UMSWeaponComponent::ToggleFlashlight);
 }
 
 float AMSCharacter::GetMovementDirection() const

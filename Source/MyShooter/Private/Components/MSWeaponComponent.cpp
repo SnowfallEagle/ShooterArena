@@ -2,10 +2,12 @@
 
 #include "Components/MSWeaponComponent.h"
 #include "Weapon/MSWeapon.h"
+#include "Weapon/Components/MSWeaponFlashlightComponent.h"
 #include "GameFramework/Character.h"
 #include "Animations/MSEquipFinishedAnimNotify.h"
 #include "Animations/MSReloadFinishedAnimNotify.h"
 #include "Animations/AnimUtils.h"
+#include "Core/CoreUtils.h"
 
 static constexpr int32 NumWeapons = 2;
 
@@ -22,7 +24,7 @@ void UMSWeaponComponent::BeginPlay()
 
     checkf(WeaponData.Num() == NumWeapons, TEXT("Character should hold %d weapons"), NumWeapons)
 
-        InitAnimations();
+    InitAnimations();
     SpawnWeapons();
     EquipWeapon(CurrentWeaponIndex);
 }
@@ -66,6 +68,14 @@ void UMSWeaponComponent::NextWeapon()
 
     CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
     EquipWeapon(CurrentWeaponIndex);
+}
+
+void UMSWeaponComponent::ToggleFlashlight()
+{
+    if (auto FlashlightComponent = FCoreUtils::GetActorComponent<UMSWeaponFlashlightComponent>(CurrentWeapon))
+    {
+        FlashlightComponent->ToggleFlashlight();
+    }
 }
 
 bool UMSWeaponComponent::TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips)

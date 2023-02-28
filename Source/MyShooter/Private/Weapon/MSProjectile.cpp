@@ -1,6 +1,7 @@
 // MyShooter Game, All Rights Reserved.
 
 #include "Weapon/MSProjectile.h"
+#include "Weapon/Components/MSWeaponFXComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -16,11 +17,14 @@ AMSProjectile::AMSProjectile()
     CollisionComponent->InitSphereRadius(5.0f);
     CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+    CollisionComponent->bReturnMaterialOnMove = true;
     SetRootComponent(CollisionComponent);
 
     MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
     MovementComponent->InitialSpeed = 2000.0f;
     MovementComponent->ProjectileGravityScale = 0.0f;
+
+    WeaponFXComponent = CreateDefaultSubobject<UMSWeaponFXComponent>("WeaponFXComponent");
 }
 
 void AMSProjectile::BeginPlay()
@@ -29,6 +33,7 @@ void AMSProjectile::BeginPlay()
 
     check(CollisionComponent);
     check(MovementComponent);
+    check(WeaponFXComponent);
 
     CollisionComponent->IgnoreActorWhenMoving(GetOwner(), true);
     CollisionComponent->OnComponentHit.AddDynamic(this, &AMSProjectile::OnProjectileHit);
@@ -40,8 +45,6 @@ void AMSProjectile::BeginPlay()
 
 void AMSProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-    UE_LOG(LogProjectile, Display, TEXT("Here"));
-
     MovementComponent->StopMovementImmediately();
 
     UGameplayStatics::ApplyRadialDamage(
@@ -56,6 +59,7 @@ void AMSProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* O
         bDoFullDamage               //
     );
 
+    WeaponFXComponent->PlayImpactFX(Hit);
     DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 24, FColor::Red, false, 5.0f);
 
     Destroy();
