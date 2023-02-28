@@ -24,6 +24,11 @@ void AMSRifleWeapon::StopFire()
     GetWorldTimerManager().ClearTimer(ShotTimer);
 }
 
+void AMSRifleWeapon::OnUnequipped()
+{
+    FlashlightComponent->Toggle(false);
+}
+
 void AMSRifleWeapon::BeginPlay()
 {
     Super::BeginPlay();
@@ -57,8 +62,8 @@ void AMSRifleWeapon::MakeShot()
 
             WeaponFXComponent->PlayImpactFX(HitResult);
 
-            //DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-            //DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f, 0, 1.0f);
+            // DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
+            // DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f, 0, 1.0f);
         }
     }
     else

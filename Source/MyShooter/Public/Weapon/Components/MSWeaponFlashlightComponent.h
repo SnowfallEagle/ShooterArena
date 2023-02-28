@@ -15,9 +15,12 @@ private:
     bool bEnabled = false;
 
 public:
-    UFUNCTION(BlueprintCallable)
-    void ToggleFlashlight();
+    FORCEINLINE void Toggle() { SetState(!bEnabled); }
+    FORCEINLINE void Toggle(bool bInEnabled) { SetState(bInEnabled); }
 
 protected:
     virtual void BeginPlay() override;
+
+private:
+    void SetState(bool bInEnabled);
 };

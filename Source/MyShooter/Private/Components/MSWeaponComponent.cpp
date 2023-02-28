@@ -22,7 +22,7 @@ void UMSWeaponComponent::BeginPlay()
 {
     Super::BeginPlay();
 
-    checkf(WeaponData.Num() == NumWeapons, TEXT("Character should hold %d weapons"), NumWeapons)
+    checkf(WeaponData.Num() == NumWeapons, TEXT("Character should hold %d weapons"), NumWeapons);
 
     InitAnimations();
     SpawnWeapons();
@@ -72,9 +72,10 @@ void UMSWeaponComponent::NextWeapon()
 
 void UMSWeaponComponent::ToggleFlashlight()
 {
+    // TODO: Cache component in FWeaponData?
     if (auto FlashlightComponent = FCoreUtils::GetActorComponent<UMSWeaponFlashlightComponent>(CurrentWeapon))
     {
-        FlashlightComponent->ToggleFlashlight();
+        FlashlightComponent->Toggle();
     }
 }
 
@@ -163,18 +164,24 @@ void UMSWeaponComponent::EquipWeapon(int32 WeaponIndex)
     {
         CurrentWeapon->StopFire();
         AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponArmorySocketName);
+        CurrentWeapon->OnUnequipped();
     }
 
     CurrentWeapon = Weapons[WeaponIndex];
+    AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
+
     const FWeaponData* CurrentWeaponData = WeaponData.FindByPredicate([&](const FWeaponData& Data) { //
-        return Data.WeaponClass == CurrentWeapon->GetClass();                                        //
+        return Data.WeaponClass == CurrentWeapon->GetClass();
     });
     CurrentReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;
 
-    AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
-
     PlayAnimMontage(EquipAnimMontage);
     bEquipAnimInProgress = true;
+
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->OnEquipped();
+    }
 }
 
 void UMSWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage)

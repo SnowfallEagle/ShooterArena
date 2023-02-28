@@ -4,11 +4,13 @@
 
 void UMSWeaponFlashlightComponent::BeginPlay()
 {
-    SetVisibility(false, true);
+    Super::BeginPlay();
+
+    SetState(false);
 }
 
-void UMSWeaponFlashlightComponent::ToggleFlashlight()
+void UMSWeaponFlashlightComponent::SetState(bool bInEnabled)
 {
-    bEnabled = !bEnabled;
-    SetVisibility(bEnabled, true);
+    bEnabled = bInEnabled;
+    SetVisibility(bInEnabled, true);
 }

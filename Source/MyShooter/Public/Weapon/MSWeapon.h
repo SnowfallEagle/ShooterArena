@@ -70,9 +70,11 @@ public:
     virtual void StartFire() {}
     virtual void StopFire() {}
 
+    virtual void OnEquipped() {}
+    virtual void OnUnequipped() {}
+
     void ChangeClip();
     FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
-
     bool TryToAddAmmo(int32 Clips);
 
     const FWeaponUIData& GetUIData() const { return UIData; }

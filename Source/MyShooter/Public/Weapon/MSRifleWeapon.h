@@ -39,6 +39,8 @@ public:
     virtual void StartFire() override;
     virtual void StopFire() override;
 
+    virtual void OnUnequipped() override;
+
 protected:
     virtual void BeginPlay() override;
 
