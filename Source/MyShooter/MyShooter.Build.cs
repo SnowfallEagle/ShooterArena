@@ -20,6 +20,7 @@ public class MyShooter : ModuleRules
                 "MyShooter/Public/Weapon",
                 "MyShooter/Public/UI",
                 "MyShooter/Public/Animations",
+                "MyShooter/Public/Pickups",
             }
         );
 		// Uncomment if you are using Slate UI
