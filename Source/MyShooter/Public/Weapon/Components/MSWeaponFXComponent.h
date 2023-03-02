@@ -9,6 +9,36 @@
 class UNiagaraSystem;
 class UPhysicalMaterial;
 
+USTRUCT(BlueprintType)
+struct FDecalData
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    UMaterialInterface* Material;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    FVector Size = FVector(10.0f);
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    float LifeTime = 5.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    float FadeOutTime = 0.75f;
+};
+
+USTRUCT(BlueprintType)
+struct FImpactData
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    UNiagaraSystem* NiagaraEffect;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    FDecalData DecalData;
+};
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class MYSHOOTER_API UMSWeaponFXComponent : public UActorComponent
 {
@@ -16,10 +46,10 @@ class MYSHOOTER_API UMSWeaponFXComponent : public UActorComponent
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    UNiagaraSystem* DefaultEffect;
+    FImpactData DefaultImpactData;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    TMap<UPhysicalMaterial*, UNiagaraSystem*> EffectsMap;
+    TMap<UPhysicalMaterial*, FImpactData> ImpactDataMap;
 
 public:
     UMSWeaponFXComponent();

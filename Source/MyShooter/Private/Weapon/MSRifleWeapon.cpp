@@ -26,11 +26,15 @@ void AMSRifleWeapon::StopFire()
 
 void AMSRifleWeapon::OnEquipped()
 {
+    Super::OnEquipped();
+
     FlashlightComponent->OnEquipped();
 }
 
 void AMSRifleWeapon::OnUnequipped()
 {
+    Super::OnUnequipped();
+
     FlashlightComponent->OnUnequipped();
 }
 

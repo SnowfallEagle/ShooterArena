@@ -1,6 +1,9 @@
 // MyShooter Game, All Rights Reserved.
 
 #include "Weapon/Components/MSWeaponFXComponent.h"
+#include "Components/DecalComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/Character.h"
 #include "NiagaraFunctionLibrary.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 
@@ -11,16 +14,42 @@ UMSWeaponFXComponent::UMSWeaponFXComponent()
 
 void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
 {
-    UNiagaraSystem* Effect = DefaultEffect;
+    // Find impact data
+    const FImpactData* ImpactData = &DefaultImpactData;
 
     if (HitResult.PhysMaterial.IsValid())
     {
         const UPhysicalMaterial* PhysMaterial = HitResult.PhysMaterial.Get();
-        if (EffectsMap.Contains(PhysMaterial))
+        if (ImpactDataMap.Contains(PhysMaterial))
         {
-            Effect = EffectsMap[PhysMaterial];
+            ImpactData = &ImpactDataMap[PhysMaterial];
         }
     }
 
-    UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Effect, HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
+    // Spawn niagara effect
+    UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+        GetWorld(),                       //
+        ImpactData->NiagaraEffect,        //
+        HitResult.ImpactPoint,            //
+        HitResult.ImpactNormal.Rotation() //
+    );
+
+    // Spawn decal
+    UDecalComponent* DecalComponent = UGameplayStatics::SpawnDecalAtLocation(
+        GetWorld(),                       //
+        ImpactData->DecalData.Material,   //
+        ImpactData->DecalData.Size,       //
+        HitResult.ImpactPoint,            //
+        HitResult.ImpactNormal.Rotation() //
+    );
+
+    if (DecalComponent)
+    {
+        DecalComponent->SetFadeOut(ImpactData->DecalData.LifeTime, ImpactData->DecalData.FadeOutTime);
+
+        if (ACharacter* Character = Cast<ACharacter>(HitResult.Actor.Get()))
+        {
+            DecalComponent->AttachTo(Character->GetMesh(), HitResult.BoneName, EAttachLocation::KeepWorldPosition);
+        }
+    }
 }

@@ -160,6 +160,7 @@ void UMSWeaponComponent::EquipWeapon(int32 WeaponIndex)
         return;
     }
 
+    // Unequip current weapon
     if (CurrentWeapon)
     {
         CurrentWeapon->StopFire();
@@ -167,9 +168,11 @@ void UMSWeaponComponent::EquipWeapon(int32 WeaponIndex)
         CurrentWeapon->OnUnequipped();
     }
 
+    // Equip and attach next weapon
     CurrentWeapon = Weapons[WeaponIndex];
     AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
 
+    // Set and play current reload anim montage
     const FWeaponData* CurrentWeaponData = WeaponData.FindByPredicate([&](const FWeaponData& Data) { //
         return Data.WeaponClass == CurrentWeapon->GetClass();
     });
