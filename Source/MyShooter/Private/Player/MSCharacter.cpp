@@ -47,7 +47,7 @@ void AMSCharacter::BeginPlay()
     HealthComponent->OnDeath.AddUObject(this, &AMSCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &AMSCharacter::OnHealthChanged);
     // Set health text first time
-    OnHealthChanged(HealthComponent->GetHealth());
+    OnHealthChanged(HealthComponent->GetHealth(), 0.0f);
 
     LandedDelegate.AddDynamic(this, &AMSCharacter::OnGroundLanded);
 }
@@ -122,7 +122,7 @@ void AMSCharacter::OnDeath()
     WeaponComponent->StopFire();
 }
 
-void AMSCharacter::OnHealthChanged(float NewHealth)
+void AMSCharacter::OnHealthChanged(float NewHealth, float HealthDelta)
 {
     HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.f"), NewHealth)));
 }

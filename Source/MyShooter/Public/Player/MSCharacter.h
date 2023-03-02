@@ -76,7 +76,7 @@ private:
     FORCEINLINE void OnEndRunning() { bWantsToRun = false; }
 
     void OnDeath();
-    void OnHealthChanged(float NewHealth);
+    void OnHealthChanged(float NewHealth, float HealthDelta);
 
     UFUNCTION()
     void OnGroundLanded(const FHitResult& HitResult);

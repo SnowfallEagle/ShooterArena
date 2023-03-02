@@ -56,8 +56,9 @@ void UMSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
 
 void UMSHealthComponent::SetHealth(float InHealth)
 {
+    const float OldHealth = Health;
     Health = FMath::Clamp(InHealth, 0.0f, MaxHealth);
-    OnHealthChanged.Broadcast(Health);
+    OnHealthChanged.Broadcast(Health, Health - OldHealth);
 
     if (IsDead())
     {

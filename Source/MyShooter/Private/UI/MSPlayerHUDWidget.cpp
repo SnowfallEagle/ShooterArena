@@ -33,3 +33,22 @@ bool UMSPlayerHUDWidget::IsPlayerSpectating() const
     const auto Controller = GetOwningPlayer();
     return Controller && Controller->GetStateName() == NAME_Spectating;
 }
+
+bool UMSPlayerHUDWidget::Initialize()
+{
+    auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
+    if (HealthComponent)
+    {
+        HealthComponent->OnHealthChanged.AddUObject(this, &UMSPlayerHUDWidget::OnHealthChanged);
+    }
+
+    return Super::Initialize();
+}
+
+void UMSPlayerHUDWidget::OnHealthChanged(float Health, float DeltaHealth)
+{
+    if (DeltaHealth < 0)
+    {
+        OnDamageTaken();
+    }
+}
