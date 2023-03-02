@@ -2,11 +2,13 @@
 
 #include "Weapon/MSWeapon.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Engine/World.h"
-#include "DrawDebugHelpers.h"
-#include "TimerManager.h"
 #include "Gameframework/Character.h"
 #include "Gameframework/Controller.h"
+#include "Engine/World.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "DrawDebugHelpers.h"
+#include "TimerManager.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeapon, All, All);
 
@@ -51,7 +53,7 @@ bool AMSWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     return true;
 }
 
-bool AMSWeapon::MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& TraceEnd) const
+bool AMSWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const
 {
     const UWorld* World = GetWorld();
     if (!World)
@@ -65,6 +67,19 @@ bool AMSWeapon::MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& Tra
     World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
 
     return true;
+}
+
+UNiagaraComponent* AMSWeapon::SpawnMuzzleFX()
+{
+    return UNiagaraFunctionLibrary::SpawnSystemAttached(
+        MuzzleFX,                      //
+        WeaponMesh,                    //
+        MuzzleSocketName,              //
+        FVector::ZeroVector,           //
+        FRotator::ZeroRotator,         //
+        EAttachLocation::SnapToTarget, //
+        true                           //
+    );
 }
 
 AController* AMSWeapon::GetPlayerController() const

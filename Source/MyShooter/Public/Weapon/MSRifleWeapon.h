@@ -8,6 +8,7 @@
 
 class UMSWeaponFXComponent;
 class UMSWeaponFlashlightComponent;
+class UNiagaraComponent;
 
 UCLASS()
 class MYSHOOTER_API AMSRifleWeapon : public AMSWeapon
@@ -33,6 +34,8 @@ protected:
 private:
     FTimerHandle ShotTimer;
 
+    UNiagaraComponent* MuzzleFXComponent;
+
 public:
     AMSRifleWeapon();
 
@@ -49,4 +52,6 @@ protected:
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
 
     void MakeDamage(FHitResult& HitResult);
+
+    void ToggleMuzzleFXVisibility(bool bVisible);
 };

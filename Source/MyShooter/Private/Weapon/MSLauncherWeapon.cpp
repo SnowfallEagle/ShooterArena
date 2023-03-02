@@ -56,5 +56,6 @@ void AMSLauncherWeapon::MakeShot()
     }
 
     DecreaseAmmo();
+    SpawnMuzzleFX();
 }
 

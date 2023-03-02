@@ -3,24 +3,29 @@
 #include "Weapon/MSRifleWeapon.h"
 #include "Weapon/Components/MSWeaponFXComponent.h"
 #include "Weapon/Components/MSWeaponFlashlightComponent.h"
+#include "NiagaraComponent.h"
 #include "DrawDebugHelpers.h"
 
 AMSRifleWeapon::AMSRifleWeapon()
 {
     WeaponFXComponent = CreateDefaultSubobject<UMSWeaponFXComponent>("WeaponFXComponent");
+    check(WeaponFXComponent);
 
     FlashlightComponent = CreateDefaultSubobject<UMSWeaponFlashlightComponent>("FlashlightComponent");
+    check(FlashlightComponent);
     FlashlightComponent->SetupAttachment(GetRootComponent());
 }
 
 void AMSRifleWeapon::StartFire()
 {
+    ToggleMuzzleFXVisibility(true);
     GetWorldTimerManager().SetTimer(ShotTimer, this, &AMSRifleWeapon::MakeShot, TimeBetweenShots, true);
     MakeShot();
 }
 
 void AMSRifleWeapon::StopFire()
 {
+    ToggleMuzzleFXVisibility(false);
     GetWorldTimerManager().ClearTimer(ShotTimer);
 }
 
@@ -42,8 +47,11 @@ void AMSRifleWeapon::BeginPlay()
 {
     Super::BeginPlay();
 
-    check(WeaponFXComponent);
-    check(FlashlightComponent);
+    MuzzleFXComponent = SpawnMuzzleFX();
+    if (MuzzleFXComponent)
+    {
+        ToggleMuzzleFXVisibility(false);
+    }
 }
 
 void AMSRifleWeapon::MakeShot()
@@ -71,13 +79,17 @@ void AMSRifleWeapon::MakeShot()
 
             WeaponFXComponent->PlayImpactFX(HitResult);
 
-            // DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-            // DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f, 0, 1.0f);
+#ifdef UE_BUILD_DEBUG
+            DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
+            DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f, 0, 1.0f);
+#endif
         }
     }
     else
     {
+#ifdef UE_BUILD_DEBUG
         DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
+#endif
     }
 
     DecreaseAmmo();
@@ -105,5 +117,14 @@ void AMSRifleWeapon::MakeDamage(FHitResult& HitResult)
     if (AActor* Actor = HitResult.GetActor())
     {
         Actor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+    }
+}
+
+void AMSRifleWeapon::ToggleMuzzleFXVisibility(bool bVisible)
+{
+    if (MuzzleFXComponent)
+    {
+        MuzzleFXComponent->SetVisibility(bVisible, true);
+        MuzzleFXComponent->SetPaused(!bVisible);
     }
 }

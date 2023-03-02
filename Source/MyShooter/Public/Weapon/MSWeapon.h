@@ -9,6 +9,8 @@
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnClipEmptySignature, AMSWeapon*);
 
 class USkeletalMeshComponent;
+class UNiagaraSystem;
+class UNiagaraComponent;
 
 USTRUCT(BlueprintType)
 struct FAmmoData
@@ -61,6 +63,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
     FWeaponUIData UIData;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    UNiagaraSystem* MuzzleFX;
+
 private:
     FAmmoData CurrentAmmo;
 
@@ -84,17 +89,17 @@ protected:
     virtual void BeginPlay() override;
 
     virtual void MakeShot() {}
+    bool MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
-    bool MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& TraceEnd) const;
-
-    FORCEINLINE FTransform GetMuzzleTransform() { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
-    AController* GetPlayerController() const;
-    bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
-
     void DecreaseAmmo();
-
     FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }
     FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets <= 0; }
     FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.Bullets == DefaultAmmo.Bullets && CurrentAmmo.Clips == DefaultAmmo.Clips; };
+
+    UNiagaraComponent* SpawnMuzzleFX();
+
+    AController* GetPlayerController() const;
+    bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
+    FORCEINLINE FTransform GetMuzzleTransform() { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
 };
