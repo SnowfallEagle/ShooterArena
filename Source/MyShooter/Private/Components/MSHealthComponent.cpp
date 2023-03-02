@@ -50,6 +50,8 @@ void UMSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
     }
 
     SetHealth(Health - Damage);
+
+    PlayCameraShake();
 }
 
 void UMSHealthComponent::SetHealth(float InHealth)
@@ -78,4 +80,26 @@ void UMSHealthComponent::SetHealth(float InHealth)
 void UMSHealthComponent::OnAutoHealUpdateTimerFired()
 {
     SetHealth(Health + AutoHealModifier);
+}
+
+void UMSHealthComponent::PlayCameraShake()
+{
+    if (IsDead())
+    {
+        return;
+    }
+
+    const auto Player = Cast<APawn>(GetOwner());
+    if (!Player)
+    {
+        return;
+    }
+
+    const auto Controller = Player->GetController<APlayerController>();
+    if (!Controller || !Controller->PlayerCameraManager)
+    {
+        return;
+    }
+
+    Controller->PlayerCameraManager->StartCameraShake(CameraShakeClass);
 }

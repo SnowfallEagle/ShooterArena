@@ -42,6 +42,7 @@ void AMSCharacter::BeginPlay()
     check(HealthTextComponent);
     check(GetCharacterMovement());
     check(GetCapsuleComponent());
+    check(GetMesh());
 
     HealthComponent->OnDeath.AddUObject(this, &AMSCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &AMSCharacter::OnHealthChanged);
@@ -105,10 +106,12 @@ void AMSCharacter::OnDeath()
 {
     UE_LOG(LogCharacter, Display, TEXT("Player %s is dead"), *GetName());
 
-    PlayAnimMontage(DeathAnimMontage);
-
     GetCharacterMovement()->DisableMovement();
     GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+    GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+    GetMesh()->SetSimulatePhysics(true);
+
     SetLifeSpan(LifeSpanOnDeath);
 
     if (Controller)
