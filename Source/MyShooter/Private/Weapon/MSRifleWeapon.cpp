@@ -3,6 +3,7 @@
 #include "Weapon/MSRifleWeapon.h"
 #include "Weapon/Components/MSWeaponFXComponent.h"
 #include "Weapon/Components/MSWeaponFlashlightComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "DrawDebugHelpers.h"
 
@@ -59,16 +60,18 @@ void AMSRifleWeapon::MakeShot()
     FVector TraceStart;
     FVector TraceEnd;
     FHitResult HitResult;
+
     if (IsAmmoEmpty() || !GetTraceData(TraceStart, TraceEnd) || !MakeHit(HitResult, TraceStart, TraceEnd))
     {
         StopFire();
         return;
     }
 
-    const FTransform SocketTransform = GetMuzzleTransform();
+    FVector* TraceFXEnd = nullptr;
 
     if (HitResult.bBlockingHit)
     {
+        const FTransform SocketTransform = GetMuzzleTransform();
         const FVector SocketDirection = SocketTransform.GetRotation().GetForwardVector();
         const FVector SocketToImpact = HitResult.ImpactPoint - SocketTransform.GetLocation();
 
@@ -78,20 +81,18 @@ void AMSRifleWeapon::MakeShot()
             MakeDamage(HitResult);
 
             WeaponFXComponent->PlayImpactFX(HitResult);
-
-#ifdef UE_BUILD_DEBUG
-            DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-            DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f, 0, 1.0f);
-#endif
+            TraceFXEnd = &HitResult.ImpactPoint;
         }
     }
     else
     {
-#ifdef UE_BUILD_DEBUG
-        DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
-#endif
+        TraceFXEnd = &TraceEnd;
     }
 
+    if (TraceFXEnd)
+    {
+        SpawnTraceFX(GetMuzzleTransform().GetLocation(), *TraceFXEnd);
+    }
     DecreaseAmmo();
 }
 
@@ -126,5 +127,13 @@ void AMSRifleWeapon::ToggleMuzzleFXVisibility(bool bVisible)
     {
         MuzzleFXComponent->SetVisibility(bVisible, true);
         MuzzleFXComponent->SetPaused(!bVisible);
+    }
+}
+
+void AMSRifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd)
+{
+    if (const auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart))
+    {
+        TraceFXComponent->SetNiagaraVariableVec3(TraceTargetName, TraceEnd);
     }
 }

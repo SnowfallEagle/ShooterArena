@@ -31,6 +31,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float DamageAmount = 10.0f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    UNiagaraSystem* TraceFX;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    FString TraceTargetName = "TraceTarget";
+
 private:
     FTimerHandle ShotTimer;
 
@@ -48,10 +54,10 @@ public:
 protected:
     virtual void BeginPlay() override;
 
+    void MakeDamage(FHitResult& HitResult);
     virtual void MakeShot() override;
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
 
-    void MakeDamage(FHitResult& HitResult);
-
     void ToggleMuzzleFXVisibility(bool bVisible);
+    void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
 };
