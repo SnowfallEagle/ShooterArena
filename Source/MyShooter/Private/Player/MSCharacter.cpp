@@ -109,7 +109,7 @@ void AMSCharacter::OnDeath()
     GetCharacterMovement()->DisableMovement();
     GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-    GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+    GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     GetMesh()->SetSimulatePhysics(true);
 
     SetLifeSpan(LifeSpanOnDeath);
