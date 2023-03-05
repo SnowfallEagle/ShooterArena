@@ -1,8 +1,7 @@
 // MyShooter Game, All Rights Reserved.
 
-
 #include "Components/MSCharacterMovementComponent.h"
-#include "Player/MSCharacter.h"
+#include "Character/MSCharacter.h"
 
 float UMSCharacterMovementComponent::GetMaxSpeed() const
 {

@@ -1,6 +1,6 @@
 // MyShooter Game, All Rights Reserved.
 
-#include "Player/MSCharacter.h"
+#include "Character/MSCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/TextRenderComponent.h"

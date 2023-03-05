@@ -1,7 +1,7 @@
 // MyShooter Game, All Rights Reserved.
 
 #include "Weapon/MSProjectile.h"
-#include "Weapon/Components/MSWeaponFXComponent.h"
+#include "Components/MSWeaponFXComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"

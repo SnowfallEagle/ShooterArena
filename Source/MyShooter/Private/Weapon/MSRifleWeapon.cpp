@@ -1,8 +1,8 @@
 // MyShooter Game, All Rights Reserved.
 
 #include "Weapon/MSRifleWeapon.h"
-#include "Weapon/Components/MSWeaponFXComponent.h"
-#include "Weapon/Components/MSWeaponFlashlightComponent.h"
+#include "Components/MSWeaponFXComponent.h"
+#include "Components/MSWeaponFlashlightComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "DrawDebugHelpers.h"

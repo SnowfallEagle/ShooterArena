@@ -16,6 +16,8 @@ public class MyShooter : ModuleRules
                 "InputCore",
                 "Niagara",
                 "PhysicsCore",
+                "GameplayTasks",
+                "NavigationSystem"
             }
         );
 
@@ -24,15 +26,27 @@ public class MyShooter : ModuleRules
         PublicIncludePaths.AddRange(new string[]
             {
                 "MyShooter/Public/Components",
+
+                "MyShooter/Public/Character",
+                "MyShooter/Public/Character/Components",
+
                 "MyShooter/Public/Player",
                 "MyShooter/Public/Dev",
+
                 "MyShooter/Public/Weapon",
                 "MyShooter/Public/Weapon/Components",
+
                 "MyShooter/Public/UI",
                 "MyShooter/Public/Animations",
                 "MyShooter/Public/Pickups",
+
+                "MyShooter/Public/AI",
+                "MyShooter/Public/AI/Components",
+                "MyShooter/Public/AI/Tasks",
+                "MyShooter/Public/AI/Services",
             }
         );
+
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 

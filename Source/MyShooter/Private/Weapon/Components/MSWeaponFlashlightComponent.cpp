@@ -1,6 +1,6 @@
 // MyShooter Game, All Rights Reserved.
 
-#include "Weapon/Components/MSWeaponFlashlightComponent.h"
+#include "Components/MSWeaponFlashlightComponent.h"
 
 void UMSWeaponFlashlightComponent::BeginPlay()
 {

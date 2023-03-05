@@ -1,8 +1,8 @@
 // MyShooter Game, All Rights Reserved.
 
 #include "Components/MSWeaponComponent.h"
+#include "Components/MSWeaponFlashlightComponent.h"
 #include "Weapon/MSWeapon.h"
-#include "Weapon/Components/MSWeaponFlashlightComponent.h"
 #include "GameFramework/Character.h"
 #include "Animations/MSEquipFinishedAnimNotify.h"
 #include "Animations/MSReloadFinishedAnimNotify.h"

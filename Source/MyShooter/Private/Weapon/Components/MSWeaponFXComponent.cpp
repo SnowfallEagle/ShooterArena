@@ -1,6 +1,6 @@
 // MyShooter Game, All Rights Reserved.
 
-#include "Weapon/Components/MSWeaponFXComponent.h"
+#include "Components/MSWeaponFXComponent.h"
 #include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
@@ -49,7 +49,7 @@ void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
 
         if (ACharacter* Character = Cast<ACharacter>(HitResult.Actor.Get()))
         {
-            DecalComponent->AttachTo(Character->GetMesh(), HitResult.BoneName, EAttachLocation::KeepWorldPosition);
+            DecalComponent->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::KeepWorldTransform, HitResult.BoneName);
         }
     }
 }
