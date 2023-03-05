@@ -3,9 +3,10 @@
 #include "AI/MSAICharacter.h"
 #include "AI/MSAIController.h"
 #include "Components/MSAIWeaponComponent.h"
+#include "BrainComponent.h"
 
-AMSAICharacter::AMSAICharacter(const FObjectInitializer& ObjInit)
-    : Super(ObjInit.SetDefaultSubobjectClass<UMSAIWeaponComponent>("WeaponComponent"))
+AMSAICharacter::AMSAICharacter(const FObjectInitializer& ObjInit) :
+    Super(ObjInit.SetDefaultSubobjectClass<UMSAIWeaponComponent>("WeaponComponent"))
 {
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
     AIControllerClass = AMSAIController::StaticClass();
@@ -15,5 +16,16 @@ AMSAICharacter::AMSAICharacter(const FObjectInitializer& ObjInit)
     {
         GetCharacterMovement()->bUseControllerDesiredRotation = true;
         GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
+    }
+}
+
+void AMSAICharacter::OnDeath()
+{
+    Super::OnDeath();
+
+    const auto MSController = GetController<AMSAIController>();
+    if (MSController && MSController->BrainComponent)
+    {
+        MSController->BrainComponent->Cleanup();
     }
 }

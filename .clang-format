@@ -3,7 +3,7 @@ BasedOnStyle: Microsoft
 IndentWidth: 4
 UseTab: Never
 BreakBeforeBraces: Allman
-ColumnLimit: 170
+ColumnLimit: 140
 AccessModifierOffset: -4
 SortIncludes: false
 AllowShortBlocksOnASingleLine: Never
@@ -14,3 +14,4 @@ ReferenceAlignment: Left
 Cpp11BracedListStyle: false
 AlwaysBreakTemplateDeclarations: Yes
 SpaceAfterTemplateKeyword: false
+BreakConstructorInitializers: AfterColon 

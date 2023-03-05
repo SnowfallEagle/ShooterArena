@@ -19,4 +19,7 @@ public:
 
 public:
     AMSAICharacter(const FObjectInitializer& ObjInit);
+
+protected:
+    virtual void OnDeath() override;
 };

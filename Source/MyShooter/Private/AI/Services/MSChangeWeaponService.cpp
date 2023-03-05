@@ -1,0 +1,30 @@
+// MyShooter Game, All Rights Reserved.
+
+#include "AI/Services/MSChangeWeaponService.h"
+#include "AIController.h"
+#include "Components/MSAIWeaponComponent.h"
+#include "Core/CoreUtils.h"
+
+UMSChangeWeaponService::UMSChangeWeaponService()
+{
+    NodeName = "Change Weapon";
+}
+
+void UMSChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+    if (Probability <= 0.0f || FMath::FRand() > Probability)
+    {
+        return;
+    }
+
+    if (const AAIController* Controller = OwnerComp.GetAIOwner())
+    {
+        if (APawn* Pawn = Controller->GetPawn())
+        {
+            if (auto WeaponComponent = FCoreUtils::GetActorComponent<UMSAIWeaponComponent>(Pawn))
+            {
+                WeaponComponent->NextWeapon();
+            }
+        }
+    }
+}

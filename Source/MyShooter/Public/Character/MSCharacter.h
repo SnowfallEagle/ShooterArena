@@ -65,6 +65,8 @@ public:
 protected:
     virtual void BeginPlay() override;
 
+    virtual void OnDeath();
+
 private:
     void MoveForward(float Amount);
     FORCEINLINE void MoveRight(float Amount) { AddMovementInput(GetActorRightVector(), Amount); }
@@ -75,7 +77,6 @@ private:
     FORCEINLINE void OnStartRunning() { bWantsToRun = true; }
     FORCEINLINE void OnEndRunning() { bWantsToRun = false; }
 
-    void OnDeath();
     void OnHealthChanged(float NewHealth, float HealthDelta);
 
     UFUNCTION()
