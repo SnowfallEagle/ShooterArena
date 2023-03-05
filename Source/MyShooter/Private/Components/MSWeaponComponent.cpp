@@ -72,7 +72,7 @@ void UMSWeaponComponent::NextWeapon()
 
 void UMSWeaponComponent::ToggleFlashlight()
 {
-    // TODO: Cache component in FWeaponData?
+    // Optimization: Later we can cache accessories in FWeaponData
     if (auto FlashlightComponent = FCoreUtils::GetActorComponent<UMSWeaponFlashlightComponent>(CurrentWeapon))
     {
         FlashlightComponent->Toggle();

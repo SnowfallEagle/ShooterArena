@@ -79,8 +79,10 @@ public:
     virtual void OnUnequipped() {}
 
     void ChangeClip();
-    FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
     bool TryToAddAmmo(int32 Clips);
+
+    FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
+    FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }
 
     const FWeaponUIData& GetUIData() const { return UIData; }
     void GetAmmoData(FAmmoData& InCurrentAmmo, FAmmoData& InDefaultAmmo) const;
@@ -93,7 +95,6 @@ protected:
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
     void DecreaseAmmo();
-    FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }
     FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets <= 0; }
     FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.Bullets == DefaultAmmo.Bullets && CurrentAmmo.Clips == DefaultAmmo.Clips; };
 
@@ -101,5 +102,5 @@ protected:
 
     AController* GetPlayerController() const;
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
-    FORCEINLINE FTransform GetMuzzleTransform() { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
+    FORCEINLINE FTransform GetMuzzleTransform() const { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
 };

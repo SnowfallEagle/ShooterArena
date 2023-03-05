@@ -1,6 +1,7 @@
 // MyShooter Game, All Rights Reserved.
 
 #include "Weapon/MSWeapon.h"
+#include "Character/MSCharacter.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Gameframework/Character.h"
 #include "Gameframework/Controller.h"
@@ -95,11 +96,27 @@ AController* AMSWeapon::GetPlayerController() const
 
 bool AMSWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const
 {
-    if (AController* Controller = GetPlayerController())
+    const auto Character = Cast<AMSCharacter>(GetOwner());
+    if (!Character)
     {
-        Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+        return false;
+    }
+
+    if (Character->IsPlayerControlled())
+    {
+        if (AController* Controller = GetPlayerController())
+        {
+            Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+            return true;
+        }
+    }
+    else
+    {
+        ViewLocation = GetMuzzleTransform().GetLocation();
+        ViewRotation = WeaponMesh->GetSocketRotation(MuzzleSocketName);
         return true;
     }
+
     return false;
 }
 

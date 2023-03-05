@@ -37,17 +37,17 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     UAnimMontage* EquipAnimMontage;
 
-private:
     UPROPERTY()
     AMSWeapon* CurrentWeapon = nullptr;
 
-    UPROPERTY()
-    UAnimMontage* CurrentReloadAnimMontage = nullptr;
+    int32 CurrentWeaponIndex = 0;
 
     UPROPERTY()
     TArray<AMSWeapon*> Weapons;
 
-    int32 CurrentWeaponIndex = 0;
+private:
+    UPROPERTY()
+    UAnimMontage* CurrentReloadAnimMontage = nullptr;
 
     bool bEquipAnimInProgress = false;
     bool bReloadAnimInProgress = false;
@@ -55,13 +55,18 @@ private:
 public:
     UMSWeaponComponent();
 
-    void StartFire();
-    void StopFire();
-    void NextWeapon();
+    virtual void StartFire();
+    virtual void StopFire();
+    virtual void NextWeapon();
+
     FORCEINLINE void Reload() { ChangeClip(); }
+    bool TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips);
+
     void ToggleFlashlight();
 
-    bool TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips);
+    FORCEINLINE bool CanEquip() const { return !bEquipAnimInProgress && !bReloadAnimInProgress; }
+    FORCEINLINE bool CanFire() const { return CurrentWeapon && !bEquipAnimInProgress && !bReloadAnimInProgress; }
+    FORCEINLINE bool CanReload() const { return CurrentWeapon && CurrentWeapon->CanReload() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
 
     bool GetWeaponUIData(FWeaponUIData& UIData) const;
     bool GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const;
@@ -70,20 +75,17 @@ protected:
     virtual void BeginPlay() override;
     virtual void EndPlay(EEndPlayReason::Type Reason) override;
 
+    void EquipWeapon(int32 WeaponIndex);
+
 private:
     void SpawnWeapons();
     void AttachWeaponToSocket(AMSWeapon* Weapon, USceneComponent* Mesh, const FName& SocketName);
-    void EquipWeapon(int32 WeaponIndex);
 
     void PlayAnimMontage(UAnimMontage* AnimMontage);
     void InitAnimations();
 
     void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
     void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
-
-    FORCEINLINE bool CanEquip() const { return !bEquipAnimInProgress && !bReloadAnimInProgress; }
-    FORCEINLINE bool CanFire() const { return CurrentWeapon && !bEquipAnimInProgress && !bReloadAnimInProgress; }
-    FORCEINLINE bool CanReload() const { return CurrentWeapon && CurrentWeapon->CanReload() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
 
     void ChangeClip();
     void OnEmptyClip(AMSWeapon* Weapon);

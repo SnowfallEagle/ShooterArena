@@ -2,8 +2,10 @@
 
 #include "AI/MSAICharacter.h"
 #include "AI/MSAIController.h"
+#include "Components/MSAIWeaponComponent.h"
 
-AMSAICharacter::AMSAICharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
+AMSAICharacter::AMSAICharacter(const FObjectInitializer& ObjInit)
+    : Super(ObjInit.SetDefaultSubobjectClass<UMSAIWeaponComponent>("WeaponComponent"))
 {
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
     AIControllerClass = AMSAIController::StaticClass();
