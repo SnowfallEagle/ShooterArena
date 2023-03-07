@@ -113,6 +113,20 @@ bool UMSWeaponComponent::GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& De
     return true;
 }
 
+bool UMSWeaponComponent::GetWeaponAmmoData(TSubclassOf<AMSWeapon> WeaponClass, FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const
+{
+    for (const auto Weapon : Weapons)
+    {
+        if (Weapon && Weapon->IsA(WeaponClass))
+        {
+            Weapon->GetAmmoData(CurrentAmmo, DefaultAmmo);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void UMSWeaponComponent::SpawnWeapons()
 {
     ACharacter* Character = Cast<ACharacter>(GetOwner());

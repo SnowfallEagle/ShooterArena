@@ -12,7 +12,7 @@ UMSChangeWeaponService::UMSChangeWeaponService()
 
 void UMSChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-    if (Probability <= 0.0f || FMath::FRand() > Probability)
+    if (!bCanTick || Probability <= 0.0f || FMath::FRand() > Probability)
     {
         return;
     }
@@ -24,6 +24,9 @@ void UMSChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
             if (auto WeaponComponent = FCoreUtils::GetActorComponent<UMSAIWeaponComponent>(Pawn))
             {
                 WeaponComponent->NextWeapon();
+
+                bCanTick = false;
+                GetWorld()->GetTimerManager().SetTimer(Timer, this, &UMSChangeWeaponService::OnCanTickAgain, TimeRateBetweenTicks, false);
             }
         }
     }

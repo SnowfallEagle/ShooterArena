@@ -70,6 +70,7 @@ public:
 
     bool GetWeaponUIData(FWeaponUIData& UIData) const;
     bool GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const;
+    bool GetWeaponAmmoData(TSubclassOf<AMSWeapon> WeaponClass, FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const;
 
 protected:
     virtual void BeginPlay() override;

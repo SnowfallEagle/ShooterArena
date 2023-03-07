@@ -21,7 +21,7 @@ protected:
     float RespawnTime = 5.0f;
 
 private:
-    float RotationYaw; // TODO
+    float RotationYaw;
 
 public:
     AMSPickup();

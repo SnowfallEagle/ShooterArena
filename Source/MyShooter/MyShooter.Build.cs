@@ -44,6 +44,8 @@ public class MyShooter : ModuleRules
                 "MyShooter/Public/AI/Components",
                 "MyShooter/Public/AI/Tasks",
                 "MyShooter/Public/AI/Services",
+                "MyShooter/Public/AI/EQS",
+                "MyShooter/Public/AI/Decorators",
             }
         );
 

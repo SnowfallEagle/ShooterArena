@@ -83,6 +83,8 @@ public:
 
     FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
     FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }
+    FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets <= 0; }
+    FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.Bullets == DefaultAmmo.Bullets && CurrentAmmo.Clips == DefaultAmmo.Clips; };
 
     const FWeaponUIData& GetUIData() const { return UIData; }
     void GetAmmoData(FAmmoData& InCurrentAmmo, FAmmoData& InDefaultAmmo) const;
@@ -95,8 +97,6 @@ protected:
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
     void DecreaseAmmo();
-    FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets <= 0; }
-    FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.Bullets == DefaultAmmo.Bullets && CurrentAmmo.Clips == DefaultAmmo.Clips; };
 
     UNiagaraComponent* SpawnMuzzleFX();
 

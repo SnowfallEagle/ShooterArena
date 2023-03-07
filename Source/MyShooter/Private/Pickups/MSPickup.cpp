@@ -67,5 +67,8 @@ void AMSPickup::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    // Handle case when actor may stay on the pickup before it's respawned
+    ClearComponentOverlaps();
+
     AddActorLocalRotation(FRotator(0.0f, RotationYaw * DeltaTime, 0.0f));
 }
