@@ -17,17 +17,20 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "Pickup")
     USphereComponent* CollisionComponent;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Pickup")
+    UPROPERTY(EditAnywhere, Category = "Pickup")
     float RespawnTime = 5.0f;
 
 private:
     float RotationYaw;
 
+    FTimerHandle RespawnTimer;
+
 public:
     AMSPickup();
 
-public:
     virtual void Tick(float DeltaTime) override;
+
+    bool CanBeTaken() const { return !GetWorldTimerManager().IsTimerActive(RespawnTimer); }
 
 protected:
     virtual void BeginPlay() override;

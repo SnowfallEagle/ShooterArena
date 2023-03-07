@@ -51,7 +51,6 @@ void AMSPickup::Hide()
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
     GetRootComponent()->SetVisibility(false, true);
 
-    FTimerHandle RespawnTimer;
     GetWorldTimerManager().SetTimer(RespawnTimer, this, &AMSPickup::Respawn, RespawnTime, false);
 }
 
