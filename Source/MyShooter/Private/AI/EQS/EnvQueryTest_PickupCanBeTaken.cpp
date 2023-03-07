@@ -1,17 +1,17 @@
 // MyShooter Game, All Rights Reserved.
 
-#include "AI/EQS/EnvQueryTest_PickupCouldBeTaken.h"
+#include "AI/EQS/EnvQueryTest_PickupCanBeTaken.h"
 #include "EnvironmentQuery/Items/EnvQueryItemType_ActorBase.h"
 #include "Pickups/MSPickup.h"
 
-UEnvQueryTest_PickupCouldBeTaken::UEnvQueryTest_PickupCouldBeTaken(const FObjectInitializer& ObjInit) : Super(ObjInit)
+UEnvQueryTest_PickupCanBeTaken::UEnvQueryTest_PickupCanBeTaken(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
     Cost = EEnvTestCost::Low;
     ValidItemType = UEnvQueryItemType_ActorBase::StaticClass();
     SetWorkOnFloatValues(false);
 }
 
-void UEnvQueryTest_PickupCouldBeTaken::RunTest(FEnvQueryInstance& QueryInstance) const
+void UEnvQueryTest_PickupCanBeTaken::RunTest(FEnvQueryInstance& QueryInstance) const
 {
     UObject* DataOwner = QueryInstance.Owner.Get();
     BoolValue.BindData(DataOwner, QueryInstance.QueryID);

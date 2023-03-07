@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "EnvironmentQuery/EnvQueryTest.h"
-#include "EnvQueryTest_PickupCouldBeTaken.generated.h"
+#include "EnvQueryTest_PickupCanBeTaken.generated.h"
 
 UCLASS()
-class MYSHOOTER_API UEnvQueryTest_PickupCouldBeTaken : public UEnvQueryTest
+class MYSHOOTER_API UEnvQueryTest_PickupCanBeTaken : public UEnvQueryTest
 {
     GENERATED_BODY()
 
 public:
-    UEnvQueryTest_PickupCouldBeTaken(const FObjectInitializer& ObjInit);
+    UEnvQueryTest_PickupCanBeTaken(const FObjectInitializer& ObjInit);
 
 	virtual void RunTest(FEnvQueryInstance& QueryInstance) const override;
 };
