@@ -9,6 +9,8 @@ AMSAIController::AMSAIController()
 {
     MSAIPerceptionComponent = CreateDefaultSubobject<UMSAIPerceptionComponent>("MSAIPerceptionComponent");
     SetPerceptionComponent(*MSAIPerceptionComponent);
+
+    bWantsPlayerState = true;
 }
 
 void AMSAIController::Tick(float DeltaTime)
