@@ -97,6 +97,15 @@ float AMSCharacter::GetMovementDirection() const
     return CrossProduct.IsZero() ? AngleBetween : AngleBetween * FMath::Sign(CrossProduct.Z);
 }
 
+void AMSCharacter::SetCharacterColor(const FLinearColor& Color)
+{
+    UMaterialInstanceDynamic* MaterialInstance = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+    if (MaterialInstance)
+    {
+        MaterialInstance->SetVectorParameterValue(MaterialColorName, Color);
+    }
+}
+
 void AMSCharacter::MoveForward(float Amount)
 {
     bMovingForward = Amount > 0.0f;

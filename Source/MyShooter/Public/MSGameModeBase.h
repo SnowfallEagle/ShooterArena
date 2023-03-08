@@ -30,9 +30,6 @@ protected:
     int32 RoundTime = 10;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Team")
-    FLinearColor DefaultTeamColor;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Team")
     TArray<FLinearColor> TeamColors;
 
 private:
@@ -48,6 +45,9 @@ public:
 
 private:
     void SpawnBots();
+    void SetTeamInfo();
+    void SetCharacterColor(AController* Controller);
+
     void StartRound();
     void ResetPlayers();
 
