@@ -23,7 +23,7 @@ void AMSAICharacter::OnDeath()
 {
     Super::OnDeath();
 
-    const auto MSController = GetController<AMSAIController>();
+    const auto* MSController = GetController<AMSAIController>();
     if (MSController && MSController->BrainComponent)
     {
         MSController->BrainComponent->Cleanup();

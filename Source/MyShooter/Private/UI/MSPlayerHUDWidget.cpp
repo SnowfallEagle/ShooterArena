@@ -6,37 +6,37 @@
 
 float UMSPlayerHUDWidget::GetHealthPercent() const
 {
-    const auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
+    const auto* HealthComponent = GetPlayerComponent<UMSHealthComponent>();
     return HealthComponent ? HealthComponent->GetHealthPercent() : 0.0f;
 }
 
 bool UMSPlayerHUDWidget::GetWeaponUIData(FWeaponUIData& UIData) const
 {
-    const auto WeaponComponent = GetPlayerComponent<UMSWeaponComponent>();
+    const auto* WeaponComponent = GetPlayerComponent<UMSWeaponComponent>();
     return WeaponComponent && WeaponComponent->GetWeaponUIData(UIData);
 }
 
 bool UMSPlayerHUDWidget::GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const
 {
-    const auto WeaponComponent = GetPlayerComponent<UMSWeaponComponent>();
+    const auto* WeaponComponent = GetPlayerComponent<UMSWeaponComponent>();
     return WeaponComponent && WeaponComponent->GetWeaponAmmoData(CurrentAmmo, DefaultAmmo);
 }
 
 bool UMSPlayerHUDWidget::IsPlayerAlive() const
 {
-    auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
+    const auto* HealthComponent = GetPlayerComponent<UMSHealthComponent>();
     return HealthComponent && !HealthComponent->IsDead();
 }
 
 bool UMSPlayerHUDWidget::IsPlayerSpectating() const
 {
-    const auto Controller = GetOwningPlayer();
+    const auto* Controller = GetOwningPlayer();
     return Controller && Controller->GetStateName() == NAME_Spectating;
 }
 
 AMSGameModeBase* UMSPlayerHUDWidget::GetGameMode()
 {
-    if (UWorld* World = GetWorld())
+    if (const UWorld* World = GetWorld())
     {
         return World->GetAuthGameMode<AMSGameModeBase>();
     }
@@ -45,7 +45,7 @@ AMSGameModeBase* UMSPlayerHUDWidget::GetGameMode()
 
 bool UMSPlayerHUDWidget::Initialize()
 {
-    auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
+    const auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
     if (HealthComponent)
     {
         HealthComponent->OnHealthChanged.AddUObject(this, &UMSPlayerHUDWidget::OnHealthChanged);

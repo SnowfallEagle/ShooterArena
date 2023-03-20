@@ -14,7 +14,7 @@ UMSWeaponFXComponent::UMSWeaponFXComponent()
 
 void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
 {
-    UWorld* World = GetWorld();
+    const UWorld* World = GetWorld();
     if (!World)
     {
         return;

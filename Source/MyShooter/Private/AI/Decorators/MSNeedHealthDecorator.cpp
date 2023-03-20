@@ -9,7 +9,7 @@ bool UMSNeedHealthDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& 
 {
     if (const AAIController* Controller = OwnerComp.GetAIOwner())
     {
-        const auto HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Controller->GetPawn());
+        const auto* HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Controller->GetPawn());
         if (HealthComponent && !HealthComponent->IsDead() && HealthComponent->GetHealthPercent() <= HealthPercent)
         {
             return true;

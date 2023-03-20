@@ -16,7 +16,7 @@ void UMSFindEnemyService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Nod
     if (const auto BlackboardComponent = OwnerComp.GetBlackboardComponent())
     {
         const auto Controller = OwnerComp.GetAIOwner();
-        if (const auto PerceptionComponent = FCoreUtils::GetActorComponent<UMSAIPerceptionComponent>(Controller))
+        if (const auto* PerceptionComponent = FCoreUtils::GetActorComponent<UMSAIPerceptionComponent>(Controller))
         {
             BlackboardComponent->SetValueAsObject(EnemyActorKey.SelectedKeyName, PerceptionComponent->GetClosestEnemy());
         }

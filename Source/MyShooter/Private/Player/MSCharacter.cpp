@@ -125,7 +125,7 @@ void AMSCharacter::OnDeath()
 
     WeaponComponent->StopFire();
 
-    if (UWorld* World = GetWorld())
+    if (const UWorld* World = GetWorld())
     {
         if (const auto GameMode = Cast<AMSGameModeBase>(World->GetAuthGameMode()))
         {

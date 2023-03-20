@@ -27,7 +27,7 @@ void AMSAIController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
 
-    if (const auto MSCharacter = Cast<AMSAICharacter>(InPawn))
+    if (const auto* MSCharacter = Cast<AMSAICharacter>(InPawn))
     {
         RunBehaviorTree(MSCharacter->BehaviorTree);
     }

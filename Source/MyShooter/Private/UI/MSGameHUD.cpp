@@ -15,7 +15,7 @@ void AMSGameHUD::BeginPlay()
 
     if (UWorld* World = GetWorld())
     {
-        if (auto PlayerHUDWidget = CreateWidget<UUserWidget>(World, PlayerHUDWidgetClass))
+        if (const auto PlayerHUDWidget = CreateWidget<UUserWidget>(World, PlayerHUDWidgetClass))
         {
             PlayerHUDWidget->AddToViewport();
         }

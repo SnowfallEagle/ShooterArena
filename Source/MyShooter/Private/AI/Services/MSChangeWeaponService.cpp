@@ -21,14 +21,14 @@ void UMSChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
     {
         if (APawn* Pawn = Controller->GetPawn())
         {
-            if (auto WeaponComponent = FCoreUtils::GetActorComponent<UMSAIWeaponComponent>(Pawn))
+            if (const auto WeaponComponent = FCoreUtils::GetActorComponent<UMSAIWeaponComponent>(Pawn))
             {
                 WeaponComponent->NextWeapon();
 
                 bCanTick = false;
-                if (UWorld* World = GetWorld())
+                if (const UWorld* World = GetWorld())
                 {
-                    World-> GetTimerManager().SetTimer(Timer, this, &UMSChangeWeaponService::OnCanTickAgain, TimeRateBetweenTicks, false);
+                    World->GetTimerManager().SetTimer(Timer, this, &UMSChangeWeaponService::OnCanTickAgain, TimeRateBetweenTicks, false);
                 }
             }
         }

@@ -22,7 +22,7 @@ void AMSDevDamageActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    if (UWorld* World = GetWorld())
+    if (const UWorld* World = GetWorld())
     {
         DrawDebugSphere(GetWorld(), GetActorLocation(), Radius, 24, SphereColor);
         UGameplayStatics::ApplyRadialDamage(GetWorld(), Damage, GetActorLocation(), Radius, DamageType, {}, this, nullptr, bDoFullDamage);

@@ -8,6 +8,6 @@ DEFINE_LOG_CATEGORY_STATIC(LogHealthPickup, All, All);
 
 bool AMSHealthPickup::GivePickupTo(APawn* Pawn)
 {
-    auto HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Pawn);
+    const auto HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Pawn);
     return HealthComponent && HealthComponent->TryToAddHealth(Health);
 }

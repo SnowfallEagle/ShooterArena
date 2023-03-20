@@ -6,7 +6,7 @@
 
 bool UMSSpectatorHUDWidget::GetRespawnTimeLeft(int32& TimeLeft)
 {
-    const auto RespawnComponent = FCoreUtils::GetActorComponent<UMSRespawnComponent>(GetOwningPlayer());
+    const auto* RespawnComponent = FCoreUtils::GetActorComponent<UMSRespawnComponent>(GetOwningPlayer());
     if (RespawnComponent && RespawnComponent->IsRespawning())
     {
         TimeLeft = RespawnComponent->GetRespawnTimeLeft();

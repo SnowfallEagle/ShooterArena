@@ -12,7 +12,7 @@ void UMSRespawnComponent::Respawn(int32 AfterTime)
 {
     RespawnTimeLeft = AfterTime;
 
-    if (UWorld* World = GetWorld())
+    if (const UWorld* World = GetWorld())
     {
         World->GetTimerManager().SetTimer(RespawnTimer, this, &UMSRespawnComponent::OnRespawnTimerUpdate, 1.0f, true);
     }
@@ -22,7 +22,7 @@ void UMSRespawnComponent::OnRespawnTimerUpdate()
 {
     if (--RespawnTimeLeft <= 0)
     {
-        if (UWorld* World = GetWorld())
+        if (const UWorld* World = GetWorld())
         {
             World->GetTimerManager().ClearTimer(RespawnTimer);
 

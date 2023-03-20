@@ -8,6 +8,7 @@
 #include "Player/MSPlayerState.h"
 #include "AIController.h"
 #include "AI/MSAICharacter.h"
+#include "EngineUtils.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMSGameModeBase, All, All);
 
@@ -65,7 +66,7 @@ void AMSGameModeBase::SpawnBots()
 
 void AMSGameModeBase::SetTeamInfo()
 {
-    UWorld* World = GetWorld();
+    const UWorld* World = GetWorld();
     if (!World)
     {
         return;
@@ -150,6 +151,7 @@ void AMSGameModeBase::OnRoundUpdate()
         }
         else
         {
+            EndGame();
             UE_LOG(LogMSGameModeBase, Display, TEXT("Round over"));
         }
 
@@ -175,7 +177,7 @@ void AMSGameModeBase::ResetPlayer(AController* Controller)
 
 void AMSGameModeBase::ResetPlayers()
 {
-    if (UWorld* World = GetWorld())
+    if (const UWorld* World = GetWorld())
     {
         for (auto It = World->GetControllerIterator(); It; ++It)
         {
@@ -186,7 +188,7 @@ void AMSGameModeBase::ResetPlayers()
 
 void AMSGameModeBase::LogPlayerStates()
 {
-    UWorld* World = GetWorld();
+    const UWorld* World = GetWorld();
     if (!World)
     {
         return;
@@ -196,7 +198,7 @@ void AMSGameModeBase::LogPlayerStates()
     {
         if (AController* Controller = It->Get())
         {
-            if (auto PlayerState = Cast<AMSPlayerState>(Controller->PlayerState))
+            if (const auto PlayerState = Cast<AMSPlayerState>(Controller->PlayerState))
             {
                 PlayerState->LogInfo();
             }
@@ -208,9 +210,24 @@ void AMSGameModeBase::StartSpawn(AController* Controller)
 {
     if (RoundTimeLeft > (MinRoundTimeToSpawn + RespawnTime))
     {
-        if (auto RespawnComponent = FCoreUtils::GetActorComponent<UMSRespawnComponent>(Controller))
+        if (const auto RespawnComponent = FCoreUtils::GetActorComponent<UMSRespawnComponent>(Controller))
         {
             RespawnComponent->Respawn(RespawnTime);
+        }
+    }
+}
+
+void AMSGameModeBase::EndGame()
+{
+    if (UWorld* World = GetWorld())
+    {
+        for (const auto Pawn : TActorRange<APawn>(World))
+        {
+            if (Pawn)
+            {
+                Pawn->TurnOff();
+                Pawn->DisableInput(nullptr);
+            }
         }
     }
 }

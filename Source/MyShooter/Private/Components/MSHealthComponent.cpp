@@ -40,7 +40,7 @@ void UMSHealthComponent::BeginPlay()
 
 void UMSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-    auto DamagedPawn = Cast<APawn>(DamagedActor);
+    const auto* DamagedPawn = Cast<APawn>(DamagedActor);
     if (!DamagedPawn)
     {
         return;
@@ -56,7 +56,7 @@ void UMSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
 
     if (bAutoHeal)
     {
-        if (UWorld* World = GetWorld())
+        if (const UWorld* World = GetWorld())
         {
             World->GetTimerManager().SetTimer(AutoHealTimer, this, &UMSHealthComponent::OnAutoHealUpdateTimerFired, AutoHealUpdateTime, true, AutoHealDelayTime);
         }
@@ -68,7 +68,7 @@ void UMSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
 
 void UMSHealthComponent::SetHealth(float InHealth)
 {
-    UWorld* World = GetWorld();
+    const UWorld* World = GetWorld();
 
     const float OldHealth = Health;
     Health = FMath::Clamp(InHealth, 0.0f, MaxHealth);
@@ -104,13 +104,13 @@ void UMSHealthComponent::PlayCameraShake()
         return;
     }
 
-    const auto Player = Cast<APawn>(GetOwner());
+    const auto* Player = Cast<APawn>(GetOwner());
     if (!Player)
     {
         return;
     }
 
-    const auto Controller = Player->GetController<APlayerController>();
+    const auto* Controller = Player->GetController<APlayerController>();
     if (!Controller || !Controller->PlayerCameraManager)
     {
         return;

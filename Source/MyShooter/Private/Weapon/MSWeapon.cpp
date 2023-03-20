@@ -89,7 +89,7 @@ AController* AMSWeapon::GetController() const
 
 bool AMSWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const
 {
-    const auto Character = Cast<AMSCharacter>(GetOwner());
+    const auto* Character = Cast<AMSCharacter>(GetOwner());
     if (!Character)
     {
         return false;
@@ -97,7 +97,7 @@ bool AMSWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation
 
     if (Character->IsPlayerControlled())
     {
-        if (AController* Controller = GetController())
+        if (const AController* Controller = GetController())
         {
             Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
             return true;

@@ -9,9 +9,9 @@
 void UMSEnemyEnvQueryContext::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const
 {
     const auto QueryOwner = Cast<AActor>(QueryInstance.Owner.Get());
-    if (const auto BlackboardComponent = UAIBlueprintHelperLibrary::GetBlackboard(QueryOwner))
+    if (const auto* BlackboardComponent = UAIBlueprintHelperLibrary::GetBlackboard(QueryOwner))
     {
-        const auto EnemyActor = Cast<AActor>(BlackboardComponent->GetValueAsObject(EnemyActorKeyName));
+        const auto* EnemyActor = Cast<AActor>(BlackboardComponent->GetValueAsObject(EnemyActorKeyName));
         UEnvQueryItemType_Actor::SetContextHelper(ContextData, EnemyActor);
     }
 }

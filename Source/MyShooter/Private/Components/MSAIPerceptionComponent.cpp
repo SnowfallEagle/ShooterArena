@@ -23,13 +23,13 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
         return nullptr;
     }
 
-    auto PlayerState = Controller->GetPlayerState<AMSPlayerState>();
+    const auto* PlayerState = Controller->GetPlayerState<AMSPlayerState>();
     if (!PlayerState)
     {
         return nullptr;
     }
 
-    const auto Pawn = Controller->GetPawn();
+    const auto* Pawn = Controller->GetPawn();
     if (!Pawn)
     {
         return nullptr;
@@ -40,7 +40,7 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
 
     for (const auto Actor : PercieveActors)
     {
-        auto PercievePawn = Cast<APawn>(Actor);
+        const auto* PercievePawn = Cast<APawn>(Actor);
         if (!PercievePawn)
         {
             continue;
@@ -51,7 +51,7 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
             continue;        
         }
 
-        const auto HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Actor);
+        const auto* HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Actor);
         if (!HealthComponent || HealthComponent->IsDead())
         {
             continue;

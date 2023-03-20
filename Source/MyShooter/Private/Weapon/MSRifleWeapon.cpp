@@ -132,7 +132,7 @@ void AMSRifleWeapon::ToggleMuzzleFXVisibility(bool bVisible)
 
 void AMSRifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd)
 {
-    if (UWorld* World = GetWorld())
+    if (const UWorld* World = GetWorld())
     {
         if (const auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart))
         {

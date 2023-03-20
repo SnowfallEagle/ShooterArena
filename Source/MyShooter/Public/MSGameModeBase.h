@@ -73,4 +73,6 @@ private:
     void ResetPlayer(AController* Controller);
     void ResetPlayers();
     void LogPlayerStates();
+
+    void EndGame();
 };

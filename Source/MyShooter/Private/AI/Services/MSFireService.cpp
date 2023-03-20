@@ -19,7 +19,7 @@ void UMSFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
     {
         if (AActor* Enemy = Cast<AActor>(Blackboard->GetValueAsObject(EnemyActorKey.SelectedKeyName)))
         {
-            auto HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Enemy);
+            const auto* HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Enemy);
             if (HealthComponent && !HealthComponent->IsDead())
             {
                 bHasAim = true;
@@ -29,8 +29,8 @@ void UMSFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 
     if (const AAIController* Controller = OwnerComp.GetAIOwner())
     {
-        auto WeaponComponent = FCoreUtils::GetActorComponent<UMSWeaponComponent>(Controller->GetPawn());
-        auto HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Controller->GetPawn());
+        const auto WeaponComponent = FCoreUtils::GetActorComponent<UMSWeaponComponent>(Controller->GetPawn());
+        const auto* HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Controller->GetPawn());
 
         if (WeaponComponent && HealthComponent)
         {

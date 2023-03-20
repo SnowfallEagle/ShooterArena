@@ -9,7 +9,7 @@ bool UMSNeedAmmoDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& Ow
 {
     if (const AAIController* Controller = OwnerComp.GetAIOwner())
     {
-        if (const auto WeaponComponent = FCoreUtils::GetActorComponent<UMSWeaponComponent>(Controller->GetPawn()))
+        if (const auto* WeaponComponent = FCoreUtils::GetActorComponent<UMSWeaponComponent>(Controller->GetPawn()))
         {
             FAmmoData CurrentAmmo, DefaultAmmo;
             WeaponComponent->GetWeaponAmmoData(WeaponClass, CurrentAmmo, DefaultAmmo);

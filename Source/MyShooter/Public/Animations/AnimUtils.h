@@ -6,14 +6,14 @@ class FAnimUtils
 {
 public:
     template<typename T>
-    static T* FindNotifyByClass(UAnimSequenceBase* Anim)
+    static T* FindNotifyByClass(const UAnimSequenceBase* Anim)
     {
         if (!Anim)
         {
             return nullptr;
         }
 
-        for (auto& NotifyEvent : Anim->Notifies)
+        for (const auto& NotifyEvent : Anim->Notifies)
         {
             T* AnimNotify = Cast<T>(NotifyEvent.Notify);
             if (AnimNotify)

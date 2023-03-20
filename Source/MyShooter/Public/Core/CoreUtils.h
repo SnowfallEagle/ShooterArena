@@ -7,7 +7,7 @@ class FCoreUtils
 {
 public:
     template<typename T>
-    static T* GetActorComponent(AActor* Actor)
+    static T* GetActorComponent(const AActor* Actor)
     {
         if (!Actor)
         {

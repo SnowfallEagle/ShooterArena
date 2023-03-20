@@ -33,7 +33,7 @@ void UMSWeaponComponent::EndPlay(EEndPlayReason::Type Reason)
 {
     CurrentWeapon = nullptr;
 
-    for (auto Weapon : Weapons)
+    for (const auto Weapon : Weapons)
     {
         Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
         Weapon->Destroy();
@@ -72,8 +72,7 @@ void UMSWeaponComponent::NextWeapon()
 
 void UMSWeaponComponent::ToggleFlashlight()
 {
-    // Optimization: Later we can cache accessories in FWeaponData
-    if (auto FlashlightComponent = FCoreUtils::GetActorComponent<UMSWeaponFlashlightComponent>(CurrentWeapon))
+    if (const auto FlashlightComponent = FCoreUtils::GetActorComponent<UMSWeaponFlashlightComponent>(CurrentWeapon))
     {
         FlashlightComponent->Toggle();
     }
@@ -81,7 +80,7 @@ void UMSWeaponComponent::ToggleFlashlight()
 
 bool UMSWeaponComponent::TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips)
 {
-    for (auto Weapon : Weapons)
+    for (const auto Weapon : Weapons)
     {
         if (Weapon && Weapon->IsA(WeaponClass))
         {
@@ -115,7 +114,7 @@ bool UMSWeaponComponent::GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& De
 
 bool UMSWeaponComponent::GetWeaponAmmoData(TSubclassOf<AMSWeapon> WeaponClass, FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const
 {
-    for (const auto Weapon : Weapons)
+    for (const auto* Weapon : Weapons)
     {
         if (Weapon && Weapon->IsA(WeaponClass))
         {
@@ -141,7 +140,7 @@ void UMSWeaponComponent::SpawnWeapons()
         return;
     }
 
-    for (auto& OneWeaponData : WeaponData)
+    for (const auto& OneWeaponData : WeaponData)
     {
         AMSWeapon* Weapon = World->SpawnActor<AMSWeapon>(OneWeaponData.WeaponClass);
         if (!Weapon)
@@ -215,7 +214,7 @@ void UMSWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage)
 
 void UMSWeaponComponent::InitAnimations()
 {
-    auto EquipFinishedNotify = FAnimUtils::FindNotifyByClass<UMSEquipFinishedAnimNotify>(EquipAnimMontage);
+    const auto EquipFinishedNotify = FAnimUtils::FindNotifyByClass<UMSEquipFinishedAnimNotify>(EquipAnimMontage);
     if (EquipFinishedNotify)
     {
         EquipFinishedNotify->OnNotified.AddUObject(this, &UMSWeaponComponent::OnEquipFinished);
@@ -226,9 +225,9 @@ void UMSWeaponComponent::InitAnimations()
         checkNoEntry();
     }
 
-    for (auto& OneWeaponData : WeaponData)
+    for (const auto& OneWeaponData : WeaponData)
     {
-        auto ReloadFinishedNotify = FAnimUtils::FindNotifyByClass<UMSReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
+        const auto ReloadFinishedNotify = FAnimUtils::FindNotifyByClass<UMSReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
         if (ReloadFinishedNotify)
         {
             ReloadFinishedNotify->OnNotified.AddUObject(this, &UMSWeaponComponent::OnReloadFinished);
