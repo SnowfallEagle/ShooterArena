@@ -25,10 +25,14 @@ public:
     FORCEINLINE FLinearColor GetTeamColor() const { return TeamColor; }
     FORCEINLINE void SetTeamColor(const FLinearColor& Color) { TeamColor = Color; }
 
+    UFUNCTION(BlueprintCallable, Category = "Stat")
     FORCEINLINE int32 GetKills() const { return Kills; }
+
     FORCEINLINE void AddKill() { ++Kills; }
 
+    UFUNCTION(BlueprintCallable, Category = "Stat")
     FORCEINLINE int32 GetDeaths() const { return Deaths; }
+
     FORCEINLINE void AddDeath() { ++Deaths; }
 
     void LogInfo();

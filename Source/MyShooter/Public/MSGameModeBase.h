@@ -45,6 +45,15 @@ public:
 
     void ReportKill(AController* Killer, AController* Victim);
 
+    UFUNCTION(BlueprintCallable, Category = "Round")
+    FORCEINLINE int32 GetCurrentRound() const { return CurrentRound; }
+
+    UFUNCTION(BlueprintCallable, Category = "Round")
+    FORCEINLINE int32 GetNumRounds() const { return NumRounds; }
+
+    UFUNCTION(BlueprintCallable, Category = "Round")
+    FORCEINLINE int32 GetRoundTimeLeft() const { return RoundTimeLeft <= RoundTime ? RoundTimeLeft : RoundTime; }
+
 private:
     void SpawnBots();
     void SetTeamInfo();

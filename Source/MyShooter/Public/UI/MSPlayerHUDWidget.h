@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Weapon/MSWeapon.h"
 #include "Core/CoreUtils.h"
+#include "MSGameModeBase.h"
 #include "MSPlayerHUDWidget.generated.h"
 
 UCLASS()
@@ -28,6 +29,15 @@ protected:
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     bool IsPlayerSpectating() const;
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    AMSGameModeBase* GetGameMode();
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    FORCEINLINE AMSPlayerState* GetPlayerState() { return GetOwningPlayerState<AMSPlayerState>(); }
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    FORCEINLINE FString TimerSecondsToString(int Seconds) { return FString::Printf(TEXT("%.2d:%.2d"), Seconds / 60, Seconds % 60); }
 
     virtual bool Initialize() override;
 

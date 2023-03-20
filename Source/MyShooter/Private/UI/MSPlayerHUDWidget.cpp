@@ -34,6 +34,15 @@ bool UMSPlayerHUDWidget::IsPlayerSpectating() const
     return Controller && Controller->GetStateName() == NAME_Spectating;
 }
 
+AMSGameModeBase* UMSPlayerHUDWidget::GetGameMode()
+{
+    if (UWorld* World = GetWorld())
+    {
+        return World->GetAuthGameMode<AMSGameModeBase>();
+    }
+    return nullptr;
+}
+
 bool UMSPlayerHUDWidget::Initialize()
 {
     auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
