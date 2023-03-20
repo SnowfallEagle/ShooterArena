@@ -21,6 +21,9 @@ public:
 
     void Respawn(int32 AfterTime);
 
+    FORCEINLINE bool IsRespawning() const { return GetWorld() && GetWorld()->GetTimerManager().IsTimerActive(RespawnTimer); }
+    FORCEINLINE int32 GetRespawnTimeLeft() const { return RespawnTimeLeft; }
+
 private:
     void OnRespawnTimerUpdate();
 };
