@@ -7,6 +7,7 @@
 #include "MSAIController.generated.h"
 
 class UMSAIPerceptionComponent;
+class UMSRespawnComponent;
 
 UCLASS()
 class MYSHOOTER_API AMSAIController : public AAIController
@@ -16,6 +17,9 @@ class MYSHOOTER_API AMSAIController : public AAIController
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
     UMSAIPerceptionComponent* MSAIPerceptionComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+    UMSRespawnComponent* MSRespawnComponent;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
     FName FocusedActorKeyName = "EnemyActor";

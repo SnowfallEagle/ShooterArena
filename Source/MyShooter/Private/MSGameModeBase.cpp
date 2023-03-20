@@ -1,6 +1,8 @@
 // MyShooter Game, All Rights Reserved.
 
 #include "MSGameModeBase.h"
+#include "Core/CoreUtils.h"
+#include "Components/MSRespawnComponent.h"
 #include "Character/MSCharacter.h"
 #include "Player/MSPlayerController.h"
 #include "Player/MSPlayerState.h"
@@ -128,6 +130,8 @@ void AMSGameModeBase::ReportKill(AController* Killer, AController* Victim)
     {
         VictimPlayerState->AddDeath();
     }
+
+    StartSpawn(Victim);
 }
 
 void AMSGameModeBase::OnRoundUpdate()
@@ -153,25 +157,29 @@ void AMSGameModeBase::OnRoundUpdate()
     }
 }
 
-void AMSGameModeBase::ResetPlayers()
+void AMSGameModeBase::RequestSpawn(AController* Controller)
 {
-    UWorld* World = GetWorld();
-    if (!World)
+    ResetPlayer(Controller);
+}
+
+void AMSGameModeBase::ResetPlayer(AController* Controller)
+{
+    if (Controller && Controller->GetPawn())
     {
-        return;
+        Controller->GetPawn()->Reset();
     }
 
-    for (auto It = World->GetControllerIterator(); It; ++It)
-    {
-        if (AController* Controller = It->Get())
-        {
-            if (APawn* Pawn = Controller->GetPawn())
-            {
-                Pawn->Reset();
-            }
+    RestartPlayer(Controller);
+    SetCharacterColor(Controller);
+}
 
-            RestartPlayer(Controller);
-            SetCharacterColor(Controller);
+void AMSGameModeBase::ResetPlayers()
+{
+    if (UWorld* World = GetWorld())
+    {
+        for (auto It = World->GetControllerIterator(); It; ++It)
+        {
+            ResetPlayer(It->Get());
         }
     }
 }
@@ -192,6 +200,17 @@ void AMSGameModeBase::LogPlayerStates()
             {
                 PlayerState->LogInfo();
             }
+        }
+    }
+}
+
+void AMSGameModeBase::StartSpawn(AController* Controller)
+{
+    if (RoundTimeLeft > (MinRoundTimeToSpawn + RespawnTime))
+    {
+        if (auto RespawnComponent = FCoreUtils::GetActorComponent<UMSRespawnComponent>(Controller))
+        {
+            RespawnComponent->Respawn(RespawnTime);
         }
     }
 }

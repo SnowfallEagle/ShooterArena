@@ -3,12 +3,15 @@
 #include "AI/MSAIController.h"
 #include "AI/MSAICharacter.h"
 #include "Components/MSAIPerceptionComponent.h"
+#include "Components/MSRespawnComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 AMSAIController::AMSAIController()
 {
     MSAIPerceptionComponent = CreateDefaultSubobject<UMSAIPerceptionComponent>("MSAIPerceptionComponent");
     SetPerceptionComponent(*MSAIPerceptionComponent);
+
+    MSRespawnComponent = CreateDefaultSubobject<UMSRespawnComponent>("MSRespawnComponent");
 
     bWantsPlayerState = true;
 }
