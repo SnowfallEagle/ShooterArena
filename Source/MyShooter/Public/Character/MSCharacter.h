@@ -69,7 +69,7 @@ public:
 
 protected:
     virtual void BeginPlay() override;
-
+    virtual void TurnOff() override;
     virtual void OnDeath();
 
 private:

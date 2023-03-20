@@ -141,6 +141,13 @@ void AMSCharacter::OnDeath()
     SetLifeSpan(LifeSpanOnDeath);
 }
 
+void AMSCharacter::TurnOff()
+{
+    Super::TurnOff();
+
+    WeaponComponent->StopFire();
+}
+
 void AMSCharacter::OnHealthChanged(float NewHealth, float HealthDelta)
 {
     HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.f"), NewHealth)));
