@@ -42,6 +42,8 @@ private:
 
     FTimerHandle AutoHealTimer;
 
+    AController* LastDamageInstigater = nullptr;
+
 public:
     UMSHealthComponent();
 
@@ -53,6 +55,8 @@ public:
 
     FORCEINLINE float GetHealth() const { return Health; }
     FORCEINLINE bool IsHealthFull() const { return FMath::IsNearlyEqual(Health, MaxHealth); }
+
+    FORCEINLINE AController* GetLastDamageInstigater() const { return LastDamageInstigater; }
 
     bool TryToAddHealth(float InHealth);
 

@@ -117,7 +117,7 @@ void AMSRifleWeapon::MakeDamage(FHitResult& HitResult)
 {
     if (AActor* Actor = HitResult.GetActor())
     {
-        Actor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+        Actor->TakeDamage(DamageAmount, FDamageEvent(), GetController(), this);
     }
 }
 
@@ -132,8 +132,11 @@ void AMSRifleWeapon::ToggleMuzzleFXVisibility(bool bVisible)
 
 void AMSRifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd)
 {
-    if (const auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart))
+    if (UWorld* World = GetWorld())
     {
-        TraceFXComponent->SetNiagaraVariableVec3(TraceTargetName, TraceEnd);
+        if (const auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart))
+        {
+            TraceFXComponent->SetNiagaraVariableVec3(TraceTargetName, TraceEnd);
+        }
     }
 }

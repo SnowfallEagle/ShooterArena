@@ -43,12 +43,20 @@ void AMSProjectile::BeginPlay()
     SetLifeSpan(LifeSeconds);
 }
 
-void AMSProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void AMSProjectile::OnProjectileHit(
+    UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit
+)
 {
+    UWorld* World = GetWorld();
+    if (!World)
+    {
+        return;
+    }
+
     MovementComponent->StopMovementImmediately();
 
     UGameplayStatics::ApplyRadialDamage(
-        GetWorld(),                 //
+        World,                      //
         DamageAmount,               //
         GetActorLocation(),         //
         DamageRadius,               //

@@ -43,6 +43,8 @@ public:
     virtual void StartPlay() override;
     UClass* GetDefaultPawnClassForController_Implementation(AController* InController);
 
+    void ReportKill(AController* Killer, AController* Victim);
+
 private:
     void SpawnBots();
     void SetTeamInfo();
@@ -52,4 +54,6 @@ private:
     void ResetPlayers();
 
     void OnRoundUpdate();
+
+    void LogPlayerStates();
 };

@@ -100,7 +100,8 @@ protected:
 
     UNiagaraComponent* SpawnMuzzleFX();
 
-    AController* GetPlayerController() const;
+    AController* GetController() const;
+
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
     FORCEINLINE FTransform GetMuzzleTransform() const { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
 };

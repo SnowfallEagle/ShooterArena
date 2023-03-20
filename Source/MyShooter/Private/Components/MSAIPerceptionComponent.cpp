@@ -5,6 +5,7 @@
 #include "Core/CoreUtils.h"
 #include "Perception/AISense_Sight.h"
 #include "AIController.h"
+#include "Player/MSPlayerState.h"
 
 AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
 {
@@ -22,6 +23,12 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
         return nullptr;
     }
 
+    auto PlayerState = Controller->GetPlayerState<AMSPlayerState>();
+    if (!PlayerState)
+    {
+        return nullptr;
+    }
+
     const auto Pawn = Controller->GetPawn();
     if (!Pawn)
     {
@@ -33,17 +40,28 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
 
     for (const auto Actor : PercieveActors)
     {
-        // TODO: Check if actor is our teammate
+        auto PercievePawn = Cast<APawn>(Actor);
+        if (!PercievePawn)
+        {
+            continue;
+        }
+
+        if (!FCoreUtils::AreEnemies(PercievePawn->Controller, Controller))
+        {
+            continue;        
+        }
 
         const auto HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Actor);
-        if (HealthComponent && !HealthComponent->IsDead())
+        if (!HealthComponent || HealthComponent->IsDead())
         {
-            const float Distance = (Actor->GetActorLocation() - Pawn->GetActorLocation()).Size();
-            if (Distance < BestDistance)
-            {
-                BestDistance = Distance;
-                BestActor = Actor;
-            }
+            continue;
+        }
+
+        const float Distance = (Actor->GetActorLocation() - Pawn->GetActorLocation()).Size();
+        if (Distance < BestDistance)
+        {
+            BestDistance = Distance;
+            BestActor = Actor;
         }
     }
 

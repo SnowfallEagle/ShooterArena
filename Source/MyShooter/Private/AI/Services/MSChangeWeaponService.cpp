@@ -26,7 +26,10 @@ void UMSChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
                 WeaponComponent->NextWeapon();
 
                 bCanTick = false;
-                GetWorld()->GetTimerManager().SetTimer(Timer, this, &UMSChangeWeaponService::OnCanTickAgain, TimeRateBetweenTicks, false);
+                if (UWorld* World = GetWorld())
+                {
+                    World-> GetTimerManager().SetTimer(Timer, this, &UMSChangeWeaponService::OnCanTickAgain, TimeRateBetweenTicks, false);
+                }
             }
         }
     }

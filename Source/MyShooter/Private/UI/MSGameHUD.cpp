@@ -13,9 +13,11 @@ void AMSGameHUD::BeginPlay()
 {
     Super::BeginPlay();
 
-    auto PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass);
-    if (PlayerHUDWidget)
+    if (UWorld* World = GetWorld())
     {
-        PlayerHUDWidget->AddToViewport();
+        if (auto PlayerHUDWidget = CreateWidget<UUserWidget>(World, PlayerHUDWidgetClass))
+        {
+            PlayerHUDWidget->AddToViewport();
+        }
     }
 }

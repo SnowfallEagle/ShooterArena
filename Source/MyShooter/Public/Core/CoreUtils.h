@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Player/MSPlayerState.h"
 
 class FCoreUtils
 {
@@ -15,5 +16,23 @@ public:
 
         const auto Component = Actor->GetComponentByClass(T::StaticClass());
         return Cast<T>(Component);
+    }
+
+    static bool AreEnemies(AController* First, AController* Second)
+    {
+        if (!First || !Second || First == Second)
+        {
+            return false;
+        }
+
+        AMSPlayerState* FirstPlayerState = First->GetPlayerState<AMSPlayerState>();
+        AMSPlayerState* SecondPlayerState = Second->GetPlayerState<AMSPlayerState>();
+
+        if (!FirstPlayerState || !SecondPlayerState || FirstPlayerState->GetTeamID() == SecondPlayerState->GetTeamID())
+        {
+            return false;
+        }
+
+        return true;
     }
 };

@@ -3,6 +3,7 @@
 #include "Components/MSHealthComponent.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
+#include "Core/CoreUtils.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
 
@@ -39,16 +40,27 @@ void UMSHealthComponent::BeginPlay()
 
 void UMSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-    if (Damage <= 0.0f || IsDead())
+    auto DamagedPawn = Cast<APawn>(DamagedActor);
+    if (!DamagedPawn)
     {
         return;
     }
 
-    if (bAutoHeal)
+    // TODO: Check if teamkill enabled
+    if (Damage <= 0.0f || IsDead() || !FCoreUtils::AreEnemies(DamagedPawn->Controller, InstigatedBy))
     {
-        GetWorld()->GetTimerManager().SetTimer(AutoHealTimer, this, &UMSHealthComponent::OnAutoHealUpdateTimerFired, AutoHealUpdateTime, true, AutoHealDelayTime);
+        return;
     }
 
+    LastDamageInstigater = InstigatedBy;
+
+    if (bAutoHeal)
+    {
+        if (UWorld* World = GetWorld())
+        {
+            World->GetTimerManager().SetTimer(AutoHealTimer, this, &UMSHealthComponent::OnAutoHealUpdateTimerFired, AutoHealUpdateTime, true, AutoHealDelayTime);
+        }
+    }
     SetHealth(Health - Damage);
 
     PlayCameraShake();
@@ -56,6 +68,8 @@ void UMSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
 
 void UMSHealthComponent::SetHealth(float InHealth)
 {
+    UWorld* World = GetWorld();
+
     const float OldHealth = Health;
     Health = FMath::Clamp(InHealth, 0.0f, MaxHealth);
     OnHealthChanged.Broadcast(Health, Health - OldHealth);
@@ -64,16 +78,16 @@ void UMSHealthComponent::SetHealth(float InHealth)
     {
         OnDeath.Broadcast();
 
-        if (bAutoHeal)
+        if (bAutoHeal && World)
         {
-            GetWorld()->GetTimerManager().ClearTimer(AutoHealTimer);
+            World->GetTimerManager().ClearTimer(AutoHealTimer);
         }
     }
     else if (IsHealthFull())
     {
-        if (bAutoHeal)
+        if (bAutoHeal && World)
         {
-            GetWorld()->GetTimerManager().ClearTimer(AutoHealTimer);
+            World->GetTimerManager().ClearTimer(AutoHealTimer);
         }
     }
 }

@@ -43,14 +43,16 @@ private:
 public:
     AMSProjectile();
 
-    void SetShotDirection(const FVector& Direction) { ShotDirection = Direction; }
+    FORCEINLINE void SetShotDirection(const FVector& Direction) { ShotDirection = Direction; }
 
 protected:
     virtual void BeginPlay() override;
 
 private:
     UFUNCTION()
-    void OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+    void OnProjectileHit(
+        UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit
+    );
 
     AController* GetController() const;
 };

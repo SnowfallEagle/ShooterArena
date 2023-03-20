@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "MSGameModeBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogCharacter, All, All);
 
@@ -122,14 +123,22 @@ void AMSCharacter::OnDeath()
     GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     GetMesh()->SetSimulatePhysics(true);
 
-    SetLifeSpan(LifeSpanOnDeath);
+    WeaponComponent->StopFire();
+
+    if (UWorld* World = GetWorld())
+    {
+        if (const auto GameMode = Cast<AMSGameModeBase>(World->GetAuthGameMode()))
+        {
+            GameMode->ReportKill(HealthComponent->GetLastDamageInstigater(), Controller);
+        }
+    }
 
     if (Controller)
     {
         Controller->ChangeState(NAME_Spectating);
     }
 
-    WeaponComponent->StopFire();
+    SetLifeSpan(LifeSpanOnDeath);
 }
 
 void AMSCharacter::OnHealthChanged(float NewHealth, float HealthDelta)

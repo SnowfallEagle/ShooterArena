@@ -81,15 +81,10 @@ UNiagaraComponent* AMSWeapon::SpawnMuzzleFX()
     );
 }
 
-AController* AMSWeapon::GetPlayerController() const
+AController* AMSWeapon::GetController() const
 {
-    const ACharacter* Player = Cast<ACharacter>(GetOwner());
-    if (!Player)
-    {
-        return nullptr;
-    }
-
-    return Player->GetController<APlayerController>();
+    const APawn* Pawn = Cast<APawn>(GetOwner());
+    return Pawn ? Pawn->GetController() : nullptr;
 }
 
 bool AMSWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const
@@ -102,7 +97,7 @@ bool AMSWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation
 
     if (Character->IsPlayerControlled())
     {
-        if (AController* Controller = GetPlayerController())
+        if (AController* Controller = GetController())
         {
             Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
             return true;

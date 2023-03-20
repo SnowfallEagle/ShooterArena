@@ -54,8 +54,9 @@ void AMSGameModeBase::SpawnBots()
         const auto Controller = World->SpawnActor<AAIController>(AIControllerClass, SpawnInfo);
         if (!Controller)
         {
-            return;
+            continue;
         }
+
         RestartPlayer(Controller);
     }
 }
@@ -77,7 +78,7 @@ void AMSGameModeBase::SetTeamInfo()
             const auto PlayerState = Cast<AMSPlayerState>(Controller->PlayerState);
             if (!PlayerState)
             {
-                return;
+                continue;
             }
             PlayerState->SetTeamID(TeamID);
             PlayerState->SetTeamColor(TeamColors[TeamID]);
@@ -113,6 +114,22 @@ void AMSGameModeBase::StartRound()
     GetWorldTimerManager().SetTimer(RoundTimer, this, &AMSGameModeBase::OnRoundUpdate, 1.0f, true);
 }
 
+void AMSGameModeBase::ReportKill(AController* Killer, AController* Victim)
+{
+    const auto KillerPlayerState = Killer ? Cast<AMSPlayerState>(Killer->PlayerState) : nullptr;
+    const auto VictimPlayerState = Victim ? Cast<AMSPlayerState>(Victim->PlayerState) : nullptr;
+
+    if (KillerPlayerState)
+    {
+        KillerPlayerState->AddKill();
+    }
+
+    if (VictimPlayerState)
+    {
+        VictimPlayerState->AddDeath();
+    }
+}
+
 void AMSGameModeBase::OnRoundUpdate()
 {
     UE_LOG(LogMSGameModeBase, Display, TEXT("Current round %d, time left %d"), CurrentRound, RoundTimeLeft);
@@ -131,6 +148,8 @@ void AMSGameModeBase::OnRoundUpdate()
         {
             UE_LOG(LogMSGameModeBase, Display, TEXT("Round over"));
         }
+
+        LogPlayerStates();
     }
 }
 
@@ -153,6 +172,26 @@ void AMSGameModeBase::ResetPlayers()
 
             RestartPlayer(Controller);
             SetCharacterColor(Controller);
+        }
+    }
+}
+
+void AMSGameModeBase::LogPlayerStates()
+{
+    UWorld* World = GetWorld();
+    if (!World)
+    {
+        return;
+    }
+
+    for (auto It = World->GetControllerIterator(); It; ++It)
+    {
+        if (AController* Controller = It->Get())
+        {
+            if (auto PlayerState = Cast<AMSPlayerState>(Controller->PlayerState))
+            {
+                PlayerState->LogInfo();
+            }
         }
     }
 }

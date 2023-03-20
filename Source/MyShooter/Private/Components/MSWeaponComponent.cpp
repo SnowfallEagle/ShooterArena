@@ -135,9 +135,15 @@ void UMSWeaponComponent::SpawnWeapons()
         return;
     }
 
+    UWorld* World = GetWorld();
+    if (!World)
+    {
+        return;
+    }
+
     for (auto& OneWeaponData : WeaponData)
     {
-        AMSWeapon* Weapon = GetWorld()->SpawnActor<AMSWeapon>(OneWeaponData.WeaponClass);
+        AMSWeapon* Weapon = World->SpawnActor<AMSWeapon>(OneWeaponData.WeaponClass);
         if (!Weapon)
         {
             continue;
