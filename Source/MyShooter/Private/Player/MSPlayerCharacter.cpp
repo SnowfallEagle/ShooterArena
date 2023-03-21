@@ -5,16 +5,26 @@
 #include "Components/MSWeaponComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
 
 AMSPlayerCharacter::AMSPlayerCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
+    CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+    check(CameraComponent);
+    CameraComponent->SetupAttachment(SpringArmComponent);
+
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+    check(SpringArmComponent);
     SpringArmComponent->SetupAttachment(GetRootComponent());
     SpringArmComponent->bUsePawnControlRotation = true;
     SpringArmComponent->SocketOffset = FVector(0.0f, 60.0f, 100.0f);
 
-    CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-    CameraComponent->SetupAttachment(SpringArmComponent);
+    CameraCollisionComponent = CreateDefaultSubobject<USphereComponent>("CameraCollisionComponent");
+    check(CameraCollisionComponent);
+    CameraCollisionComponent->SetupAttachment(CameraComponent);
+    CameraCollisionComponent->SetSphereRadius(10.0f);
+    CameraCollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 }
 
 void AMSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -22,7 +32,6 @@ void AMSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     check(PlayerInputComponent);
-    check(WeaponComponent);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &AMSPlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AMSPlayerCharacter::MoveRight);
@@ -39,10 +48,49 @@ void AMSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
     PlayerInputComponent->BindAction("ToggleFlashlight", IE_Pressed, WeaponComponent, &UMSWeaponComponent::ToggleFlashlight);
 }
 
+void AMSPlayerCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+
+    CameraCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AMSPlayerCharacter::OnCameraCollisionBeginOverlap);
+    CameraCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &AMSPlayerCharacter::OnCameraCollisionEndOverlap);
+}
+
 void AMSPlayerCharacter::MoveForward(float Amount)
 {
     bMovingForward = Amount > 0.0f;
     AddMovementInput(GetActorForwardVector(), Amount);
+}
+
+void AMSPlayerCharacter::OnCameraCollisionBeginOverlap(
+    UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+    const FHitResult& SweepResult
+)
+{
+    OnCameraOverlap();
+}
+
+void AMSPlayerCharacter::OnCameraCollisionEndOverlap(
+    UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
+)
+{
+    OnCameraOverlap();
+}
+
+void AMSPlayerCharacter::OnCameraOverlap()
+{
+    const bool bHide = CameraCollisionComponent->IsOverlappingComponent(GetCapsuleComponent());
+    GetMesh()->SetOwnerNoSee(bHide);
+
+    TArray<USceneComponent*> Components;
+    GetMesh()->GetChildrenComponents(true, Components);
+    for (const auto Component : Components)
+    {
+        if (const auto PrimitiveComponent = Cast<UPrimitiveComponent>(Component))
+        {
+            PrimitiveComponent->SetOwnerNoSee(bHide);
+        }
+    }
 }
 
 float AMSPlayerCharacter::GetMovementDirection() const
@@ -61,4 +109,3 @@ float AMSPlayerCharacter::GetMovementDirection() const
 
     return CrossProduct.IsZero() ? AngleBetween : AngleBetween * FMath::Sign(CrossProduct.Z);
 }
-
