@@ -52,4 +52,5 @@ private:
     }
 
     void OnHealthChanged(float Health, float DeltaHealth);
+    void OnPawnChanged(APawn* NewPawn);
 };

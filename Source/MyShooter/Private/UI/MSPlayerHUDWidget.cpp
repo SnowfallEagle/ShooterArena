@@ -45,18 +45,27 @@ AMSGameModeBase* UMSPlayerHUDWidget::GetGameMode()
 
 bool UMSPlayerHUDWidget::Initialize()
 {
+    if (APlayerController* Controller = GetOwningPlayer())
+    {
+        Controller->GetOnNewPawnNotifier().AddUObject(this, &UMSPlayerHUDWidget::OnPawnChanged);
+    }
+    OnPawnChanged(GetOwningPlayerPawn());
+
+    return Super::Initialize();
+}
+
+void UMSPlayerHUDWidget::OnPawnChanged(APawn* NewPawn)
+{
     const auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
     if (HealthComponent)
     {
         HealthComponent->OnHealthChanged.AddUObject(this, &UMSPlayerHUDWidget::OnHealthChanged);
     }
-
-    return Super::Initialize();
 }
 
 void UMSPlayerHUDWidget::OnHealthChanged(float Health, float DeltaHealth)
 {
-    if (DeltaHealth < 0)
+    if (DeltaHealth < 0.0f)
     {
         OnDamageTaken();
     }
