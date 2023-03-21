@@ -39,9 +39,6 @@ public:
 protected:
     virtual void BeginPlay() override;
 
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    float GetMovementDirection() const;
-
 private:
     void MoveForward(float Amount);
     FORCEINLINE void MoveRight(float Amount) { AddMovementInput(GetActorRightVector(), Amount); }

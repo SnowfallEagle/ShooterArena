@@ -10,15 +10,15 @@
 
 AMSPlayerCharacter::AMSPlayerCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
-    CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-    check(CameraComponent);
-    CameraComponent->SetupAttachment(SpringArmComponent);
-
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
     check(SpringArmComponent);
     SpringArmComponent->SetupAttachment(GetRootComponent());
     SpringArmComponent->bUsePawnControlRotation = true;
     SpringArmComponent->SocketOffset = FVector(0.0f, 60.0f, 100.0f);
+
+    CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+    check(CameraComponent);
+    CameraComponent->SetupAttachment(SpringArmComponent);
 
     CameraCollisionComponent = CreateDefaultSubobject<USphereComponent>("CameraCollisionComponent");
     check(CameraCollisionComponent);
@@ -93,19 +93,3 @@ void AMSPlayerCharacter::OnCameraOverlap()
     }
 }
 
-float AMSPlayerCharacter::GetMovementDirection() const
-{
-    const FVector Velocity = GetVelocity();
-    if (Velocity.IsZero())
-    {
-        return 0.0f;
-    }
-
-    const FVector ForwardVector = GetActorForwardVector();
-    const FVector VelocityNormal = Velocity.GetSafeNormal();
-
-    const float AngleBetween = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(ForwardVector, VelocityNormal)));
-    const FVector CrossProduct = FVector::CrossProduct(ForwardVector, VelocityNormal);
-
-    return CrossProduct.IsZero() ? AngleBetween : AngleBetween * FMath::Sign(CrossProduct.Z);
-}

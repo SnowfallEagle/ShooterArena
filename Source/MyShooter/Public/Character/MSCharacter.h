@@ -48,6 +48,8 @@ public:
     virtual bool IsRunning() const { return false; }
 
 protected:
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    float GetMovementDirection() const;
 
     virtual void BeginPlay() override;
     virtual void TurnOff() override;

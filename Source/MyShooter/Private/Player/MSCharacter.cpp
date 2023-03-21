@@ -88,6 +88,7 @@ void AMSCharacter::TurnOff()
 
 void AMSCharacter::OnHealthChanged(float NewHealth, float HealthDelta)
 {
+    // TODO: UI health bar
 }
 
 void AMSCharacter::OnGroundLanded(const FHitResult& HitResult)
@@ -102,4 +103,21 @@ void AMSCharacter::OnGroundLanded(const FHitResult& HitResult)
     TakeDamage(Damage, FDamageEvent(), nullptr, nullptr);
 
     UE_LOG(LogCharacter, Display, TEXT("Damage by landing: %f"), Damage);
+}
+
+float AMSCharacter::GetMovementDirection() const
+{
+    const FVector Velocity = GetVelocity();
+    if (Velocity.IsZero())
+    {
+        return 0.0f;
+    }
+
+    const FVector ForwardVector = GetActorForwardVector();
+    const FVector VelocityNormal = Velocity.GetSafeNormal();
+
+    const float AngleBetween = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(ForwardVector, VelocityNormal)));
+    const FVector CrossProduct = FVector::CrossProduct(ForwardVector, VelocityNormal);
+
+    return CrossProduct.IsZero() ? AngleBetween : AngleBetween * FMath::Sign(CrossProduct.Z);
 }
