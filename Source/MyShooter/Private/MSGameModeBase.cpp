@@ -152,6 +152,7 @@ void AMSGameModeBase::OnRoundUpdate()
         else
         {
             EndGame();
+
             UE_LOG(LogMSGameModeBase, Display, TEXT("Round over"));
         }
 

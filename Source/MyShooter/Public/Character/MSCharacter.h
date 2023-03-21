@@ -7,9 +7,6 @@
 #include "Components/MSCharacterMovementComponent.h"
 #include "MSCharacter.generated.h"
 
-class UCameraComponent;
-class USpringArmComponent;
-class UTextRenderComponent;
 class UMSHealthComponent;
 class UMSWeaponComponent;
 
@@ -20,16 +17,7 @@ class MYSHOOTER_API AMSCharacter : public ACharacter
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    UCameraComponent* CameraComponent;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    USpringArmComponent* SpringArmComponent;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UMSHealthComponent* HealthComponent;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    UTextRenderComponent* HealthTextComponent;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UMSWeaponComponent* WeaponComponent;
@@ -49,39 +37,23 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Material")
     FName MaterialColorName = "Paint Color";
 
-private:
-    bool bWantsToRun = false;
-    bool bMovingForward = true;
-
 public:
     AMSCharacter(const FObjectInitializer& ObjInit);
 
     virtual void Tick(float DeltaTime) override;
-    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    bool IsRunning() const { return bWantsToRun && bMovingForward && !GetVelocity().IsZero(); }
-
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    float GetMovementDirection() const;
 
     void SetCharacterColor(const FLinearColor& Color);
 
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    virtual bool IsRunning() const { return false; }
+
 protected:
+
     virtual void BeginPlay() override;
     virtual void TurnOff() override;
     virtual void OnDeath();
 
 private:
-    void MoveForward(float Amount);
-    FORCEINLINE void MoveRight(float Amount) { AddMovementInput(GetActorRightVector(), Amount); }
-
-    FORCEINLINE void LookUp(float Amount) { AddControllerPitchInput(Amount); }
-    FORCEINLINE void TurnAround(float Amount) { AddControllerYawInput(Amount); }
-
-    FORCEINLINE void OnStartRunning() { bWantsToRun = true; }
-    FORCEINLINE void OnEndRunning() { bWantsToRun = false; }
-
     void OnHealthChanged(float NewHealth, float HealthDelta);
 
     UFUNCTION()
