@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "MSGameModeBase.h"
 #include "MSPlayerController.generated.h"
 
 class UMSRespawnComponent;
@@ -19,4 +20,12 @@ protected:
 
 public:
     AMSPlayerController();
+
+protected:
+    virtual void BeginPlay() override;
+    virtual void SetupInputComponent() override;
+
+private:
+    void OnPause();
+    void OnMatchStateChanged(EMatchState NewState);
 };

@@ -33,10 +33,10 @@ struct FWeaponUIData
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-    UTexture2D* MainIcon;
+    UTexture2D* MainIcon = nullptr;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-    UTexture2D* CrosshairIcon;
+    UTexture2D* CrosshairIcon = nullptr;
 };
 
 UCLASS()

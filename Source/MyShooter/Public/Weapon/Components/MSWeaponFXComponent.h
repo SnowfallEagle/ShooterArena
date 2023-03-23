@@ -15,7 +15,7 @@ struct FDecalData
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    UMaterialInterface* Material;
+    UMaterialInterface* Material = nullptr;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     FVector Size = FVector(10.0f);
@@ -33,7 +33,7 @@ struct FImpactData
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    UNiagaraSystem* NiagaraEffect;
+    UNiagaraSystem* NiagaraEffect = nullptr;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     FDecalData DecalData;

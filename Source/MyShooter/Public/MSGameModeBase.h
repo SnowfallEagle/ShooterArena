@@ -8,10 +8,24 @@
 
 class AAIController;
 
+UENUM()
+enum class EMatchState : uint8
+{
+    WaitingToStart = 0,
+    InProgress,
+    Pause,
+    Ended
+};
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMatchStateChanged, EMatchState);
+
 UCLASS()
 class MYSHOOTER_API AMSGameModeBase : public AGameModeBase
 {
     GENERATED_BODY()
+
+public:
+    FOnMatchStateChanged OnMatchStateChanged;
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
@@ -43,6 +57,8 @@ private:
     int32 RoundTimeLeft;
     FTimerHandle RoundTimer;
 
+    EMatchState MatchState = EMatchState::WaitingToStart;
+
 public:
     AMSGameModeBase();
 
@@ -61,7 +77,12 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Round")
     FORCEINLINE int32 GetRoundTimeLeft() const { return RoundTimeLeft; }
 
+	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate = FCanUnpause()) override;
+    virtual bool ClearPause() override;
+
 private:
+    void SetMatchState(EMatchState NewState);
+
     void SpawnBots();
     void SetTeamInfo();
     void SetCharacterColor(AController* Controller);

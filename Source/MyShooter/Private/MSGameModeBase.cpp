@@ -28,6 +28,30 @@ void AMSGameModeBase::StartPlay()
 
     CurrentRound = 1;
     StartRound();
+
+    SetMatchState(EMatchState::InProgress);
+}
+
+bool AMSGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate)
+{
+    const bool bPaused = Super::SetPause(PC, CanUnpauseDelegate);
+    if (bPaused)
+    {
+        SetMatchState(EMatchState::Pause);
+    }
+
+    return bPaused;
+}
+
+bool AMSGameModeBase::ClearPause()
+{
+    const bool bCleared = Super::ClearPause();
+    if (bCleared)
+    {
+        SetMatchState(EMatchState::InProgress);    
+    }
+
+    return bCleared;
 }
 
 UClass* AMSGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
@@ -231,4 +255,17 @@ void AMSGameModeBase::EndGame()
             }
         }
     }
+
+    SetMatchState(EMatchState::Ended);
+}
+
+void AMSGameModeBase::SetMatchState(EMatchState NewState)
+{
+    if (MatchState == NewState)
+    {
+        return;
+    }
+
+    MatchState = NewState;
+    OnMatchStateChanged.Broadcast(NewState);
 }
