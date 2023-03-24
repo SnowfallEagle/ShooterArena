@@ -35,4 +35,6 @@ public:
 
         return true;
     }
+
+    FORCEINLINE static FText IntToText(int Num) { return FText::FromString(FString::FromInt(Num)); }
 };

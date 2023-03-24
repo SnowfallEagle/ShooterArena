@@ -18,7 +18,8 @@ void AMSGameHUD::BeginPlay()
     if (UWorld* World = GetWorld())
     {
         Widgets.Add(EMatchState::InProgress, CreateWidget<UUserWidget>(World, PlayerHUDWidgetClass));
-        Widgets.Add(EMatchState::Pause, CreateWidget<UUserWidget>(World, PauseHUDWidgetClass));
+        Widgets.Add(EMatchState::Pause, CreateWidget<UUserWidget>(World, PauseWidgetClass));
+        Widgets.Add(EMatchState::Ended, CreateWidget<UUserWidget>(World, GameEndedWidgetClass));
 
         for (const auto Pair : Widgets)
         {
@@ -38,8 +39,6 @@ void AMSGameHUD::BeginPlay()
 
 void AMSGameHUD::OnMatchStateChanged(EMatchState NewState)
 {
-    UE_LOG(LogMSGameHUD, Display, TEXT("Match State changed: %s"), *UEnum::GetValueAsString(NewState));
-
     if (CurrentWidget)
     {
         CurrentWidget->SetVisibility(ESlateVisibility::Hidden);

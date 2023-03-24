@@ -17,7 +17,7 @@ bool UMSPauseWidget::Initialize()
 
 void UMSPauseWidget::OnClearPause()
 {
-    if (UWorld* World = GetWorld())
+    if (const UWorld* World = GetWorld())
     {
         if (AGameModeBase* GameMode = World->GetAuthGameMode())
         {

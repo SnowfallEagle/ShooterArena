@@ -17,7 +17,10 @@ protected:
     TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-    TSubclassOf<UUserWidget> PauseHUDWidgetClass;
+    TSubclassOf<UUserWidget> PauseWidgetClass;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    TSubclassOf<UUserWidget> GameEndedWidgetClass;
 
 private:
     UPROPERTY()

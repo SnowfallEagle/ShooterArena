@@ -2,13 +2,13 @@
 
 #include "MSGameModeBase.h"
 #include "Core/CoreUtils.h"
+#include "EngineUtils.h"
 #include "Components/MSRespawnComponent.h"
 #include "Character/MSCharacter.h"
 #include "Player/MSPlayerController.h"
 #include "Player/MSPlayerState.h"
 #include "AIController.h"
 #include "AI/MSAICharacter.h"
-#include "EngineUtils.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMSGameModeBase, All, All);
 
@@ -97,6 +97,7 @@ void AMSGameModeBase::SetTeamInfo()
     }
 
     int32 TeamID = 1;
+    int32 BotID = 1;
 
     for (auto It = World->GetControllerIterator(); It; ++It)
     {
@@ -109,6 +110,7 @@ void AMSGameModeBase::SetTeamInfo()
             }
             PlayerState->SetTeamID(TeamID);
             PlayerState->SetTeamColor(TeamColors[TeamID]);
+            PlayerState->SetPlayerName(Controller->IsPlayerController() ? "Player" : FString("Bot") + FString::FromInt(BotID++));
 
             SetCharacterColor(Controller);
 
@@ -268,4 +270,6 @@ void AMSGameModeBase::SetMatchState(EMatchState NewState)
 
     MatchState = NewState;
     OnMatchStateChanged.Broadcast(NewState);
+
+    UE_LOG(LogMSGameModeBase, Display, TEXT("State changed: %s"), *UEnum::GetValueAsString(NewState));
 }

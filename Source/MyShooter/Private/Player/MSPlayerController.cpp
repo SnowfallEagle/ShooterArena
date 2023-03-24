@@ -51,7 +51,7 @@ void AMSPlayerController::OnMatchStateChanged(EMatchState NewState)
         SetInputMode(FInputModeGameOnly());
         bShowMouseCursor = false;
     }
-    else if (NewState == EMatchState::Pause)
+    else if (NewState == EMatchState::Pause || NewState == EMatchState::Ended)
     {
         SetInputMode(FInputModeUIOnly());
         bShowMouseCursor = true;
