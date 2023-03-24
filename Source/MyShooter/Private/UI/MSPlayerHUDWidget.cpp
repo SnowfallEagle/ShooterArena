@@ -43,15 +43,15 @@ AMSGameModeBase* UMSPlayerHUDWidget::GetGameMode()
     return nullptr;
 }
 
-bool UMSPlayerHUDWidget::Initialize()
+void UMSPlayerHUDWidget::NativeOnInitialized()
 {
+    Super::NativeOnInitialized();
+
     if (APlayerController* Controller = GetOwningPlayer())
     {
         Controller->GetOnNewPawnNotifier().AddUObject(this, &UMSPlayerHUDWidget::OnPawnChanged);
     }
     OnPawnChanged(GetOwningPlayerPawn());
-
-    return Super::Initialize();
 }
 
 void UMSPlayerHUDWidget::OnPawnChanged(APawn* NewPawn)

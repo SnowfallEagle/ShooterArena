@@ -11,11 +11,6 @@ class MYSHOOTER_API UMSNextLocationTask : public UBTTaskNode
 {
     GENERATED_BODY()
 
-public:
-    UMSNextLocationTask();
-
-	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
-
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
     float Radius = 100.0f;
@@ -28,4 +23,9 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (EditCondition = "!bFindFromSelf"))
     FBlackboardKeySelector FromActorKey;
+
+public:
+    UMSNextLocationTask();
+
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
 };

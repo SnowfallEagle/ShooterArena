@@ -12,8 +12,6 @@ class MYSHOOTER_API AMSDevDamageActor : public AActor
 	GENERATED_BODY()
 	
 public:	
-	AMSDevDamageActor();
-
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
     USceneComponent* SceneComponent;
 
@@ -31,6 +29,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<UDamageType> DamageType;
+
+public:
+	AMSDevDamageActor();
 
 protected:
 	virtual void BeginPlay() override;

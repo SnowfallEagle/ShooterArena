@@ -3,24 +3,27 @@
 #include "UI/MSGameEndedWidget.h"
 #include "UI/MSPlayerStatRowWidget.h"
 #include "Components/VerticalBox.h"
+#include "Components/Button.h"
 #include "Player/MSPlayerState.h"
 #include "Core/CoreUtils.h"
+#include "Kismet/GameplayStatics.h"
 
-bool UMSGameEndedWidget::Initialize()
+void UMSGameEndedWidget::NativeOnInitialized()
 {
-    const bool bRes = Super::Initialize();
-    if (bRes)
+    Super::NativeOnInitialized();
+
+    if (const UWorld* World = GetWorld())
     {
-        if (const UWorld* World = GetWorld())
+        if (const auto GameMode = Cast<AMSGameModeBase>(World->GetAuthGameMode()))
         {
-            if (const auto GameMode = Cast<AMSGameModeBase>(World->GetAuthGameMode()))
-            {
-                GameMode->OnMatchStateChanged.AddUObject(this, &UMSGameEndedWidget::OnMatchStateChanged);
-            }
+            GameMode->OnMatchStateChanged.AddUObject(this, &UMSGameEndedWidget::OnMatchStateChanged);
         }
     }
 
-    return bRes;
+    if (RestartLevelButton)
+    {
+        RestartLevelButton->OnClicked.AddDynamic(this, &UMSGameEndedWidget::OnRestartLevel);
+    }
 }
 
 void UMSGameEndedWidget::OnMatchStateChanged(EMatchState NewState)
@@ -82,7 +85,7 @@ void UMSGameEndedWidget::UpdateStats()
         PlayerStatRowWidget->SetTeam(FCoreUtils::IntToText(PlayerState->GetTeamID()));
         PlayerStatRowWidget->TogglePlayerIndicatorVisibility(Controller->IsPlayerController());
 
-        StatesAndWidgets.Emplace(FPlayerStateAndWidget { PlayerState, PlayerStatRowWidget });
+        StatesAndWidgets.Emplace(FPlayerStateAndWidget{ PlayerState, PlayerStatRowWidget });
     }
 
     StatesAndWidgets.Sort();
@@ -90,4 +93,9 @@ void UMSGameEndedWidget::UpdateStats()
     {
         PlayerStatBox->AddChild(StateAndWidget.Widget);
     }
+}
+
+void UMSGameEndedWidget::OnRestartLevel()
+{
+    UGameplayStatics::OpenLevel(this, FName(UGameplayStatics::GetCurrentLevelName(this)));
 }

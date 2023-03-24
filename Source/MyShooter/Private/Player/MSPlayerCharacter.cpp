@@ -38,14 +38,14 @@ void AMSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
     PlayerInputComponent->BindAxis("LookUp", this, &AMSPlayerCharacter::LookUp);
     PlayerInputComponent->BindAxis("TurnAround", this, &AMSPlayerCharacter::TurnAround);
 
-    PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AMSPlayerCharacter::OnStartRunning);
-    PlayerInputComponent->BindAction("Run", IE_Released, this, &AMSPlayerCharacter::OnEndRunning);
-    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMSPlayerCharacter::Jump);
-    PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UMSWeaponComponent::StartFire);
-    PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &UMSWeaponComponent::StopFire);
-    PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &UMSWeaponComponent::NextWeapon);
-    PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &UMSWeaponComponent::Reload);
-    PlayerInputComponent->BindAction("ToggleFlashlight", IE_Pressed, WeaponComponent, &UMSWeaponComponent::ToggleFlashlight);
+    PlayerInputComponent->BindAction("Run", EInputEvent::IE_Pressed, this, &AMSPlayerCharacter::OnStartRunning);
+    PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released, this, &AMSPlayerCharacter::OnEndRunning);
+    PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AMSPlayerCharacter::Jump);
+    PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::StartFire);
+    PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Released, WeaponComponent, &UMSWeaponComponent::StopFire);
+    PlayerInputComponent->BindAction("NextWeapon", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::NextWeapon);
+    PlayerInputComponent->BindAction("Reload", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::Reload);
+    PlayerInputComponent->BindAction("ToggleFlashlight", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::ToggleFlashlight);
 }
 
 void AMSPlayerCharacter::BeginPlay()

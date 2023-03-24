@@ -4,15 +4,14 @@
 #include "Components/Button.h"
 #include "GameFramework/GameModeBase.h"
 
-bool UMSPauseWidget::Initialize()
+void UMSPauseWidget::NativeOnInitialized()
 {
-    const bool bRes = Super::Initialize();
-    if (bRes && ClearPauseButton)
+    Super::NativeOnInitialized();
+
+    if (ClearPauseButton)
     {
         ClearPauseButton->OnClicked.AddDynamic(this, &UMSPauseWidget::OnClearPause);
     }
-
-    return bRes;
 }
 
 void UMSPauseWidget::OnClearPause()

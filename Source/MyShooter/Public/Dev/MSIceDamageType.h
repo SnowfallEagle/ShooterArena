@@ -6,12 +6,8 @@
 #include "GameFramework/DamageType.h"
 #include "MSIceDamageType.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class MYSHOOTER_API UMSIceDamageType : public UDamageType
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
 };

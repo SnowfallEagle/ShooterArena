@@ -17,8 +17,8 @@ protected:
     UPROPERTY(meta = (BindWidget))
     UButton* ClearPauseButton;
 
-public:
-    virtual bool Initialize() override;
+protected:
+    virtual void NativeOnInitialized() override;
 
 private:
     UFUNCTION()

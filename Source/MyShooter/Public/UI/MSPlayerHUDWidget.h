@@ -39,10 +39,10 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "UI")
     FORCEINLINE FString TimerSecondsToString(int Seconds) { return FString::Printf(TEXT("%.2d:%.2d"), Seconds / 60, Seconds % 60); }
 
-    virtual bool Initialize() override;
-
     UFUNCTION(BlueprintImplementableEvent, Category = "UI")
     void OnDamageTaken();
+
+    virtual void NativeOnInitialized() override;
 
 private:
     template<typename T>

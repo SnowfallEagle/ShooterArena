@@ -14,7 +14,8 @@ class MYSHOOTER_API UMSAnimNotify : public UAnimNotify
     GENERATED_BODY()
 
 public:
-	virtual void Notify(USkeletalMeshComponent* MeshComponent, UAnimSequenceBase* Animation) override;
-
     FOnNotifiedSignature OnNotified;
+
+public:
+	virtual void Notify(USkeletalMeshComponent* MeshComponent, UAnimSequenceBase* Animation) override;
 };

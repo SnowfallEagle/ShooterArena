@@ -8,14 +8,12 @@
 #include "MSGameEndedWidget.generated.h"
 
 class UVerticalBox;
+class UButton;
 
 UCLASS()
 class MYSHOOTER_API UMSGameEndedWidget : public UUserWidget
 {
     GENERATED_BODY()
-
-public:
-    virtual bool Initialize() override;
 
 protected:
     UPROPERTY(meta = (BindWidget))
@@ -24,7 +22,16 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
     TSubclassOf<UUserWidget> PlayerStatRowWidgetClass;
 
+    UPROPERTY(meta = (BindWidget))
+    UButton* RestartLevelButton;
+
+protected:
+    virtual void NativeOnInitialized() override;
+
 private:
     void OnMatchStateChanged(EMatchState NewState);
     void UpdateStats();
+
+    UFUNCTION()
+    void OnRestartLevel();
 };
