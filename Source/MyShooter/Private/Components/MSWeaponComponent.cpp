@@ -70,6 +70,12 @@ void UMSWeaponComponent::NextWeapon()
     EquipWeapon(CurrentWeaponIndex);
 }
 
+void UMSWeaponComponent::TurnOff()
+{
+    bEnabled = false;
+    StopFire();
+}
+
 void UMSWeaponComponent::ToggleFlashlight()
 {
     if (const auto FlashlightComponent = FCoreUtils::GetActorComponent<UMSWeaponFlashlightComponent>(CurrentWeapon))

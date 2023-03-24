@@ -81,9 +81,9 @@ void AMSCharacter::OnDeath()
 
 void AMSCharacter::TurnOff()
 {
-    Super::TurnOff();
+    WeaponComponent->TurnOff();
 
-    WeaponComponent->StopFire();
+    Super::TurnOff();
 }
 
 void AMSCharacter::OnHealthChanged(float NewHealth, float HealthDelta)

@@ -52,6 +52,8 @@ private:
     bool bEquipAnimInProgress = false;
     bool bReloadAnimInProgress = false;
 
+    bool bEnabled = true;
+
 public:
     UMSWeaponComponent();
 
@@ -59,14 +61,16 @@ public:
     virtual void StopFire();
     virtual void NextWeapon();
 
+    void TurnOff();
+
     FORCEINLINE void Reload() { ChangeClip(); }
     bool TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips);
 
     void ToggleFlashlight();
 
-    FORCEINLINE bool CanEquip() const { return !bEquipAnimInProgress && !bReloadAnimInProgress; }
-    FORCEINLINE bool CanFire() const { return CurrentWeapon && !bEquipAnimInProgress && !bReloadAnimInProgress; }
-    FORCEINLINE bool CanReload() const { return CurrentWeapon && CurrentWeapon->CanReload() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
+    FORCEINLINE bool CanEquip() const { return bEnabled && !bEquipAnimInProgress && !bReloadAnimInProgress; }
+    FORCEINLINE bool CanFire() const { return bEnabled && CurrentWeapon && !bEquipAnimInProgress && !bReloadAnimInProgress; }
+    FORCEINLINE bool CanReload() const { return bEnabled && CurrentWeapon && CurrentWeapon->CanReload() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
 
     bool GetWeaponUIData(FWeaponUIData& UIData) const;
     bool GetWeaponAmmoData(FAmmoData& CurrentAmmo, FAmmoData& DefaultAmmo) const;

@@ -4,6 +4,7 @@
 #include "Core/CoreUtils.h"
 #include "EngineUtils.h"
 #include "Components/MSRespawnComponent.h"
+#include "Components/MSWeaponComponent.h"
 #include "Character/MSCharacter.h"
 #include "Player/MSPlayerController.h"
 #include "Player/MSPlayerState.h"
