@@ -88,7 +88,7 @@ void AMSCharacter::TurnOff()
 
 void AMSCharacter::OnHealthChanged(float NewHealth, float HealthDelta)
 {
-    // TODO: UI health bar
+    // Empty...
 }
 
 void AMSCharacter::OnGroundLanded(const FHitResult& HitResult)

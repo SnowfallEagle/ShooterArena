@@ -53,10 +53,11 @@ protected:
 
     virtual void BeginPlay() override;
     virtual void TurnOff() override;
+
     virtual void OnDeath();
+    virtual void OnHealthChanged(float NewHealth, float HealthDelta);
 
 private:
-    void OnHealthChanged(float NewHealth, float HealthDelta);
 
     UFUNCTION()
     void OnGroundLanded(const FHitResult& HitResult);
