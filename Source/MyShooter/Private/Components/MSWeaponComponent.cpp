@@ -3,11 +3,11 @@
 #include "Components/MSWeaponComponent.h"
 #include "Components/MSWeaponFlashlightComponent.h"
 #include "Weapon/MSWeapon.h"
-#include "GameFramework/Character.h"
 #include "Animations/MSEquipFinishedAnimNotify.h"
 #include "Animations/MSReloadFinishedAnimNotify.h"
 #include "Animations/AnimUtils.h"
 #include "Core/CoreUtils.h"
+#include "GameFramework/Character.h"
 
 static constexpr int32 NumWeapons = 2;
 

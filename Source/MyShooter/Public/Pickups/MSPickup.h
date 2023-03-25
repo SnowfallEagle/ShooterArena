@@ -30,7 +30,7 @@ public:
 
     virtual void Tick(float DeltaTime) override;
 
-    bool CanBeTaken() const { return !GetWorldTimerManager().IsTimerActive(RespawnTimer); }
+    FORCEINLINE bool CanBeTaken() const { return !GetWorldTimerManager().IsTimerActive(RespawnTimer); }
 
 protected:
     virtual void BeginPlay() override;

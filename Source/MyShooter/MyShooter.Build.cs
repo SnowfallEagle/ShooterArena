@@ -17,7 +17,7 @@ public class MyShooter : ModuleRules
                 "Niagara",
                 "PhysicsCore",
                 "GameplayTasks",
-                "NavigationSystem"
+                "NavigationSystem",
             }
         );
 

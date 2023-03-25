@@ -15,7 +15,10 @@ class MYSHOOTER_API UMSPauseWidget : public UUserWidget
 
 protected:
     UPROPERTY(meta = (BindWidget))
-    UButton* ClearPauseButton;
+    UButton* ClearPauseButton = nullptr;
+
+    UPROPERTY(meta = (BindWidget))
+    UButton* MainMenuButton = nullptr;
 
 protected:
     virtual void NativeOnInitialized() override;
@@ -23,4 +26,7 @@ protected:
 private:
     UFUNCTION()
     void OnClearPause();
+
+    UFUNCTION()
+    void OnMainMenu();
 };

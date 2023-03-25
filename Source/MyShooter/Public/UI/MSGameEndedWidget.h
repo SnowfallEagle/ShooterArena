@@ -16,14 +16,17 @@ class MYSHOOTER_API UMSGameEndedWidget : public UUserWidget
     GENERATED_BODY()
 
 protected:
-    UPROPERTY(meta = (BindWidget))
-    UVerticalBox* PlayerStatBox;
-
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
     TSubclassOf<UUserWidget> PlayerStatRowWidgetClass;
 
     UPROPERTY(meta = (BindWidget))
-    UButton* RestartLevelButton;
+    UVerticalBox* PlayerStatBox = nullptr;
+
+    UPROPERTY(meta = (BindWidget))
+    UButton* RestartLevelButton = nullptr;
+
+    UPROPERTY(meta = (BindWidget))
+    UButton* MainMenuButton = nullptr;
 
 protected:
     virtual void NativeOnInitialized() override;
@@ -34,4 +37,7 @@ private:
 
     UFUNCTION()
     void OnRestartLevel();
+
+    UFUNCTION()
+    void OnMainMenu();
 };

@@ -7,6 +7,10 @@
 #include "Player/MSPlayerState.h"
 #include "Core/CoreUtils.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "MSGameInstance.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogMSGameEndedWidget, All, All);
 
 void UMSGameEndedWidget::NativeOnInitialized()
 {
@@ -23,6 +27,11 @@ void UMSGameEndedWidget::NativeOnInitialized()
     if (RestartLevelButton)
     {
         RestartLevelButton->OnClicked.AddDynamic(this, &UMSGameEndedWidget::OnRestartLevel);
+    }
+
+    if (MainMenuButton)
+    {
+        MainMenuButton->OnClicked.AddDynamic(this, &UMSGameEndedWidget::OnMainMenu);
     }
 }
 
@@ -98,4 +107,22 @@ void UMSGameEndedWidget::UpdateStats()
 void UMSGameEndedWidget::OnRestartLevel()
 {
     UGameplayStatics::OpenLevel(this, FName(UGameplayStatics::GetCurrentLevelName(this)));
+}
+
+void UMSGameEndedWidget::OnMainMenu()
+{
+    if (const UWorld* World = GetWorld())
+    {
+        if (const auto* GameInstance = World->GetGameInstance<UMSGameInstance>())
+        {
+            FName MainMenuLevelName = GameInstance->GetMainMenuLevelName();
+            if (MainMenuLevelName.IsNone())
+            {
+                UE_LOG(LogMSGameEndedWidget, Error, TEXT("There's no MainMenuLevelName in GameInstance"));
+                return;
+            }
+
+            UGameplayStatics::OpenLevel(this, MainMenuLevelName);
+        }
+    }
 }
