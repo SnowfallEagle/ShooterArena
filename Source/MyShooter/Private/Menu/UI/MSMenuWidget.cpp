@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 #include "MSGameInstance.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMSMenuWidget, All, All);
@@ -113,6 +114,7 @@ void UMSMenuWidget::OnStart()
     if (!IsAnimationPlaying(LoadingAnimation))
     {
         PlayAnimation(LoadingAnimation);
+        UGameplayStatics::PlaySound2D(GetWorld(), GameStartSound);
     }
 }
 

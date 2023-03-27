@@ -10,6 +10,7 @@ class UButton;
 class UHorizontalBox;
 class UMSGameInstance;
 class UMSLevelItemWidget;
+class USoundCue;
 
 UCLASS()
 class MYSHOOTER_API UMSMenuWidget : public UUserWidget
@@ -32,8 +33,14 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
     TSubclassOf<UUserWidget> LevelItemWidgetClass;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    USoundCue* GameStartSound = nullptr;
+
 private:
+    UPROPERTY()
     TArray<UMSLevelItemWidget*> LevelItemWidgets;
+
+    UPROPERTY()
     UMSLevelItemWidget* CurrentLevelItemWidget = nullptr;
 
 protected:
