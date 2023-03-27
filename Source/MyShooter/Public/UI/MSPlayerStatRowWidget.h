@@ -30,10 +30,14 @@ protected:
     UPROPERTY(meta = (BindWidget))
     UImage* PlayerIndicatorImage = nullptr;
 
+    UPROPERTY(meta = (BindWidget))
+    UImage* TeamImage = nullptr;
+
 public:
     void SetName(const FText& Name);
     void SetKills(const FText& Name);
     void SetDeaths(const FText& Name);
     void SetTeam(const FText& Name);
+    void SetTeamColor(const FLinearColor& Color);
     void TogglePlayerIndicatorVisibility(bool bVisible);
 };

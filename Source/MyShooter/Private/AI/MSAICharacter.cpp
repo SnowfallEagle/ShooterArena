@@ -85,12 +85,12 @@ void AMSAICharacter::OnCheckHealthBarVisibility()
 
     if (const auto HealthBarWidget = Cast<UMSHealthBarWidget>(HealthBarWidgetComponent->GetUserWidgetObject()))
     {
-        FVector PlayerLocation = PlayerPawn->GetActorLocation();
-        FVector MyLocation = GetActorLocation();
+        const FVector PlayerLocation = PlayerPawn->GetActorLocation();
+        const FVector MyLocation = GetActorLocation();
         const bool bDistanceVisibility = FVector::DistSquared(PlayerLocation, MyLocation) < SquaredHealthBarDrawDistance;
 
-        FVector MeToPlayer = (PlayerLocation - MyLocation).GetSafeNormal();
-        FVector EndLocation = MyLocation + MeToPlayer * HealthBarDrawDistance;
+        const FVector MeToPlayer = (PlayerLocation - MyLocation).GetSafeNormal();
+        const FVector EndLocation = MyLocation + MeToPlayer * HealthBarDrawDistance;
 
         FHitResult HitResult;
         FCollisionQueryParams CollisionParams;

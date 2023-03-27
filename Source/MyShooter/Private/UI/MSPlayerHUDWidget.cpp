@@ -3,6 +3,7 @@
 #include "UI/MSPlayerHUDWidget.h"
 #include "Components/MSHealthComponent.h"
 #include "Components/MSWeaponComponent.h"
+#include "Components/ProgressBar.h"
 
 float UMSPlayerHUDWidget::GetHealthPercent() const
 {
@@ -56,11 +57,12 @@ void UMSPlayerHUDWidget::NativeOnInitialized()
 
 void UMSPlayerHUDWidget::OnPawnChanged(APawn* NewPawn)
 {
-    const auto HealthComponent = GetPlayerComponent<UMSHealthComponent>();
-    if (HealthComponent)
+    if (const auto HealthComponent = GetPlayerComponent<UMSHealthComponent>())
     {
         HealthComponent->OnHealthChanged.AddUObject(this, &UMSPlayerHUDWidget::OnHealthChanged);
     }
+    
+    UpdateHealthBar();
 }
 
 void UMSPlayerHUDWidget::OnHealthChanged(float Health, float DeltaHealth)
@@ -68,5 +70,23 @@ void UMSPlayerHUDWidget::OnHealthChanged(float Health, float DeltaHealth)
     if (DeltaHealth < 0.0f)
     {
         OnDamageTaken();
+
+        if (!IsAnimationPlaying(DamageAnimation))
+        {
+            PlayAnimation(DamageAnimation);
+        }
     }
+
+    UpdateHealthBar();
+}
+
+void UMSPlayerHUDWidget::UpdateHealthBar()
+{
+    if (HealthBar)
+    {
+        const float Health = GetHealthPercent();
+        HealthBar->SetPercent(Health);
+        HealthBar->SetFillColorAndOpacity(Health > ColorThreshold ? HealthyColor : DyingColor);
+        HealthBar->SetVisibility(Health > 0.0f && Health < VisibilityThreshold ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+    }    
 }

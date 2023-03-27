@@ -26,6 +26,9 @@ protected:
     UPROPERTY(meta = (BindWidget))
     UHorizontalBox* LevelItemsBox = nullptr;
 
+    UPROPERTY(Transient, meta = (BindWidgetAnim))
+    UWidgetAnimation* LoadingAnimation = nullptr;
+    
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
     TSubclassOf<UUserWidget> LevelItemWidgetClass;
 
@@ -35,6 +38,7 @@ private:
 
 protected:
     virtual void NativeOnInitialized() override;
+    virtual void OnAnimationFinished_Implementation(const UWidgetAnimation* Animation);
 
 private:
     void InitializeButtons();

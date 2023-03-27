@@ -22,7 +22,7 @@ public:
     FORCEINLINE int32 GetTeamID() const { return TeamID; }
     FORCEINLINE void SetTeamID(int32 ID) { TeamID = ID; }
 
-    FORCEINLINE FLinearColor GetTeamColor() const { return TeamColor; }
+    FORCEINLINE const FLinearColor& GetTeamColor() const { return TeamColor; }
     FORCEINLINE void SetTeamColor(const FLinearColor& Color) { TeamColor = Color; }
 
     UFUNCTION(BlueprintCallable, Category = "Stat")

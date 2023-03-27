@@ -63,6 +63,19 @@ void UMSMenuWidget::InitializeLevelItems()
     OnLevelSelected(StartupLevel.LevelName.IsNone() ? LevelsData[0] : StartupLevel);
 }
 
+void UMSMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
+{
+    Super::OnAnimationFinished_Implementation(Animation);
+
+    if (Animation == LoadingAnimation)
+    {
+        if (const auto GameInstance = GetGameInstance())
+        {
+            UGameplayStatics::OpenLevel(this, GameInstance->GetStartupLevel().LevelName);
+        }        
+    }
+}
+
 UMSGameInstance* UMSMenuWidget::GetGameInstance() const
 {
     if (const UWorld* World = GetWorld())
@@ -97,9 +110,9 @@ void UMSMenuWidget::OnLevelSelected(const FLevelData& LevelData)
 
 void UMSMenuWidget::OnStart()
 {
-    if (const auto GameInstance = GetGameInstance())
+    if (!IsAnimationPlaying(LoadingAnimation))
     {
-        UGameplayStatics::OpenLevel(this, GameInstance->GetStartupLevel().LevelName);
+        PlayAnimation(LoadingAnimation);
     }
 }
 

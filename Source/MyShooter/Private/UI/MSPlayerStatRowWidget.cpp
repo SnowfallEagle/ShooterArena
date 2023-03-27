@@ -36,6 +36,14 @@ void UMSPlayerStatRowWidget::SetTeam(const FText& Name)
     }
 }
 
+void UMSPlayerStatRowWidget::SetTeamColor(const FLinearColor& Color)
+{
+    if (TeamImage)
+    {
+        TeamImage->SetColorAndOpacity(Color);
+    }
+}
+
 void UMSPlayerStatRowWidget::TogglePlayerIndicatorVisibility(bool bVisible)
 {
     if (PlayerIndicatorImage)

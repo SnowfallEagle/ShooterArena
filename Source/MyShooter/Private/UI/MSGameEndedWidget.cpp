@@ -92,6 +92,7 @@ void UMSGameEndedWidget::UpdateStats()
         PlayerStatRowWidget->SetKills(FCoreUtils::IntToText(PlayerState->GetKills()));
         PlayerStatRowWidget->SetDeaths(FCoreUtils::IntToText(PlayerState->GetDeaths()));
         PlayerStatRowWidget->SetTeam(FCoreUtils::IntToText(PlayerState->GetTeamID()));
+        PlayerStatRowWidget->SetTeamColor(PlayerState->GetTeamColor());
         PlayerStatRowWidget->TogglePlayerIndicatorVisibility(Controller->IsPlayerController());
 
         StatesAndWidgets.Emplace(FPlayerStateAndWidget{ PlayerState, PlayerStatRowWidget });
