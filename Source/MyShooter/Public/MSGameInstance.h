@@ -18,10 +18,10 @@ struct FLevelData
     FName DisplayName = NAME_None;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
-    UTexture2D* LevelImage = nullptr;
+    UTexture2D* LevelImage;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
-    UTexture2D* FrameImage = nullptr;
+    UTexture2D* FrameImage;
 };
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnLevelSelectedSignature, const FLevelData&);

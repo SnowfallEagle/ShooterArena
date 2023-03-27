@@ -42,7 +42,7 @@ private:
 
     FTimerHandle AutoHealTimer;
 
-    AController* LastDamageInstigater = nullptr;
+    AController* LastDamageInstigater;
 
 public:
     UMSHealthComponent();

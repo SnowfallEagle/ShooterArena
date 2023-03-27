@@ -6,6 +6,8 @@
 #include "Components/MSHealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 #include "MSGameModeBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogCharacter, All, All);
@@ -71,12 +73,9 @@ void AMSCharacter::OnDeath()
         }
     }
 
-    if (Controller)
-    {
-        Controller->ChangeState(NAME_Spectating);
-    }
-
     SetLifeSpan(LifeSpanOnDeath);
+
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
 }
 
 void AMSCharacter::TurnOff()

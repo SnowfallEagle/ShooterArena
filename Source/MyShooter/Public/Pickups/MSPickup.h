@@ -7,6 +7,7 @@
 #include "MSPickup.generated.h"
 
 class USphereComponent;
+class USoundCue;
 
 UCLASS()
 class MYSHOOTER_API AMSPickup : public AActor
@@ -19,6 +20,9 @@ protected:
 
     UPROPERTY(EditAnywhere, Category = "Pickup")
     float RespawnTime = 5.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    USoundCue* PickupSound;
 
 private:
     float RotationYaw;

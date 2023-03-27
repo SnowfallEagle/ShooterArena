@@ -3,9 +3,11 @@
 #include "Weapon/MSRifleWeapon.h"
 #include "Components/MSWeaponFXComponent.h"
 #include "Components/MSWeaponFlashlightComponent.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
-#include "DrawDebugHelpers.h"
 
 AMSRifleWeapon::AMSRifleWeapon()
 {
@@ -19,14 +21,14 @@ AMSRifleWeapon::AMSRifleWeapon()
 
 void AMSRifleWeapon::StartFire()
 {
-    ToggleMuzzleFXVisibility(true);
+    ToggleAllFX(true);
     GetWorldTimerManager().SetTimer(ShotTimer, this, &AMSRifleWeapon::MakeShot, TimeBetweenShots, true);
     MakeShot();
 }
 
 void AMSRifleWeapon::StopFire()
 {
-    ToggleMuzzleFXVisibility(false);
+    ToggleAllFX(false);
     GetWorldTimerManager().ClearTimer(ShotTimer);
 }
 
@@ -49,10 +51,9 @@ void AMSRifleWeapon::BeginPlay()
     Super::BeginPlay();
 
     MuzzleFXComponent = SpawnMuzzleFX();
-    if (MuzzleFXComponent)
-    {
-        ToggleMuzzleFXVisibility(false);
-    }
+    FireAudioComponent = UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
+
+    ToggleAllFX(false);
 }
 
 void AMSRifleWeapon::MakeShot()
@@ -61,9 +62,16 @@ void AMSRifleWeapon::MakeShot()
     FVector TraceEnd;
     FHitResult HitResult;
 
-    if (IsAmmoEmpty() || !GetTraceData(TraceStart, TraceEnd) || !MakeHit(HitResult, TraceStart, TraceEnd))
+    const bool bAmmoEmpty = IsAmmoEmpty();
+
+    if (bAmmoEmpty || !GetTraceData(TraceStart, TraceEnd) || !MakeHit(HitResult, TraceStart, TraceEnd))
     {
         StopFire();
+
+        if (bAmmoEmpty)
+        {
+            UGameplayStatics::PlaySoundAtLocation(GetWorld(), NoAmmoSound, GetActorLocation());
+        }
         return;
     }
 
@@ -121,12 +129,27 @@ void AMSRifleWeapon::MakeDamage(FHitResult& HitResult)
     }
 }
 
-void AMSRifleWeapon::ToggleMuzzleFXVisibility(bool bVisible)
+void AMSRifleWeapon::ToggleAllFX(bool bActive)
 {
     if (MuzzleFXComponent)
     {
-        MuzzleFXComponent->SetVisibility(bVisible, true);
-        MuzzleFXComponent->SetPaused(!bVisible);
+        MuzzleFXComponent->SetVisibility(bActive, true);
+        MuzzleFXComponent->SetPaused(!bActive);
+    }
+
+    if (FireAudioComponent)
+    {
+        if (bActive)
+        {
+            if (!FireAudioComponent->IsActive())
+            {
+                FireAudioComponent->FadeIn(0.05f);
+            }
+        }
+        else
+        {
+            FireAudioComponent->IsActive() ? FireAudioComponent->FadeOut(0.05f, 0.1f, EAudioFaderCurve::Logarithmic) : FireAudioComponent->Stop();
+        }
     }
 }
 

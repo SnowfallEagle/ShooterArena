@@ -16,22 +16,22 @@ class MYSHOOTER_API UMSPlayerStatRowWidget : public UUserWidget
 
 protected:
     UPROPERTY(meta = (BindWidget))
-    UTextBlock* NameTextBlock = nullptr;
+    UTextBlock* NameTextBlock;
 
     UPROPERTY(meta = (BindWidget))
-    UTextBlock* KillsTextBlock = nullptr;
+    UTextBlock* KillsTextBlock;
 
     UPROPERTY(meta = (BindWidget))
-    UTextBlock* DeathsTextBlock = nullptr;
+    UTextBlock* DeathsTextBlock;
 
     UPROPERTY(meta = (BindWidget))
-    UTextBlock* TeamTextBlock = nullptr;
+    UTextBlock* TeamTextBlock;
 
     UPROPERTY(meta = (BindWidget))
-    UImage* PlayerIndicatorImage = nullptr;
+    UImage* PlayerIndicatorImage;
 
     UPROPERTY(meta = (BindWidget))
-    UImage* TeamImage = nullptr;
+    UImage* TeamImage;
 
 public:
     void SetName(const FText& Name);

@@ -11,6 +11,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnClipEmptySignature, AMSWeapon*);
 class USkeletalMeshComponent;
 class UNiagaraSystem;
 class UNiagaraComponent;
+class USoundCue;
 
 USTRUCT(BlueprintType)
 struct FAmmoData
@@ -33,10 +34,10 @@ struct FWeaponUIData
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-    UTexture2D* MainIcon = nullptr;
+    UTexture2D* MainIcon;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-    UTexture2D* CrosshairIcon = nullptr;
+    UTexture2D* CrosshairIcon;
 };
 
 UCLASS()
@@ -65,6 +66,12 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     UNiagaraSystem* MuzzleFX;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    USoundCue* FireSound;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    USoundCue* NoAmmoSound;
 
 private:
     FAmmoData CurrentAmmo;

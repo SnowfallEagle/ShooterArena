@@ -20,13 +20,13 @@ protected:
     TSubclassOf<UUserWidget> PlayerStatRowWidgetClass;
 
     UPROPERTY(meta = (BindWidget))
-    UVerticalBox* PlayerStatBox = nullptr;
+    UVerticalBox* PlayerStatBox;
 
     UPROPERTY(meta = (BindWidget))
-    UButton* RestartLevelButton = nullptr;
+    UButton* RestartLevelButton;
 
     UPROPERTY(meta = (BindWidget))
-    UButton* MainMenuButton = nullptr;
+    UButton* MainMenuButton;
 
 protected:
     virtual void NativeOnInitialized() override;

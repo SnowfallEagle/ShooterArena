@@ -16,7 +16,7 @@ struct FWeaponData
     TSubclassOf<AMSWeapon> WeaponClass;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-    UAnimMontage* ReloadAnimMontage = nullptr;
+    UAnimMontage* ReloadAnimMontage;
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -35,10 +35,10 @@ protected:
     FName WeaponArmorySocketName = "ArmorySocket";
 
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    UAnimMontage* EquipAnimMontage = nullptr;
+    UAnimMontage* EquipAnimMontage;
 
     UPROPERTY()
-    AMSWeapon* CurrentWeapon = nullptr;
+    AMSWeapon* CurrentWeapon;
 
     int32 CurrentWeaponIndex = 0;
 
@@ -47,7 +47,7 @@ protected:
 
 private:
     UPROPERTY()
-    UAnimMontage* CurrentReloadAnimMontage = nullptr;
+    UAnimMontage* CurrentReloadAnimMontage;
 
     bool bEquipAnimInProgress = false;
     bool bReloadAnimInProgress = false;

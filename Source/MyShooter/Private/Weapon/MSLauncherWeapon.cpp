@@ -2,7 +2,8 @@
 
 #include "Weapon/MSLauncherWeapon.h"
 #include "Weapon/MSProjectile.h"
-#include "DrawDebugHelpers.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 void AMSLauncherWeapon::StartFire()
 {
@@ -11,14 +12,15 @@ void AMSLauncherWeapon::StartFire()
 
 void AMSLauncherWeapon::MakeShot()
 {
-    if (IsAmmoEmpty())
+    UWorld* World = GetWorld();
+    if (!World)
     {
         return;
     }
 
-    UWorld* World = GetWorld();
-    if (!World)
+    if (IsAmmoEmpty())
     {
+        UGameplayStatics::SpawnSoundAtLocation(World, NoAmmoSound, GetActorLocation());
         return;
     }
 
@@ -57,5 +59,6 @@ void AMSLauncherWeapon::MakeShot()
 
     DecreaseAmmo();
     SpawnMuzzleFX();
+    UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
 }
 

@@ -19,29 +19,29 @@ class MYSHOOTER_API UMSMenuWidget : public UUserWidget
 
 protected:
     UPROPERTY(meta = (BindWidget))
-    UButton* StartButton = nullptr;
+    UButton* StartButton;
 
     UPROPERTY(meta = (BindWidget))
-    UButton* QuitButton = nullptr;
+    UButton* QuitButton;
 
     UPROPERTY(meta = (BindWidget))
-    UHorizontalBox* LevelItemsBox = nullptr;
+    UHorizontalBox* LevelItemsBox;
 
     UPROPERTY(Transient, meta = (BindWidgetAnim))
-    UWidgetAnimation* LoadingAnimation = nullptr;
+    UWidgetAnimation* LoadingAnimation;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
     TSubclassOf<UUserWidget> LevelItemWidgetClass;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
-    USoundCue* GameStartSound = nullptr;
+    USoundCue* GameStartSound;
 
 private:
     UPROPERTY()
     TArray<UMSLevelItemWidget*> LevelItemWidgets;
 
     UPROPERTY()
-    UMSLevelItemWidget* CurrentLevelItemWidget = nullptr;
+    UMSLevelItemWidget* CurrentLevelItemWidget;
 
 protected:
     virtual void NativeOnInitialized() override;

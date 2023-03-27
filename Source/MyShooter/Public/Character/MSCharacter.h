@@ -9,6 +9,7 @@
 
 class UMSHealthComponent;
 class UMSWeaponComponent;
+class USoundCue;
 
 UCLASS()
 class MYSHOOTER_API AMSCharacter : public ACharacter
@@ -37,6 +38,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Material")
     FName MaterialColorName = "Paint Color";
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    USoundCue* DeathSound;
+
 public:
     AMSCharacter(const FObjectInitializer& ObjInit);
 
@@ -58,7 +62,6 @@ protected:
     virtual void OnHealthChanged(float NewHealth, float HealthDelta);
 
 private:
-
     UFUNCTION()
     void OnGroundLanded(const FHitResult& HitResult);
 };

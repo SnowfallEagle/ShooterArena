@@ -21,16 +21,16 @@ public:
 
 protected:
     UPROPERTY(meta = (BindWidget))
-    UButton* LevelSelectButton = nullptr;
+    UButton* LevelSelectButton;
 
     UPROPERTY(meta = (BindWidget))
-    UTextBlock* LevelNameTextBlock = nullptr;
+    UTextBlock* LevelNameTextBlock;
 
     UPROPERTY(meta = (BindWidget))
-    UImage* LevelImage = nullptr;
+    UImage* LevelImage;
 
     UPROPERTY(meta = (BindWidget))
-    UImage* FrameImage = nullptr;
+    UImage* FrameImage;
 
 private:
     FLevelData LevelData;

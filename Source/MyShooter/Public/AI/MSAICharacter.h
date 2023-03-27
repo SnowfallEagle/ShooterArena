@@ -16,11 +16,11 @@ class MYSHOOTER_API AMSAICharacter : public AMSCharacter
 
 public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
-    UBehaviorTree* BehaviorTree = nullptr;
+    UBehaviorTree* BehaviorTree;
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    UWidgetComponent* HealthBarWidgetComponent = nullptr;
+    UWidgetComponent* HealthBarWidgetComponent;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     float HealthBarDrawDistance = 2500.0f;

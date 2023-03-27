@@ -9,6 +9,7 @@
 class UMSWeaponFXComponent;
 class UMSWeaponFlashlightComponent;
 class UNiagaraComponent;
+class UAudioComponent;
 
 UCLASS()
 class MYSHOOTER_API AMSRifleWeapon : public AMSWeapon
@@ -40,7 +41,11 @@ protected:
 private:
     FTimerHandle ShotTimer;
 
+    UPROPERTY()
     UNiagaraComponent* MuzzleFXComponent;
+
+    UPROPERTY()
+    UAudioComponent* FireAudioComponent;
 
 public:
     AMSRifleWeapon();
@@ -58,6 +63,6 @@ protected:
     virtual void MakeShot() override;
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
 
-    void ToggleMuzzleFXVisibility(bool bVisible);
+    void ToggleAllFX(bool bActive);
     void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
 };

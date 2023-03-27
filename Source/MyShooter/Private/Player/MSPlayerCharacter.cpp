@@ -56,6 +56,16 @@ void AMSPlayerCharacter::BeginPlay()
     CameraCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &AMSPlayerCharacter::OnCameraCollisionEndOverlap);
 }
 
+void AMSPlayerCharacter::OnDeath()
+{
+    Super::OnDeath();
+
+    if (Controller)
+    {
+        Controller->ChangeState(NAME_Spectating);
+    }
+}
+
 void AMSPlayerCharacter::MoveForward(float Amount)
 {
     bMovingForward = Amount > 0.0f;
@@ -92,4 +102,3 @@ void AMSPlayerCharacter::OnCameraOverlap()
         }
     }
 }
-

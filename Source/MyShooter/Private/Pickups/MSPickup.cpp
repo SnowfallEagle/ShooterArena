@@ -2,6 +2,8 @@
 
 #include "Pickups/MSPickup.h"
 #include "Components/SphereComponent.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPickup, All, All);
 
@@ -38,6 +40,7 @@ void AMSPickup::NotifyActorBeginOverlap(AActor* OtherActor)
     if (GivePickupTo(Pawn))
     {
         Hide();
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupSound, GetActorLocation());
     }
 }
 

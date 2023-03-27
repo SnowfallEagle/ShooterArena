@@ -15,7 +15,7 @@ class MYSHOOTER_API UMSHealthBarWidget : public UUserWidget
 
 protected:
     UPROPERTY(meta = (BindWidget))
-    UProgressBar* HealthBar = nullptr;
+    UProgressBar* HealthBar;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI", meta = (ClampMin = "0.0", ClampMax = "1.0"))
     float VisibilityThreshold = 0.8f;
