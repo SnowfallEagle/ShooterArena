@@ -2,6 +2,7 @@
 
 #include "Player/MSPlayerController.h"
 #include "Components/MSRespawnComponent.h"
+#include "MSGameInstance.h"
 
 AMSPlayerController::AMSPlayerController()
 {
@@ -31,6 +32,7 @@ void AMSPlayerController::SetupInputComponent()
     }
 
     InputComponent->BindAction("Pause", EInputEvent::IE_Pressed, this, &AMSPlayerController::OnPause);
+    InputComponent->BindAction("Mute", EInputEvent::IE_Pressed, this, &AMSPlayerController::OnMute);
 }
 
 void AMSPlayerController::OnPause()
@@ -41,6 +43,14 @@ void AMSPlayerController::OnPause()
         {
             GameMode->SetPause(this);
         }
+    }
+}
+
+void AMSPlayerController::OnMute()
+{
+    if (const auto GameInstance = GetGameInstance<UMSGameInstance>())
+    {
+        GameInstance->ToggleVolume();
     }
 }
 

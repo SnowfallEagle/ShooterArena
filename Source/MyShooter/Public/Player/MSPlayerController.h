@@ -27,5 +27,6 @@ protected:
 
 private:
     void OnPause();
+    void OnMute();
     void OnMatchStateChanged(EMatchState NewState);
 };

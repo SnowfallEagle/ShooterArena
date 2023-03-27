@@ -49,6 +49,8 @@ public class MyShooter : ModuleRules
 
                 "MyShooter/Public/Menu",
                 "MyShooter/Public/Menu/UI",
+
+                "MyShooter/Public/Sound",
             }
         );
 
