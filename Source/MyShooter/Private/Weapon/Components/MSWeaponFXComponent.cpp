@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "NiagaraFunctionLibrary.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
+#include "Sound/SoundCue.h"
 
 UMSWeaponFXComponent::UMSWeaponFXComponent()
 {
@@ -25,10 +26,9 @@ void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
 
     if (HitResult.PhysMaterial.IsValid())
     {
-        const UPhysicalMaterial* PhysMaterial = HitResult.PhysMaterial.Get();
-        if (ImpactDataMap.Contains(PhysMaterial))
+        if (const FImpactData* FoundImpactData = ImpactDataMap.Find(HitResult.PhysMaterial.Get()))
         {
-            ImpactData = &ImpactDataMap[PhysMaterial];
+            ImpactData = FoundImpactData;
         }
     }
 
@@ -58,4 +58,9 @@ void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
             DecalComponent->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::KeepWorldTransform, HitResult.BoneName);
         }
     }
+
+    // Play impact sound
+    UGameplayStatics::SpawnSoundAtLocation(World, ImpactData->ImpactSound, HitResult.ImpactPoint);
+    // DEBUG
+    UE_LOG(LogTemp, Error, TEXT("HERE"));
 }
