@@ -61,6 +61,7 @@ public:
     virtual void StopFire();
     virtual void NextWeapon();
 
+    void Zoom(bool bToggle);
     void TurnOff();
 
     FORCEINLINE void Reload() { ChangeClip(); }

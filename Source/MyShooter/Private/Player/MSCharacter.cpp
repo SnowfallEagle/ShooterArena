@@ -63,7 +63,7 @@ void AMSCharacter::OnDeath()
     GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     GetMesh()->SetSimulatePhysics(true);
 
-    WeaponComponent->StopFire();
+    WeaponComponent->TurnOff();
 
     if (const UWorld* World = GetWorld())
     {

@@ -31,7 +31,7 @@ void UMSWeaponComponent::BeginPlay()
 
 void UMSWeaponComponent::EndPlay(EEndPlayReason::Type Reason)
 {
-    CurrentWeapon = nullptr;
+    TurnOff();
 
     for (const auto Weapon : Weapons)
     {
@@ -73,7 +73,21 @@ void UMSWeaponComponent::NextWeapon()
 void UMSWeaponComponent::TurnOff()
 {
     bEnabled = false;
-    StopFire();
+    
+    if (CurrentWeapon)
+    {
+        StopFire();
+        CurrentWeapon->OnUnequipped();
+        CurrentWeapon = nullptr;
+    }
+}
+
+void UMSWeaponComponent::Zoom(bool bToggle)
+{
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->Zoom(bToggle);
+    }
 }
 
 void UMSWeaponComponent::ToggleFlashlight()
@@ -189,8 +203,8 @@ void UMSWeaponComponent::EquipWeapon(int32 WeaponIndex)
     if (CurrentWeapon)
     {
         CurrentWeapon->StopFire();
-        AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponArmorySocketName);
         CurrentWeapon->OnUnequipped();
+        AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponArmorySocketName);
     }
 
     // Equip and attach next weapon

@@ -41,11 +41,16 @@ void AMSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
     PlayerInputComponent->BindAction("Run", EInputEvent::IE_Pressed, this, &AMSPlayerCharacter::OnStartRunning);
     PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released, this, &AMSPlayerCharacter::OnEndRunning);
     PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AMSPlayerCharacter::Jump);
+
     PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::StartFire);
     PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Released, WeaponComponent, &UMSWeaponComponent::StopFire);
     PlayerInputComponent->BindAction("NextWeapon", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::NextWeapon);
     PlayerInputComponent->BindAction("Reload", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::Reload);
     PlayerInputComponent->BindAction("ToggleFlashlight", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::ToggleFlashlight);
+
+    DECLARE_DELEGATE_OneParam(FZoomInputSignature, bool);
+    PlayerInputComponent->BindAction<FZoomInputSignature>("Zoom", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::Zoom, true);
+    PlayerInputComponent->BindAction<FZoomInputSignature>("Zoom", EInputEvent::IE_Released, WeaponComponent, &UMSWeaponComponent::Zoom, false);
 }
 
 void AMSPlayerCharacter::BeginPlay()

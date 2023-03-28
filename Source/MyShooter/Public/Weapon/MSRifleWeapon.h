@@ -27,7 +27,7 @@ protected:
     float TimeBetweenShots = 0.1f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-    float BulletSpread = 1.5f;
+    float DefaultBulletSpread = 1.5f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float DamageAmount = 10.0f;
@@ -38,6 +38,16 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     FString TraceTargetName = "TraceTarget";
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    float ZoomFOV = 50.0f;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+    float ZoomSpreadModifier = 0.5f;
+
+private:
+    float BulletSpread = 0.0f;
+    float DefaultFOV = 90.0f;
+    
 private:
     FTimerHandle ShotTimer;
 
@@ -53,6 +63,8 @@ public:
     virtual void StartFire() override;
     virtual void StopFire() override;
 
+    virtual void Zoom(bool bToggle) override;
+    
     virtual void OnEquipped() override;
     virtual void OnUnequipped() override;
 

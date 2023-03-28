@@ -36,6 +36,11 @@ void AMSWeapon::BeginPlay()
     CurrentAmmo = DefaultAmmo;
 }
 
+void AMSWeapon::OnUnequipped()
+{
+    Zoom(false);
+}
+
 bool AMSWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 {
     FVector ViewLocation;

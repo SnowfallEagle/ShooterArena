@@ -83,7 +83,9 @@ public:
     virtual void StopFire() {}
 
     virtual void OnEquipped() {}
-    virtual void OnUnequipped() {}
+    virtual void OnUnequipped();
+
+    virtual void Zoom(bool bToggle) {}
 
     void ChangeClip();
     bool TryToAddAmmo(int32 Clips);

@@ -17,6 +17,8 @@ AMSRifleWeapon::AMSRifleWeapon()
     FlashlightComponent = CreateDefaultSubobject<UMSWeaponFlashlightComponent>("FlashlightComponent");
     check(FlashlightComponent);
     FlashlightComponent->SetupAttachment(GetRootComponent());
+
+    BulletSpread = DefaultBulletSpread;
 }
 
 void AMSRifleWeapon::StartFire()
@@ -30,6 +32,25 @@ void AMSRifleWeapon::StopFire()
 {
     ToggleAllFX(false);
     GetWorldTimerManager().ClearTimer(ShotTimer);
+}
+
+void AMSRifleWeapon::Zoom(bool bToggle)
+{
+    if (const auto Controller = Cast<APlayerController>(GetController()))
+    {
+        if (Controller->PlayerCameraManager)
+        {
+            if (bToggle)
+            {
+                DefaultFOV = Controller->PlayerCameraManager->GetFOVAngle();
+                Controller->PlayerCameraManager->SetFOV(ZoomFOV);
+            }
+            else
+            {
+                Controller->PlayerCameraManager->SetFOV(DefaultFOV);
+            }
+        }
+    }
 }
 
 void AMSRifleWeapon::OnEquipped()
