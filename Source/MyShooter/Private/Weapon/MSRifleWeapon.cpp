@@ -74,7 +74,8 @@ void AMSRifleWeapon::BeginPlay()
     Super::BeginPlay();
 
     MuzzleFXComponent = SpawnMuzzleFX();
-    FireAudioComponent = UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
+    FireAudioComponent = UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName, FVector::ZeroVector, EAttachLocation::SnapToTarget, false, 1.0f, 1.0f, 0.0f, nullptr, nullptr, false);
+    FireAudioComponent->Stop();
 
     ToggleAllFX(false);
 }
