@@ -1,7 +1,7 @@
 // MyShooter Game, All Rights Reserved.
 
 #include "Components/MSHealthComponent.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "TimerManager.h"
 #include "Core/CoreUtils.h"
 
@@ -32,38 +32,40 @@ void UMSHealthComponent::BeginPlay()
 
     if (AActor* ComponentOwner = GetOwner())
     {
-        ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &UMSHealthComponent::OnTakeAnyDamage);
+        ComponentOwner->OnTakePointDamage.AddDynamic(this, &UMSHealthComponent::OnTakePointDamage);
+        ComponentOwner->OnTakeRadialDamage.AddDynamic(this, &UMSHealthComponent::OnTakeRadialDamage);
     }
 
     SetHealth(MaxHealth);
 }
 
-void UMSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+void UMSHealthComponent::OnTakePointDamage(
+    AActor* DamagedActor, float Damage, class AController* InstigatedBy, FVector HitLocation, class UPrimitiveComponent* FHitComponent,
+    FName BoneName, FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser
+)
 {
-    const auto* DamagedPawn = Cast<APawn>(DamagedActor);
-    if (!DamagedPawn)
-    {
-        return;
-    }
+    float FinalDamage = Damage;
 
-    // TODO: Check if teamkill enabled
-    if (Damage <= 0.0f || IsDead() || !FCoreUtils::AreEnemies(DamagedPawn->Controller, InstigatedBy))
+    if (const auto Character = Cast<ACharacter>(DamagedActor))
     {
-        return;
-    }
-
-    LastDamageInstigater = InstigatedBy;
-
-    if (bAutoHeal)
-    {
-        if (const UWorld* World = GetWorld())
+        const UPhysicalMaterial* PhysMaterial = Character->GetMesh()->GetBodyInstance(BoneName)->GetSimplePhysicalMaterial();
+        if (const float* Modifier = DamageModifiers.Find(PhysMaterial))
         {
-            World->GetTimerManager().SetTimer(AutoHealTimer, this, &UMSHealthComponent::OnAutoHealUpdateTimerFired, AutoHealUpdateTime, true, AutoHealDelayTime);
+            FinalDamage *= *Modifier;
         }
     }
-    SetHealth(Health - Damage);
 
-    PlayCameraShake();
+    UE_LOG(LogHealthComponent, Display, TEXT("Point Damage %f, Final Damage %f, Bone Name: %s"), Damage, FinalDamage, *BoneName.ToString())
+    ApplyDamage(FinalDamage, InstigatedBy);
+}
+
+void UMSHealthComponent::OnTakeRadialDamage(
+    AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo,
+    class AController* InstigatedBy, AActor* DamageCauser
+)
+{
+    UE_LOG(LogHealthComponent, Display, TEXT("Radial Damage %f"), Damage);
+    ApplyDamage(Damage, InstigatedBy);
 }
 
 void UMSHealthComponent::SetHealth(float InHealth)
@@ -117,4 +119,34 @@ void UMSHealthComponent::PlayCameraShake()
     }
 
     Controller->PlayerCameraManager->StartCameraShake(CameraShakeClass);
+}
+
+void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater)
+{
+    const auto* DamagedPawn = Cast<APawn>(GetOwner());
+    if (!DamagedPawn)
+    {
+        return;
+    }
+
+    // TODO: Check if teamkill enabled
+    if (Damage <= 0.0f || IsDead() || !FCoreUtils::AreEnemies(DamagedPawn->Controller, Instigater))
+    {
+        return;
+    }
+
+    LastDamageInstigater = Instigater;
+
+    if (bAutoHeal)
+    {
+        if (const UWorld* World = GetWorld())
+        {
+            World->GetTimerManager().SetTimer(
+                AutoHealTimer, this, &UMSHealthComponent::OnAutoHealUpdateTimerFired, AutoHealUpdateTime, true, AutoHealDelayTime
+            );
+        }
+    }
+    SetHealth(Health - Damage);
+
+    PlayCameraShake();
 }

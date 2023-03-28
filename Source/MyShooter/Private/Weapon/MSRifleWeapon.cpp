@@ -44,10 +44,12 @@ void AMSRifleWeapon::Zoom(bool bToggle)
             {
                 DefaultFOV = Controller->PlayerCameraManager->GetFOVAngle();
                 Controller->PlayerCameraManager->SetFOV(ZoomFOV);
+                BulletSpread = DefaultBulletSpread * ZoomSpreadModifier;
             }
             else
             {
                 Controller->PlayerCameraManager->SetFOV(DefaultFOV);
+                BulletSpread = DefaultBulletSpread;
             }
         }
     }
@@ -146,7 +148,10 @@ void AMSRifleWeapon::MakeDamage(FHitResult& HitResult)
 {
     if (AActor* Actor = HitResult.GetActor())
     {
-        Actor->TakeDamage(DamageAmount, FDamageEvent(), GetController(), this);
+        FPointDamageEvent PointDamageEvent;
+        PointDamageEvent.HitInfo = HitResult;
+        
+        Actor->TakeDamage(DamageAmount, PointDamageEvent, GetController(), this);
     }
 }
 
@@ -160,6 +165,7 @@ void AMSRifleWeapon::ToggleAllFX(bool bActive)
 
     if (FireAudioComponent)
     {
+        bActive ? FireAudioComponent->Play() : FireAudioComponent->Stop();
         if (bActive)
         {
             if (!FireAudioComponent->IsActive())
