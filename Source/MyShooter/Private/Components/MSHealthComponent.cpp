@@ -2,6 +2,7 @@
 
 #include "Components/MSHealthComponent.h"
 #include "GameFramework/Character.h"
+#include "Perception/AISense_Damage.h"
 #include "TimerManager.h"
 #include "Core/CoreUtils.h"
 
@@ -121,6 +122,22 @@ void UMSHealthComponent::PlayCameraShake()
     Controller->PlayerCameraManager->StartCameraShake(CameraShakeClass);
 }
 
+void UMSHealthComponent::ReportDamageEvent(float Damage)
+{
+    if (LastDamageInstigater)
+    {
+        AActor* Owner = GetOwner();
+        AActor* Instigater = LastDamageInstigater->GetPawn();
+
+        if (Owner && Instigater)
+        {
+            UAISense_Damage::ReportDamageEvent(
+                GetWorld(), Owner, Instigater, Damage, Instigater->GetActorLocation(), Owner->GetActorLocation()
+            );
+        }
+    }
+}
+
 void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater)
 {
     const auto* DamagedPawn = Cast<APawn>(GetOwner());
@@ -148,5 +165,6 @@ void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater)
     }
     SetHealth(Health - Damage);
 
+    ReportDamageEvent(Damage);
     PlayCameraShake();
 }

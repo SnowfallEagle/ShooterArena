@@ -2,10 +2,11 @@
 
 #include "Components/MSAIPerceptionComponent.h"
 #include "Components/MSHealthComponent.h"
+#include "Player/MSPlayerState.h"
 #include "Core/CoreUtils.h"
 #include "Perception/AISense_Sight.h"
+#include "Perception/AISense_Damage.h"
 #include "AIController.h"
-#include "Player/MSPlayerState.h"
 
 AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
 {
@@ -14,7 +15,11 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
     GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PercieveActors);
     if (PercieveActors.Num() <= 0)
     {
-        return nullptr;
+        GetCurrentlyPerceivedActors(UAISense_Damage::StaticClass(), PercieveActors);
+        if (PercieveActors.Num() <= 0)
+        {
+            return nullptr;
+        }
     }
 
     const auto Controller = Cast<AAIController>(GetOwner());
@@ -64,6 +69,8 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
             BestActor = Actor;
         }
     }
+
+    // TODO: Check damage sense again, because we could see teammates, but didn't check for damage
 
     return BestActor;
 }

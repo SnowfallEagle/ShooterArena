@@ -81,6 +81,6 @@ private:
     void OnAutoHealUpdateTimerFired();
 
     void PlayCameraShake();
-
     void ApplyDamage(float Damage, AController* Instigater);
+    void ReportDamageEvent(float Damage); // TODO: Move in AIHealthComponent
 };
