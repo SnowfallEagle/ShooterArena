@@ -17,5 +17,5 @@ public:
     FOnNotifiedSignature OnNotified;
 
 public:
-	virtual void Notify(USkeletalMeshComponent* MeshComponent, UAnimSequenceBase* Animation) override;
+    virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference);
 };

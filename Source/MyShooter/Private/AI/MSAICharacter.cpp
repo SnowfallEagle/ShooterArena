@@ -99,7 +99,7 @@ void AMSAICharacter::OnCheckHealthBarVisibility()
         const bool bTraced = World->LineTraceSingleByChannel( //
             HitResult, MyLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams
         );
-        const bool bTraceVisibility = bTraced && HitResult.Actor.Get() == PlayerPawn;
+        const bool bTraceVisibility = bTraced && HitResult.GetActor() == PlayerPawn;
 
         HealthBarWidget->SetVisibility(bDistanceVisibility && bTraceVisibility ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
     }

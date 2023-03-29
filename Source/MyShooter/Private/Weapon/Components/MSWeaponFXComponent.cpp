@@ -53,7 +53,7 @@ void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
     {
         DecalComponent->SetFadeOut(ImpactData->DecalData.LifeTime, ImpactData->DecalData.FadeOutTime);
 
-        if (ACharacter* Character = Cast<ACharacter>(HitResult.Actor.Get()))
+        if (ACharacter* Character = Cast<ACharacter>(HitResult.GetActor()))
         {
             DecalComponent->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::KeepWorldTransform, HitResult.BoneName);
         }
