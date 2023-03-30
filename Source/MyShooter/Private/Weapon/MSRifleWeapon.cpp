@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "Character/MSCharacter.h"
 
 AMSRifleWeapon::AMSRifleWeapon()
 {
@@ -126,6 +127,16 @@ bool AMSRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     if (!GetPlayerViewPoint(ViewLocation, ViewRotation))
     {
         return false;
+    }
+
+    float RealSpread = BulletSpread;
+    if (AMSCharacter* Character = Cast<AMSCharacter>(GetOwner()))
+    {
+        if (Character->IsRunning())
+        {
+            static constexpr float SpreadSpeedModifier = 2.0f;
+            RealSpread *= SpreadSpeedModifier;
+        }
     }
 
     TraceStart = ViewLocation;
