@@ -69,7 +69,7 @@ public:
 
     void ToggleFlashlight();
 
-    FORCEINLINE bool CanEquip() const { return bEnabled && !bEquipAnimInProgress && !bReloadAnimInProgress; }
+    FORCEINLINE bool CanEquip() const { return bEnabled && !bReloadAnimInProgress; }
     FORCEINLINE bool CanFire() const { return bEnabled && CurrentWeapon && !bEquipAnimInProgress && !bReloadAnimInProgress; }
     FORCEINLINE bool CanReload() const { return bEnabled && CurrentWeapon && CurrentWeapon->CanReload() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
 

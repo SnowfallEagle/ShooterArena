@@ -284,6 +284,7 @@ void UMSWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
         return;
     }
 
+    CurrentWeapon->ChangeClip();
     bReloadAnimInProgress = false;
 }
 
@@ -295,7 +296,6 @@ void UMSWeaponComponent::ChangeClip()
     }
 
     CurrentWeapon->StopFire();
-    CurrentWeapon->ChangeClip();
 
     PlayAnimMontage(CurrentReloadAnimMontage);
     bReloadAnimInProgress = true;
