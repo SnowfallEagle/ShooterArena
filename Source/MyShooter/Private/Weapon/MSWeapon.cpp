@@ -120,11 +120,7 @@ bool AMSWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation
 
 void AMSWeapon::DecreaseAmmo()
 {
-    if (CurrentAmmo.ClipBullets == 0)
-    {
-        UE_LOG(LogWeapon, Warning, TEXT("Clip is empty"));
-        return;
-    }
+    check(CurrentAmmo.ClipBullets > 0)
 
     --CurrentAmmo.ClipBullets;
 
@@ -143,11 +139,7 @@ void AMSWeapon::ChangeClip()
     }
     else
     {
-        if (CurrentAmmo.StockBullets <= 0)
-        {
-            UE_LOG(LogWeapon, Warning, TEXT("No more clips"));
-            return;
-        }
+        check(CurrentAmmo.StockBullets > 0);
 
         CurrentAmmo.StockBullets -= DefaultAmmo.ClipBullets - CurrentAmmo.ClipBullets;
         CurrentAmmo.ClipBullets = DefaultAmmo.ClipBullets;

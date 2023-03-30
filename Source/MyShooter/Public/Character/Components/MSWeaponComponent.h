@@ -69,8 +69,8 @@ public:
 
     void ToggleFlashlight();
 
-    FORCEINLINE bool CanEquip() const { return bEnabled && !bReloadAnimInProgress; }
-    FORCEINLINE bool CanFire() const { return bEnabled && CurrentWeapon && !bEquipAnimInProgress && !bReloadAnimInProgress; }
+    FORCEINLINE bool CanEquip() const { return bEnabled; }
+    FORCEINLINE bool CanFire() const { return bEnabled && CurrentWeapon && !CurrentWeapon->IsClipEmpty() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
     FORCEINLINE bool CanReload() const { return bEnabled && CurrentWeapon && CurrentWeapon->CanReload() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
 
     bool GetWeaponUIData(FWeaponUIData& UIData) const;

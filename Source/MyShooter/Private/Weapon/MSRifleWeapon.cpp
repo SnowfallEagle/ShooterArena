@@ -86,17 +86,9 @@ void AMSRifleWeapon::MakeShot()
     FVector TraceEnd;
     FHitResult HitResult;
 
-    const bool bAmmoEmpty = IsAmmoEmpty();
-
-    if (bAmmoEmpty || !GetTraceData(TraceStart, TraceEnd) || !MakeHit(HitResult, TraceStart, TraceEnd))
+    if (IsAmmoEmpty() || !GetTraceData(TraceStart, TraceEnd) || !MakeHit(HitResult, TraceStart, TraceEnd))
     {
         StopFire();
-
-        if (bAmmoEmpty)
-        {
-            UGameplayStatics::PlaySoundAtLocation(GetWorld(), NoAmmoSound, GetActorLocation());
-        }
-        return;
     }
 
     FVector* TraceFXEnd = nullptr;
@@ -107,7 +99,6 @@ void AMSRifleWeapon::MakeShot()
         const FVector SocketDirection = SocketTransform.GetRotation().GetForwardVector();
         const FVector SocketToImpact = HitResult.ImpactPoint - SocketTransform.GetLocation();
 
-        // TODO: Maybe find another way to handle it
         if (FVector::DotProduct(SocketDirection, SocketToImpact) >= 0.0f)
         {
             MakeDamage(HitResult);

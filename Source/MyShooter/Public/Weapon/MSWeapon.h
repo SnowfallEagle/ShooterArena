@@ -95,6 +95,8 @@ public:
     FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.ClipBullets <= 0; }
     FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.ClipBullets == DefaultAmmo.ClipBullets && CurrentAmmo.StockBullets == DefaultAmmo.StockBullets; };
 
+    USoundCue* GetNoAmmoSound() const { return NoAmmoSound; }
+
     const FWeaponUIData& GetUIData() const { return UIData; }
     void GetAmmoData(FAmmoData& InCurrentAmmo, FAmmoData& InDefaultAmmo) const;
 

@@ -18,12 +18,6 @@ void AMSLauncherWeapon::MakeShot()
         return;
     }
 
-    if (IsAmmoEmpty())
-    {
-        UGameplayStatics::SpawnSoundAtLocation(World, NoAmmoSound, GetActorLocation());
-        return;
-    }
-
     FVector TraceStart;
     FVector TraceEnd;
     if (!GetTraceData(TraceStart, TraceEnd))
@@ -42,7 +36,6 @@ void AMSLauncherWeapon::MakeShot()
     const FVector SocketDirection = SocketTransform.GetRotation().GetForwardVector();
     const FVector SocketToEnd = EndPoint - SocketTransform.GetLocation();
 
-    // TODO: Maybe find another way to handle it
     if (FVector::DotProduct(SocketDirection, SocketToEnd) < 0.0f)
     {
         return;

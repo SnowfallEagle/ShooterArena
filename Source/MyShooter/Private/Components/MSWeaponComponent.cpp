@@ -6,8 +6,10 @@
 #include "Animations/MSEquipFinishedAnimNotify.h"
 #include "Animations/MSReloadFinishedAnimNotify.h"
 #include "Animations/AnimUtils.h"
-#include "Core/CoreUtils.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+#include "Core/CoreUtils.h"
 
 static constexpr int32 NumWeapons = 2;
 
@@ -48,6 +50,10 @@ void UMSWeaponComponent::StartFire()
     if (CanFire())
     {
         CurrentWeapon->StartFire();
+    }
+    else if (CurrentWeapon && CurrentWeapon->IsClipEmpty())
+    {
+        UGameplayStatics::PlaySound2D(GetWorld(), CurrentWeapon->GetNoAmmoSound());
     }
 }
 
@@ -219,6 +225,7 @@ void UMSWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
     PlayAnimMontage(EquipAnimMontage);
     bEquipAnimInProgress = true;
+    bReloadAnimInProgress = false; // Cancel reloading
 }
 
 void UMSWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage)
