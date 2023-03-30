@@ -61,6 +61,4 @@ void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
 
     // Play impact sound
     UGameplayStatics::SpawnSoundAtLocation(World, ImpactData->ImpactSound, HitResult.ImpactPoint);
-    // DEBUG
-    UE_LOG(LogTemp, Error, TEXT("HERE"));
 }

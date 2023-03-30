@@ -73,7 +73,7 @@ void UMSMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* A
         if (const auto GameInstance = GetGameInstance())
         {
             UGameplayStatics::OpenLevel(this, GameInstance->GetStartupLevel().LevelName);
-        }        
+        }
     }
 }
 
