@@ -120,13 +120,13 @@ bool AMSWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation
 
 void AMSWeapon::DecreaseAmmo()
 {
-    if (CurrentAmmo.Bullets == 0)
+    if (CurrentAmmo.ClipBullets == 0)
     {
         UE_LOG(LogWeapon, Warning, TEXT("Clip is empty"));
         return;
     }
 
-    --CurrentAmmo.Bullets;
+    --CurrentAmmo.ClipBullets;
 
     if (IsClipEmpty() && !IsAmmoEmpty())
     {
@@ -137,18 +137,27 @@ void AMSWeapon::DecreaseAmmo()
 
 void AMSWeapon::ChangeClip()
 {
-    if (!CurrentAmmo.bInfinite)
+    if (CurrentAmmo.bInfinite)
     {
-        if (CurrentAmmo.Clips <= 0)
+        CurrentAmmo.ClipBullets = DefaultAmmo.ClipBullets;
+    }
+    else
+    {
+        if (CurrentAmmo.StockBullets <= 0)
         {
             UE_LOG(LogWeapon, Warning, TEXT("No more clips"));
             return;
         }
 
-        --CurrentAmmo.Clips;
-    }
+        CurrentAmmo.StockBullets -= DefaultAmmo.ClipBullets - CurrentAmmo.ClipBullets;
+        CurrentAmmo.ClipBullets = DefaultAmmo.ClipBullets;
 
-    CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+        if (CurrentAmmo.StockBullets < 0)
+        {
+            CurrentAmmo.ClipBullets += CurrentAmmo.StockBullets;
+            CurrentAmmo.StockBullets = 0;
+        }
+    }
 }
 
 bool AMSWeapon::TryToAddAmmo(int32 Clips)
@@ -160,15 +169,11 @@ bool AMSWeapon::TryToAddAmmo(int32 Clips)
 
     bool bAmmoWasEmpty = IsAmmoEmpty();
 
-    int32 SumClips = CurrentAmmo.Clips + Clips;
-    if (SumClips > DefaultAmmo.Clips)
+    CurrentAmmo.StockBullets += Clips * DefaultAmmo.ClipBullets;
+    if (CurrentAmmo.StockBullets > DefaultAmmo.StockBullets)
     {
-        CurrentAmmo.Clips = DefaultAmmo.Clips;
-        CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-    }
-    else
-    {
-        CurrentAmmo.Clips = SumClips;
+        CurrentAmmo.ClipBullets = FMath::Min(CurrentAmmo.ClipBullets + (CurrentAmmo.StockBullets - DefaultAmmo.StockBullets), DefaultAmmo.ClipBullets);
+        CurrentAmmo.StockBullets = DefaultAmmo.StockBullets;
     }
 
     if (bAmmoWasEmpty)

@@ -14,7 +14,7 @@ bool UMSNeedAmmoDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& Ow
             FAmmoData CurrentAmmo, DefaultAmmo;
             WeaponComponent->GetWeaponAmmoData(WeaponClass, CurrentAmmo, DefaultAmmo);
 
-            if (CurrentAmmo.Clips <= 0)
+            if (CurrentAmmo.StockBullets < DefaultAmmo.ClipBullets)
             {
                 return true;
             }

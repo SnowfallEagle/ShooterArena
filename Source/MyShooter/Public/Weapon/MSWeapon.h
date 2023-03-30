@@ -19,10 +19,10 @@ struct FAmmoData
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-    int32 Bullets;
+    int32 ClipBullets;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!bInfinite"))
-    int32 Clips;
+    int32 StockBullets;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     bool bInfinite;
@@ -90,10 +90,10 @@ public:
     void ChangeClip();
     bool TryToAddAmmo(int32 Clips);
 
-    FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
-    FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.Clips <= 0 && IsClipEmpty(); }
-    FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets <= 0; }
-    FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.Bullets == DefaultAmmo.Bullets && CurrentAmmo.Clips == DefaultAmmo.Clips; };
+    FORCEINLINE bool CanReload() const { return CurrentAmmo.ClipBullets < DefaultAmmo.ClipBullets && CurrentAmmo.StockBullets > 0; }
+    FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.bInfinite && CurrentAmmo.StockBullets <= 0 && IsClipEmpty(); }
+    FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.ClipBullets <= 0; }
+    FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.ClipBullets == DefaultAmmo.ClipBullets && CurrentAmmo.StockBullets == DefaultAmmo.StockBullets; };
 
     const FWeaponUIData& GetUIData() const { return UIData; }
     void GetAmmoData(FAmmoData& InCurrentAmmo, FAmmoData& InDefaultAmmo) const;
