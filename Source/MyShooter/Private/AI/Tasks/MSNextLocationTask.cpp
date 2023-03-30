@@ -5,11 +5,6 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
 
-UMSNextLocationTask::UMSNextLocationTask()
-{
-    NodeName = "Next Location";
-}
-
 EBTNodeResult::Type UMSNextLocationTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     const AAIController* Controller = OwnerComp.GetAIOwner();

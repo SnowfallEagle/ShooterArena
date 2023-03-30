@@ -32,8 +32,14 @@ private:
     FTimerHandle CheckHealthBarTimer;
     float SquaredHealthBarDrawDistance;
 
+    bool bWantsToRun = false;
+
 public:
     AMSAICharacter(const FObjectInitializer& ObjInit);
+
+    virtual bool IsRunning() const { return bWantsToRun && IsMovingForward(); }
+    FORCEINLINE void StartRunning() { bWantsToRun = true; }
+    FORCEINLINE void StopRunning() { bWantsToRun = false; }
 
 protected:
     virtual void BeginPlay() override;
@@ -44,4 +50,6 @@ protected:
 
 private:
     void OnCheckHealthBarVisibility();
+
+    FORCEINLINE bool IsMovingForward() const { return FVector::DotProduct(GetVelocity(), GetActorForwardVector()) > 0; }
 };

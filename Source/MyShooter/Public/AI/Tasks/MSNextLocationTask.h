@@ -25,7 +25,7 @@ protected:
     FBlackboardKeySelector FromActorKey;
 
 public:
-    UMSNextLocationTask();
+    UMSNextLocationTask() { NodeName = "Next Location"; }
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
 };
