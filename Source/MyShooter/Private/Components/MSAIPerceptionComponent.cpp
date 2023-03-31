@@ -5,24 +5,11 @@
 #include "Core/CoreUtils.h"
 #include "Perception/AISense_Sight.h"
 #include "Perception/AISense_Damage.h"
+#include "Perception/AISense_Hearing.h"
 #include "AIController.h"
 
 AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
 {
-    TArray<AActor*> PercieveActors;
-
-    GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PercieveActors);
-    bool bPercieveBySight = PercieveActors.Num() > 0;
-
-    if (!bPercieveBySight)
-    {
-        GetCurrentlyPerceivedActors(UAISense_Damage::StaticClass(), PercieveActors);
-        if (PercieveActors.Num() <= 0)
-        {
-            return nullptr;
-        }
-    }
-
     const auto Controller = Cast<AAIController>(GetOwner());
     if (!Controller)
     {
@@ -35,21 +22,15 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
         return nullptr;
     }
 
-    AActor* BestActor = FindBestByDistance(Controller, Pawn, PercieveActors);
-    if (!BestActor && bPercieveBySight)
+    if (AActor* BestEnemy = GetBestEnemyBySense<UAISense_Sight>(Controller, Pawn))
     {
-        static constexpr int32 MinArraySize = 4;
-
-        PercieveActors.Init(nullptr, MinArraySize);
-        GetCurrentlyPerceivedActors(UAISense_Damage::StaticClass(), PercieveActors);
-
-        if (PercieveActors.Num() > 0)
-        {
-            BestActor = FindBestByDistance(Controller, Pawn, PercieveActors);
-        }
+        return BestEnemy;
     }
-
-    return BestActor;
+    if (AActor* BestEnemy = GetBestEnemyBySense<UAISense_Damage>(Controller, Pawn))
+    {
+        return BestEnemy;
+    }
+    return GetBestEnemyBySense<UAISense_Hearing>(Controller, Pawn);
 }
 
 AActor* UMSAIPerceptionComponent::FindBestByDistance(
