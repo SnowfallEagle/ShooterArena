@@ -11,7 +11,7 @@ EBTNodeResult::Type UMSStartRunningTask::ExecuteTask(UBehaviorTreeComponent& Own
         if (const auto Character = Cast<AMSAICharacter>(AIController->GetPawn()))
         {
             Character->StartRunning();
-            return Super::ExecuteTask(OwnerComp, NodeMemory);
+            return EBTNodeResult::Succeeded;
         }
     }
 

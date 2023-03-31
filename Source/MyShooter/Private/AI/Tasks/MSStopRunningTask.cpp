@@ -11,7 +11,7 @@ EBTNodeResult::Type UMSStopRunningTask::ExecuteTask(UBehaviorTreeComponent& Owne
         if (const auto Character = Cast<AMSAICharacter>(AIController->GetPawn()))
         {
             Character->StopRunning();
-            return Super::ExecuteTask(OwnerComp, NodeMemory);
+            return EBTNodeResult::Succeeded;
         }
     }
 
