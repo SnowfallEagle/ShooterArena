@@ -2,7 +2,6 @@
 
 #include "Components/MSAIPerceptionComponent.h"
 #include "Components/MSHealthComponent.h"
-#include "Player/MSPlayerState.h"
 #include "Core/CoreUtils.h"
 #include "Perception/AISense_Sight.h"
 #include "Perception/AISense_Damage.h"
@@ -13,7 +12,9 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
     TArray<AActor*> PercieveActors;
 
     GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PercieveActors);
-    if (PercieveActors.Num() <= 0)
+    bool bPercieveBySight = PercieveActors.Num() > 0;
+
+    if (!bPercieveBySight)
     {
         GetCurrentlyPerceivedActors(UAISense_Damage::StaticClass(), PercieveActors);
         if (PercieveActors.Num() <= 0)
@@ -28,22 +29,37 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
         return nullptr;
     }
 
-    const auto* PlayerState = Controller->GetPlayerState<AMSPlayerState>();
-    if (!PlayerState)
-    {
-        return nullptr;
-    }
-
     const auto* Pawn = Controller->GetPawn();
     if (!Pawn)
     {
         return nullptr;
     }
 
-    float BestDistance = MAX_FLT;
+    AActor* BestActor = FindBestByDistance(Controller, Pawn, PercieveActors);
+    if (!BestActor && bPercieveBySight)
+    {
+        static constexpr int32 MinArraySize = 4;
+
+        PercieveActors.Init(nullptr, MinArraySize);
+        GetCurrentlyPerceivedActors(UAISense_Damage::StaticClass(), PercieveActors);
+
+        if (PercieveActors.Num() > 0)
+        {
+            BestActor = FindBestByDistance(Controller, Pawn, PercieveActors);
+        }
+    }
+
+    return BestActor;
+}
+
+AActor* UMSAIPerceptionComponent::FindBestByDistance(
+    const AAIController* OwnerController, const AActor* OwnerActor, const TArray<AActor*>& Actors
+) const
+{
+    float BestDistance = TNumericLimits<float>::Max();
     AActor* BestActor = nullptr;
 
-    for (const auto Actor : PercieveActors)
+    for (const auto Actor : Actors)
     {
         const auto* PercievePawn = Cast<APawn>(Actor);
         if (!PercievePawn)
@@ -51,9 +67,9 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
             continue;
         }
 
-        if (!FCoreUtils::AreEnemies(PercievePawn->Controller, Controller))
+        if (!FCoreUtils::AreEnemies(PercievePawn->Controller, OwnerController))
         {
-            continue;        
+            continue;
         }
 
         const auto* HealthComponent = FCoreUtils::GetActorComponent<UMSHealthComponent>(Actor);
@@ -62,15 +78,13 @@ AActor* UMSAIPerceptionComponent::GetClosestEnemy() const
             continue;
         }
 
-        const float Distance = (Actor->GetActorLocation() - Pawn->GetActorLocation()).Size();
+        const float Distance = (Actor->GetActorLocation() - OwnerActor->GetActorLocation()).Size();
         if (Distance < BestDistance)
         {
             BestDistance = Distance;
             BestActor = Actor;
         }
     }
-
-    // TODO: Check damage sense again, because we could see teammates, but didn't check for damage
 
     return BestActor;
 }

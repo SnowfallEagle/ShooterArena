@@ -18,15 +18,15 @@ public:
         return Cast<T>(Component);
     }
 
-    static bool AreEnemies(AController* First, AController* Second)
+    static bool AreEnemies(const AController* First, const AController* Second)
     {
         if (!First || !Second || First == Second)
         {
             return false;
         }
 
-        AMSPlayerState* FirstPlayerState = First->GetPlayerState<AMSPlayerState>();
-        AMSPlayerState* SecondPlayerState = Second->GetPlayerState<AMSPlayerState>();
+        const AMSPlayerState* FirstPlayerState = First->GetPlayerState<AMSPlayerState>();
+        const AMSPlayerState* SecondPlayerState = Second->GetPlayerState<AMSPlayerState>();
 
         if (!FirstPlayerState || !SecondPlayerState || FirstPlayerState->GetTeamID() == SecondPlayerState->GetTeamID())
         {

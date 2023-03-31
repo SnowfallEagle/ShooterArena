@@ -13,4 +13,7 @@ class MYSHOOTER_API UMSAIPerceptionComponent : public UAIPerceptionComponent
 
 public:
     AActor* GetClosestEnemy() const;
+
+private:
+    AActor* FindBestByDistance(const AAIController* OwnerController, const AActor* OwnerActor, const TArray<AActor*>& Actors) const;
 };
