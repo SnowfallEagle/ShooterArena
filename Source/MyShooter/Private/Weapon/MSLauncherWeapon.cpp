@@ -12,6 +12,8 @@ void AMSLauncherWeapon::StartFire()
 
 void AMSLauncherWeapon::MakeShot()
 {
+    Super::MakeShot();
+
     UWorld* World = GetWorld();
     if (!World)
     {

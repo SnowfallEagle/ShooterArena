@@ -83,6 +83,8 @@ void AMSRifleWeapon::BeginPlay()
 
 void AMSRifleWeapon::MakeShot()
 {
+    Super::MakeShot();
+
     FVector TraceStart;
     FVector TraceEnd;
     FHitResult HitResult;
@@ -135,7 +137,7 @@ bool AMSRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     {
         if (Character->IsRunning())
         {
-            static constexpr float SpreadSpeedModifier = 2.0f;
+            static constexpr float SpreadSpeedModifier = 2.0f; // TODO: Make field
             RealSpread *= SpreadSpeedModifier;
         }
     }

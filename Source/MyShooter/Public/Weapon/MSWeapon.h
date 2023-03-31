@@ -103,7 +103,7 @@ public:
 protected:
     virtual void BeginPlay() override;
 
-    virtual void MakeShot() {}
+    virtual void MakeShot();
     bool MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 

@@ -7,6 +7,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "Sound/SoundCue.h"
+#include "Perception/AISense_Hearing.h"
 
 UMSWeaponFXComponent::UMSWeaponFXComponent()
 {
@@ -59,6 +60,11 @@ void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
         }
     }
 
-    // Play impact sound
+    // Play impact sound and report noise event
     UGameplayStatics::SpawnSoundAtLocation(World, ImpactData->ImpactSound, HitResult.ImpactPoint);
+
+    if (AActor* FXOwner = GetOwner())
+    {
+        UAISense_Hearing::ReportNoiseEvent(GetWorld(), HitResult.ImpactPoint, 1.0f, FXOwner->GetOwner(), ImpactData->MaxNoiseRange);
+    }
 }

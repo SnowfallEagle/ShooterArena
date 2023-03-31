@@ -10,7 +10,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Core/CoreUtils.h"
-#include "Perception/AISense_Hearing.h"
 
 static constexpr int32 NumWeapons = 2;
 
@@ -51,12 +50,6 @@ void UMSWeaponComponent::StartFire()
     if (CanFire())
     {
         CurrentWeapon->StartFire();
-
-        if (AActor* Owner = GetOwner())
-        {
-            // TODO: We can put it in MSWeapon::MakeShot()
-            UAISense_Hearing::ReportNoiseEvent(GetWorld(), Owner->GetActorLocation(), 1.0f, Owner);
-        }
     }
     else if (CurrentWeapon && CurrentWeapon->IsClipEmpty())
     {

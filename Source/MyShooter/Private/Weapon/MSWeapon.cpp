@@ -10,6 +10,7 @@
 #include "NiagaraComponent.h"
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
+#include "Perception/AISense_Hearing.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeapon, All, All);
 
@@ -55,6 +56,11 @@ bool AMSWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
 
     return true;
+}
+
+void AMSWeapon::MakeShot()
+{
+    UAISense_Hearing::ReportNoiseEvent(GetWorld(), GetActorLocation(), 1.0f, GetOwner());
 }
 
 bool AMSWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const
