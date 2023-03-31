@@ -291,11 +291,14 @@ void UMSWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
         return;
     }
 
-    CurrentWeapon->ChangeClip();
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->Reload();
+    }
     bReloadAnimInProgress = false;
 }
 
-void UMSWeaponComponent::ChangeClip()
+void UMSWeaponComponent::Reload()
 {
     if (!CanReload())
     {
@@ -312,10 +315,10 @@ void UMSWeaponComponent::OnEmptyClip(AMSWeapon* Weapon)
 {
     if (CurrentWeapon == Weapon) // With reloading animation
     {
-        ChangeClip();
+        Reload();
     }
     else if (Weapon) // Without animation
     {
-        Weapon->ChangeClip();
+        Weapon->Reload();
     }
 }

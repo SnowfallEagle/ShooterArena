@@ -64,7 +64,7 @@ public:
     void Zoom(bool bToggle);
     void TurnOff();
 
-    FORCEINLINE void Reload() { ChangeClip(); }
+    void Reload();
     bool TryToAddAmmo(TSubclassOf<AMSWeapon> WeaponClass, int32 Clips);
 
     void ToggleFlashlight();
@@ -92,8 +92,6 @@ private:
 
     void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
     void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
-
-    void ChangeClip();
     void OnEmptyClip(AMSWeapon* Weapon);
 };
 

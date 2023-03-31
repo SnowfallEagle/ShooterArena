@@ -107,15 +107,12 @@ bool AMSWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation
             Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
             return true;
         }
-    }
-    else
-    {
-        ViewLocation = GetMuzzleTransform().GetLocation();
-        ViewRotation = WeaponMesh->GetSocketRotation(MuzzleSocketName);
-        return true;
+        return false;
     }
 
-    return false;
+    ViewLocation = GetMuzzleTransform().GetLocation();
+    ViewRotation = WeaponMesh->GetSocketRotation(MuzzleSocketName);
+    return true;
 }
 
 void AMSWeapon::DecreaseAmmo()
@@ -131,24 +128,23 @@ void AMSWeapon::DecreaseAmmo()
     }
 }
 
-void AMSWeapon::ChangeClip()
+void AMSWeapon::Reload()
 {
     if (CurrentAmmo.bInfinite)
     {
         CurrentAmmo.ClipBullets = DefaultAmmo.ClipBullets;
+        return;
     }
-    else
+
+    check(CurrentAmmo.StockBullets > 0);
+
+    CurrentAmmo.StockBullets -= DefaultAmmo.ClipBullets - CurrentAmmo.ClipBullets;
+    CurrentAmmo.ClipBullets = DefaultAmmo.ClipBullets;
+
+    if (CurrentAmmo.StockBullets < 0)
     {
-        check(CurrentAmmo.StockBullets > 0);
-
-        CurrentAmmo.StockBullets -= DefaultAmmo.ClipBullets - CurrentAmmo.ClipBullets;
-        CurrentAmmo.ClipBullets = DefaultAmmo.ClipBullets;
-
-        if (CurrentAmmo.StockBullets < 0)
-        {
-            CurrentAmmo.ClipBullets += CurrentAmmo.StockBullets;
-            CurrentAmmo.StockBullets = 0;
-        }
+        CurrentAmmo.ClipBullets += CurrentAmmo.StockBullets;
+        CurrentAmmo.StockBullets = 0;
     }
 }
 

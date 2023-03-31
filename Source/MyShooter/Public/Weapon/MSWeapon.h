@@ -87,7 +87,7 @@ public:
 
     virtual void Zoom(bool bToggle) {}
 
-    void ChangeClip();
+    void Reload();
     bool TryToAddAmmo(int32 Clips);
 
     FORCEINLINE bool CanReload() const { return CurrentAmmo.ClipBullets < DefaultAmmo.ClipBullets && CurrentAmmo.StockBullets > 0; }

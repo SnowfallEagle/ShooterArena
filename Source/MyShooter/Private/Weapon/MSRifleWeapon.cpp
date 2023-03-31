@@ -90,6 +90,7 @@ void AMSRifleWeapon::MakeShot()
     if (IsAmmoEmpty() || !GetTraceData(TraceStart, TraceEnd) || !MakeHit(HitResult, TraceStart, TraceEnd))
     {
         StopFire();
+        return;
     }
 
     FVector* TraceFXEnd = nullptr;
