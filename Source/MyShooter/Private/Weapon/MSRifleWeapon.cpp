@@ -137,8 +137,7 @@ bool AMSRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
     {
         if (Character->IsRunning())
         {
-            static constexpr float SpreadSpeedModifier = 2.0f; // TODO: Make field
-            RealSpread *= SpreadSpeedModifier;
+            RealSpread *= RunningSpreadModifier;
         }
     }
 

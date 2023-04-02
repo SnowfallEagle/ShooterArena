@@ -164,8 +164,6 @@ void AMSGameModeBase::ReportKill(AController* Killer, AController* Victim)
 
 void AMSGameModeBase::OnRoundUpdate()
 {
-    UE_LOG(LogMSGameModeBase, Display, TEXT("Current round %d, time left %d"), CurrentRound, RoundTimeLeft);
-
     if (--RoundTimeLeft <= 0)
     {
         GetWorldTimerManager().ClearTimer(RoundTimer);

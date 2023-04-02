@@ -4,12 +4,16 @@
 
 void UMSAIWeaponComponent::StartFire()
 {
-    if (!CanFire())
+    if (!CanFireWithReloading())
     {
         return;
     }
 
-    if (CurrentWeapon->IsAmmoEmpty())
+    if (CurrentWeapon->IsClipEmpty() && CurrentWeapon->CanReload())
+    {
+        Reload();
+    }
+    else if (CurrentWeapon->IsAmmoEmpty())
     {
         NextWeapon();
     }

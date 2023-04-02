@@ -32,17 +32,20 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float DamageAmount = 10.0f;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    UNiagaraSystem* TraceFX;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    FString TraceTargetName = "TraceTarget";
-
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float ZoomFOV = 50.0f;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0", ClampMax = "1.0"))
     float ZoomSpreadModifier = 0.5f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0", ClampMax = "5.0"))
+    float RunningSpreadModifier = 2.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    UNiagaraSystem* TraceFX;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    FString TraceTargetName = "TraceTarget";
 
 private:
     float BulletSpread = 0.0f;

@@ -15,6 +15,7 @@ UMSFireService::UMSFireService()
 void UMSFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
     bool bHasAim = false;
+
     if (const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent())
     {
         if (AActor* Enemy = Cast<AActor>(Blackboard->GetValueAsObject(EnemyActorKey.SelectedKeyName)))

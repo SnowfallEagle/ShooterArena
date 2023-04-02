@@ -51,5 +51,5 @@ protected:
 private:
     void OnCheckHealthBarVisibility();
 
-    FORCEINLINE bool IsMovingForward() const { return FVector::DotProduct(GetVelocity(), GetActorForwardVector()) > 0.6f; }
+    FORCEINLINE bool IsMovingForward() const { return FVector::DotProduct(GetVelocity().GetSafeNormal(), GetBaseAimRotation().Vector()) > 0.8f; }
 };

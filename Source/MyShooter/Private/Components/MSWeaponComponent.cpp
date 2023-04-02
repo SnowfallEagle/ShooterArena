@@ -79,7 +79,7 @@ void UMSWeaponComponent::NextWeapon()
 void UMSWeaponComponent::TurnOff()
 {
     bEnabled = false;
-    
+
     if (CurrentWeapon)
     {
         StopFire();
