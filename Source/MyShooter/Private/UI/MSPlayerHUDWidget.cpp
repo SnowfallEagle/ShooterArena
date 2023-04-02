@@ -4,6 +4,7 @@
 #include "Components/MSHealthComponent.h"
 #include "Components/MSWeaponComponent.h"
 #include "Components/ProgressBar.h"
+#include "Components/Image.h"
 #include "Player/MSPlayerCharacter.h"
 
 float UMSPlayerHUDWidget::GetHealthPercent() const
@@ -73,11 +74,19 @@ void UMSPlayerHUDWidget::OnPawnChanged(APawn* NewPawn)
 
 void UMSPlayerHUDWidget::OnHit(bool bKilled)
 {
-    PlayAnimation(HitAnimation);
-
     if (bKilled)
     {
+        if (IsAnimationPlaying(HitAnimation))
+        {
+            StopAnimation(HitAnimation);
+        }
+        PlayAnimation(HideHitAnimation);
+
         PlayAnimation(DeathHitAnimation);
+    }
+    else
+    {
+        PlayAnimation(HitAnimation);
     }
 }
 

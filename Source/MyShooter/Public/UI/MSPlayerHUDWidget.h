@@ -10,6 +10,7 @@
 #include "MSPlayerHUDWidget.generated.h"
 
 class UProgressBar;
+class UImage;
 
 UCLASS()
 class MYSHOOTER_API UMSPlayerHUDWidget : public UUserWidget
@@ -20,11 +21,17 @@ protected:
     UPROPERTY(meta = (BindWidget))
     UProgressBar* HealthBar;
 
+    UPROPERTY(meta = (BindWidget))
+    UImage* HitImage;
+
     UPROPERTY(Transient, meta = (BindWidgetAnim))
     UWidgetAnimation* DamageAnimation;
 
     UPROPERTY(Transient, meta = (BindWidgetAnim))
     UWidgetAnimation* HitAnimation;
+
+    UPROPERTY(Transient, meta = (BindWidgetAnim))
+    UWidgetAnimation* HideHitAnimation;
 
     UPROPERTY(Transient, meta = (BindWidgetAnim))
     UWidgetAnimation* DeathHitAnimation;
