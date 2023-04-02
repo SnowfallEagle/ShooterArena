@@ -23,6 +23,12 @@ protected:
     UPROPERTY(Transient, meta = (BindWidgetAnim))
     UWidgetAnimation* DamageAnimation;
 
+    UPROPERTY(Transient, meta = (BindWidgetAnim))
+    UWidgetAnimation* HitAnimation;
+
+    UPROPERTY(Transient, meta = (BindWidgetAnim))
+    UWidgetAnimation* DeathHitAnimation;
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI", meta = (ClampMin = "0.0", ClampMax = "1.0"))
     float VisibilityThreshold = 0.9f;
 
@@ -76,4 +82,6 @@ private:
 
     void OnHealthChanged(float Health, float DeltaHealth);
     void OnPawnChanged(APawn* NewPawn);
+
+    void OnHit(bool bKilled);
 };

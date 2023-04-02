@@ -2,6 +2,7 @@
 
 #include "AI/MSAICharacter.h"
 #include "AI/MSAIController.h"
+#include "Player/MSPlayerCharacter.h"
 #include "BrainComponent.h"
 #include "Components/MSAIWeaponComponent.h"
 #include "Components/WidgetComponent.h"
@@ -62,6 +63,17 @@ void AMSAICharacter::OnHealthChanged(float NewHealth, float HealthDelta)
     if (const auto HealthBarWidget = Cast<UMSHealthBarWidget>(HealthBarWidgetComponent->GetUserWidgetObject()))
     {
         HealthBarWidget->SetHealthPercent(HealthComponent->GetHealthPercent());
+    }
+
+    if (HealthDelta < 0.0f)
+    {
+        if (const auto* DamagerController = HealthComponent->GetLastDamageInstigater())
+        {
+            if (const auto PlayerCharacter = Cast<AMSPlayerCharacter>(DamagerController->GetPawn()))
+            {
+                PlayerCharacter->ReportHit(NewHealth <= 0.0f);
+            }
+        }
     }
 }
 

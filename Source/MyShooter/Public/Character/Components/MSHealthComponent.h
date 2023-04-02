@@ -82,5 +82,5 @@ private:
 
     void PlayCameraShake();
     void ApplyDamage(float Damage, AController* Instigater);
-    void ReportDamageEvent(float Damage); // TODO: Move in AIHealthComponent
+    void ReportDamageEvent(float Damage);
 };

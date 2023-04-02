@@ -10,10 +10,15 @@ class UCameraComponent;
 class USpringArmComponent;
 class USphereComponent;
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHitSignature, bool /* bKilled */);
+
 UCLASS()
 class MYSHOOTER_API AMSPlayerCharacter : public AMSCharacter
 {
     GENERATED_BODY()
+
+public:
+    FOnHitSignature OnHit;
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -33,8 +38,9 @@ public:
     AMSPlayerCharacter(const FObjectInitializer& ObjInit);
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
     virtual bool IsRunning() const override { return bWantsToRun && bMovingForward && !GetVelocity().IsZero(); }
+
+    void ReportHit(bool bKilled) { OnHit.Broadcast(bKilled); }
 
 protected:
     virtual void BeginPlay() override;

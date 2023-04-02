@@ -4,6 +4,7 @@
 #include "Components/MSHealthComponent.h"
 #include "Components/MSWeaponComponent.h"
 #include "Components/ProgressBar.h"
+#include "Player/MSPlayerCharacter.h"
 
 float UMSPlayerHUDWidget::GetHealthPercent() const
 {
@@ -61,8 +62,23 @@ void UMSPlayerHUDWidget::OnPawnChanged(APawn* NewPawn)
     {
         HealthComponent->OnHealthChanged.AddUObject(this, &UMSPlayerHUDWidget::OnHealthChanged);
     }
-    
+
+    if (const auto PlayerCharacter = Cast<AMSPlayerCharacter>(NewPawn))
+    {
+        PlayerCharacter->OnHit.AddUObject(this, &UMSPlayerHUDWidget::OnHit);
+    }
+
     UpdateHealthBar();
+}
+
+void UMSPlayerHUDWidget::OnHit(bool bKilled)
+{
+    PlayAnimation(HitAnimation);
+
+    if (bKilled)
+    {
+        PlayAnimation(DeathHitAnimation);
+    }
 }
 
 void UMSPlayerHUDWidget::OnHealthChanged(float Health, float DeltaHealth)
