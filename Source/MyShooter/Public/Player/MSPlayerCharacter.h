@@ -9,6 +9,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class USphereComponent;
+class USoundCue;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHitSignature, bool /* bKilled */);
 
@@ -30,6 +31,12 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USphereComponent* CameraCollisionComponent;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    USoundCue* HitSound;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    USoundCue* DeathHitSound;
+
 private:
     bool bWantsToRun = false;
     bool bMovingForward = true;
@@ -40,7 +47,7 @@ public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
     virtual bool IsRunning() const override { return bWantsToRun && bMovingForward && !GetVelocity().IsZero(); }
 
-    void ReportHit(bool bKilled) { OnHit.Broadcast(bKilled); }
+    void ReportHit(bool bKilled);
 
 protected:
     virtual void BeginPlay() override;

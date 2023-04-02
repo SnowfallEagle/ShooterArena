@@ -7,6 +7,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 AMSPlayerCharacter::AMSPlayerCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
@@ -51,6 +53,13 @@ void AMSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
     DECLARE_DELEGATE_OneParam(FZoomInputSignature, bool);
     PlayerInputComponent->BindAction<FZoomInputSignature>("Zoom", EInputEvent::IE_Pressed, WeaponComponent, &UMSWeaponComponent::Zoom, true);
     PlayerInputComponent->BindAction<FZoomInputSignature>("Zoom", EInputEvent::IE_Released, WeaponComponent, &UMSWeaponComponent::Zoom, false);
+}
+
+void AMSPlayerCharacter::ReportHit(bool bKilled)
+{
+    UGameplayStatics::PlaySound2D(GetWorld(), bKilled? DeathHitSound : HitSound);
+
+    OnHit.Broadcast(bKilled);
 }
 
 void AMSPlayerCharacter::BeginPlay()
