@@ -2,6 +2,7 @@
 
 #include "UI/MSHealthBarWidget.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 
 void UMSHealthBarWidget::SetHealthPercent(float Health)
 {

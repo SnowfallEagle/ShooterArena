@@ -113,14 +113,14 @@ void AMSGameModeBase::SetTeamInfo()
             PlayerState->SetTeamColor(TeamColors[TeamID]);
             PlayerState->SetPlayerName(Controller->IsPlayerController() ? "Player" : FString("Bot") + FString::FromInt(BotID++));
 
-            SetCharacterColor(Controller);
+            SetCharacterInfo(Controller);
 
             TeamID = (TeamID == 1) ? 2 : 1;
         }
     }
 }
 
-void AMSGameModeBase::SetCharacterColor(AController* Controller)
+void AMSGameModeBase::SetCharacterInfo(AController* Controller)
 {
     if (!Controller)
     {
@@ -133,6 +133,11 @@ void AMSGameModeBase::SetCharacterColor(AController* Controller)
     if (Character && PlayerState)
     {
         Character->SetCharacterColor(PlayerState->GetTeamColor());
+
+        if (AMSAICharacter* AICharacter = Cast<AMSAICharacter>(Character))
+        {
+            AICharacter->SetName(PlayerState->GetPlayerName());
+        }
     }
 }
 
@@ -198,7 +203,7 @@ void AMSGameModeBase::ResetPlayer(AController* Controller)
     }
 
     RestartPlayer(Controller);
-    SetCharacterColor(Controller);
+    SetCharacterInfo(Controller);
 }
 
 void AMSGameModeBase::ResetPlayers()

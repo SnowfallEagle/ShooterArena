@@ -8,9 +8,10 @@
 #include "Components/WidgetComponent.h"
 #include "Components/MSHealthComponent.h"
 #include "UI/MSHealthBarWidget.h"
+#include "UI/MSPlayerNameWidget.h"
+#include "Core/CoreUtils.h"
 
-AMSAICharacter::AMSAICharacter(const FObjectInitializer& ObjInit) :
-    Super(ObjInit.SetDefaultSubobjectClass<UMSAIWeaponComponent>("WeaponComponent"))
+AMSAICharacter::AMSAICharacter(const FObjectInitializer& ObjInit) : Super(ObjInit.SetDefaultSubobjectClass<UMSAIWeaponComponent>("WeaponComponent"))
 {
     AutoPossessAI = EAutoPossessAI::Disabled;
     AIControllerClass = AMSAIController::StaticClass();
@@ -21,10 +22,12 @@ AMSAICharacter::AMSAICharacter(const FObjectInitializer& ObjInit) :
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
 
     HealthBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("HealthBarWidgetComponent");
-    check(HealthBarWidgetComponent);
     HealthBarWidgetComponent->SetupAttachment(GetRootComponent());
     HealthBarWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
     HealthBarWidgetComponent->SetDrawAtDesiredSize(true);
+
+    NameWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("NameWidgetComponent");
+    NameWidgetComponent->SetupAttachment(GetRootComponent());
 
     SquaredHealthBarDrawDistance = HealthBarDrawDistance * HealthBarDrawDistance;
 }
@@ -33,9 +36,7 @@ void AMSAICharacter::BeginPlay()
 {
     Super::BeginPlay();
 
-    GetWorldTimerManager().SetTimer(
-        CheckHealthBarTimer, this, &AMSAICharacter::OnCheckHealthBarVisibility, CheckHealthBarVisibilityTimeRate, true
-    );
+    GetWorldTimerManager().SetTimer(CheckHealthBarTimer, this, &AMSAICharacter::OnCheckHealthBarVisibility, CheckHealthBarVisibilityTimeRate, true);
 }
 
 void AMSAICharacter::EndPlay(EEndPlayReason::Type Reason)
@@ -43,6 +44,21 @@ void AMSAICharacter::EndPlay(EEndPlayReason::Type Reason)
     Super::EndPlay(Reason);
 
     GetWorldTimerManager().ClearTimer(CheckHealthBarTimer);
+}
+
+void AMSAICharacter::SetName(const FString& Name)
+{
+    if (const UWorld* World = GetWorld())
+    {
+        if (const AController* PlayerController = World->GetFirstPlayerController())
+        {
+            if (const auto NameWidget = Cast<UMSPlayerNameWidget>(NameWidgetComponent->GetUserWidgetObject()))
+            {
+                NameWidget->SetVisibility(FCoreUtils::AreEnemies(GetController(), PlayerController) ? ESlateVisibility::Hidden : ESlateVisibility::Visible);
+                NameWidget->SetName(Name);
+            }
+        }
+    }
 }
 
 void AMSAICharacter::OnDeath()

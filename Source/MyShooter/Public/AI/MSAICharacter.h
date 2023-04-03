@@ -22,6 +22,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UWidgetComponent* HealthBarWidgetComponent;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UWidgetComponent* NameWidgetComponent;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     float HealthBarDrawDistance = 2500.0f;
 
@@ -36,6 +39,8 @@ private:
 
 public:
     AMSAICharacter(const FObjectInitializer& ObjInit);
+
+    void SetName(const FString& String);
 
     virtual bool IsRunning() const { return bWantsToRun && IsMovingForward(); }
     FORCEINLINE void StartRunning() { bWantsToRun = true; }

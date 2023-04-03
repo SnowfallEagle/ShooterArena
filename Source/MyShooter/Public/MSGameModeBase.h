@@ -85,7 +85,7 @@ private:
 
     void SpawnBots();
     void SetTeamInfo();
-    void SetCharacterColor(AController* Controller);
+    void SetCharacterInfo(AController* Controller);
 
     void StartRound();
     void OnRoundUpdate();
