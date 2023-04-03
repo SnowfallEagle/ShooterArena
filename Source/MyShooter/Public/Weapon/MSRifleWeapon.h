@@ -47,6 +47,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     FString TraceTargetName = "TraceTarget";
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    TSubclassOf<UCameraShakeBase> RecoilShakeClass;
+
 private:
     float BulletSpread = 0.0f;
     float DefaultFOV = 90.0f;
@@ -74,10 +77,14 @@ public:
 protected:
     virtual void BeginPlay() override;
 
-    void MakeDamage(FHitResult& HitResult);
     virtual void MakeShot() override;
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
 
+private:
+    void MakeDamage(FHitResult& HitResult);
+
     void ToggleAllFX(bool bActive);
-    void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
+    void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd) const;
+
+    void PlayRecoilShake() const;
 };

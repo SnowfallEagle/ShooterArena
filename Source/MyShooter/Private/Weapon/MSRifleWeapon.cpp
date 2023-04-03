@@ -121,6 +121,8 @@ void AMSRifleWeapon::MakeShot()
         SpawnTraceFX(GetMuzzleTransform().GetLocation(), *TraceFXEnd);
     }
     DecreaseAmmo();
+
+    PlayRecoilShake();
 }
 
 bool AMSRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
@@ -185,13 +187,24 @@ void AMSRifleWeapon::ToggleAllFX(bool bActive)
     }
 }
 
-void AMSRifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd)
+void AMSRifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd) const
 {
     if (const UWorld* World = GetWorld())
     {
         if (const auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart))
         {
             TraceFXComponent->SetNiagaraVariableVec3(TraceTargetName, TraceEnd);
+        }
+    }
+}
+
+void AMSRifleWeapon::PlayRecoilShake() const
+{
+    if (const auto* Controller = Cast<APlayerController>(GetController()))
+    {
+        if (Controller->PlayerCameraManager)
+        {
+            Controller->PlayerCameraManager->StartCameraShake(RecoilShakeClass);
         }
     }
 }
