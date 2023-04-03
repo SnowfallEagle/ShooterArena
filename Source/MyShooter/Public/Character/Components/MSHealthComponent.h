@@ -35,7 +35,11 @@ protected:
     float AutoHealModifier = 1.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    TSubclassOf<UCameraShakeBase> CameraShakeClass;
+    TSubclassOf<UCameraShakeBase> DamageCameraShakeClass;
+
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+    TSubclassOf<UCameraShakeBase> ProjectileImpactShakeClass;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Damage")
     TMap<const UPhysicalMaterial*, float> DamageModifiers;
@@ -80,7 +84,7 @@ private:
     void SetHealth(float InHealth);
     void OnAutoHealUpdateTimerFired();
 
-    void PlayCameraShake();
-    void ApplyDamage(float Damage, AController* Instigater);
+    void PlayCameraShake(TSubclassOf<UCameraShakeBase> ShakeClass);
+    void ApplyDamage(float Damage, AController* Instigater, TSubclassOf<UCameraShakeBase> ShakeClass);
     void ReportDamageEvent(float Damage);
 };

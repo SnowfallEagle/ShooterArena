@@ -57,7 +57,7 @@ void UMSHealthComponent::OnTakePointDamage(
     }
 
     UE_LOG(LogHealthComponent, Display, TEXT("Point Damage %f, Final Damage %f, Bone Name: %s"), Damage, FinalDamage, *BoneName.ToString())
-    ApplyDamage(FinalDamage, InstigatedBy);
+    ApplyDamage(FinalDamage, InstigatedBy, DamageCameraShakeClass);
 }
 
 void UMSHealthComponent::OnTakeRadialDamage(
@@ -66,7 +66,7 @@ void UMSHealthComponent::OnTakeRadialDamage(
 )
 {
     UE_LOG(LogHealthComponent, Display, TEXT("Radial Damage %f"), Damage);
-    ApplyDamage(Damage, InstigatedBy);
+    ApplyDamage(Damage, InstigatedBy, ProjectileImpactShakeClass);
 }
 
 void UMSHealthComponent::SetHealth(float InHealth)
@@ -100,7 +100,7 @@ void UMSHealthComponent::OnAutoHealUpdateTimerFired()
     SetHealth(Health + AutoHealModifier);
 }
 
-void UMSHealthComponent::PlayCameraShake()
+void UMSHealthComponent::PlayCameraShake(TSubclassOf<UCameraShakeBase> ShakeClass)
 {
     if (IsDead())
     {
@@ -119,7 +119,7 @@ void UMSHealthComponent::PlayCameraShake()
         return;
     }
 
-    Controller->PlayerCameraManager->StartCameraShake(CameraShakeClass);
+    Controller->PlayerCameraManager->StartCameraShake(ShakeClass);
 }
 
 void UMSHealthComponent::ReportDamageEvent(float Damage)
@@ -138,7 +138,7 @@ void UMSHealthComponent::ReportDamageEvent(float Damage)
     }
 }
 
-void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater)
+void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater, TSubclassOf<UCameraShakeBase> ShakeClass)
 {
     const auto* DamagedPawn = Cast<APawn>(GetOwner());
     if (!DamagedPawn)
@@ -166,5 +166,5 @@ void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater)
     SetHealth(Health - Damage);
 
     ReportDamageEvent(Damage);
-    PlayCameraShake();
+    PlayCameraShake(ShakeClass);
 }
