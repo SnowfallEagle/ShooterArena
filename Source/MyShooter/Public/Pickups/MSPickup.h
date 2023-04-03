@@ -18,6 +18,12 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "Pickup")
     USphereComponent* CollisionComponent;
 
+    UPROPERTY(VisibleAnywhere, Category = "Pickup")
+    UStaticMeshComponent* PickupBaseMesh;
+
+    UPROPERTY(VisibleAnywhere, Category = "Pickup")
+    USceneComponent* PickupMeshesContainer;
+
     UPROPERTY(EditAnywhere, Category = "Pickup")
     float RespawnTime = 5.0f;
 
@@ -41,7 +47,7 @@ protected:
     virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 private:
-    virtual bool GivePickupTo(APawn* Pawn);
+    virtual bool GivePickupTo(APawn* Pawn) { return false; }
 
     void Hide();
     void Respawn();

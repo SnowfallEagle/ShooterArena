@@ -16,6 +16,12 @@ AMSPickup::AMSPickup()
     CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
     SetRootComponent(CollisionComponent);
+
+    PickupMeshesContainer = CreateDefaultSubobject<USceneComponent>("PickupMeshContainer");
+    PickupMeshesContainer->SetupAttachment(GetRootComponent());
+
+    PickupBaseMesh = CreateDefaultSubobject<UStaticMeshComponent>("PickupBaseMesh");
+    PickupBaseMesh->SetupAttachment(GetRootComponent());
 }
 
 void AMSPickup::BeginPlay()
@@ -44,15 +50,10 @@ void AMSPickup::NotifyActorBeginOverlap(AActor* OtherActor)
     }
 }
 
-bool AMSPickup::GivePickupTo(APawn* Pawn)
-{
-    return false;
-}
-
 void AMSPickup::Hide()
 {
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-    GetRootComponent()->SetVisibility(false, true);
+    PickupMeshesContainer->SetVisibility(false, true);
 
     GetWorldTimerManager().SetTimer(RespawnTimer, this, &AMSPickup::Respawn, RespawnTime, false);
 }
@@ -60,7 +61,7 @@ void AMSPickup::Hide()
 void AMSPickup::Respawn()
 {
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-    GetRootComponent()->SetVisibility(true, true);
+    PickupMeshesContainer->SetVisibility(true, true);
 
     GenerateRotation();
 }
@@ -72,5 +73,5 @@ void AMSPickup::Tick(float DeltaTime)
     // Handle case when actor may stay on the pickup before it's respawned
     ClearComponentOverlaps();
 
-    AddActorLocalRotation(FRotator(0.0f, RotationYaw * DeltaTime, 0.0f));
+    PickupMeshesContainer->AddLocalRotation(FRotator(0.0f, RotationYaw * DeltaTime, 0.0f));
 }
