@@ -12,7 +12,10 @@ void UMSAIWeaponComponent::StartFire()
 
     if (CurrentWeapon->IsClipEmpty() && CurrentWeapon->CanReload())
     {
-        Reload();
+        if (!bReloadAnimInProgress)
+        {
+            Reload();
+        }
     }
     else
     {

@@ -45,12 +45,12 @@ protected:
     UPROPERTY()
     TArray<AMSWeapon*> Weapons;
 
+    bool bEquipAnimInProgress = false;
+    bool bReloadAnimInProgress = false;
+
 private:
     UPROPERTY()
     UAnimMontage* CurrentReloadAnimMontage;
-
-    bool bEquipAnimInProgress = false;
-    bool bReloadAnimInProgress = false;
 
     bool bEnabled = true;
 
@@ -71,7 +71,7 @@ public:
 
     FORCEINLINE bool CanEquip() const { return bEnabled; }
     FORCEINLINE bool CanFire() const { return bEnabled && CurrentWeapon && !CurrentWeapon->IsClipEmpty() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
-    FORCEINLINE bool CanFireWithReloading() const { return bEnabled && CurrentWeapon && !CurrentWeapon->IsAmmoEmpty() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
+    FORCEINLINE bool CanFireWithReloading() const { return bEnabled && CurrentWeapon && !CurrentWeapon->IsAmmoEmpty() && !bEquipAnimInProgress; }
     FORCEINLINE bool CanReload() const { return bEnabled && CurrentWeapon && CurrentWeapon->CanReload() && !bEquipAnimInProgress && !bReloadAnimInProgress; }
 
     bool GetWeaponUIData(FWeaponUIData& UIData) const;
@@ -95,4 +95,3 @@ private:
     void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
     void OnEmptyClip(AMSWeapon* Weapon);
 };
-
