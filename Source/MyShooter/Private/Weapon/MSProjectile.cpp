@@ -31,10 +31,6 @@ void AMSProjectile::BeginPlay()
 {
     Super::BeginPlay();
 
-    check(CollisionComponent);
-    check(MovementComponent);
-    check(WeaponFXComponent);
-
     CollisionComponent->IgnoreActorWhenMoving(GetOwner(), true);
     CollisionComponent->OnComponentHit.AddDynamic(this, &AMSProjectile::OnProjectileHit);
 

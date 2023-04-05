@@ -13,10 +13,8 @@
 AMSRifleWeapon::AMSRifleWeapon()
 {
     WeaponFXComponent = CreateDefaultSubobject<UMSWeaponFXComponent>("WeaponFXComponent");
-    check(WeaponFXComponent);
 
     FlashlightComponent = CreateDefaultSubobject<UMSWeaponFlashlightComponent>("FlashlightComponent");
-    check(FlashlightComponent);
     FlashlightComponent->SetupAttachment(GetRootComponent());
 
     BulletSpread = DefaultBulletSpread;

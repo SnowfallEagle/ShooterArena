@@ -37,7 +37,7 @@ void UMSWeaponComponent::EndPlay(EEndPlayReason::Type Reason)
 
     for (const auto Weapon : Weapons)
     {
-        Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform); // TODO: Do we need to detach?
+        Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
         Weapon->Destroy();
     }
     Weapons.Empty();

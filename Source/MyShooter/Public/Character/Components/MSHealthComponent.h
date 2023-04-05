@@ -46,6 +46,8 @@ protected:
 private:
     float Health = 0.0f;
     FTimerHandle AutoHealTimer;
+
+    UPROPERTY()
     AController* LastDamageInstigater;
 
 public:

@@ -13,17 +13,14 @@
 AMSPlayerCharacter::AMSPlayerCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
-    check(SpringArmComponent);
     SpringArmComponent->SetupAttachment(GetRootComponent());
     SpringArmComponent->bUsePawnControlRotation = true;
     SpringArmComponent->SocketOffset = FVector(0.0f, 60.0f, 100.0f);
 
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-    check(CameraComponent);
     CameraComponent->SetupAttachment(SpringArmComponent);
 
     CameraCollisionComponent = CreateDefaultSubobject<USphereComponent>("CameraCollisionComponent");
-    check(CameraCollisionComponent);
     CameraCollisionComponent->SetupAttachment(CameraComponent);
     CameraCollisionComponent->SetSphereRadius(10.0f);
     CameraCollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
@@ -32,8 +29,6 @@ AMSPlayerCharacter::AMSPlayerCharacter(const FObjectInitializer& ObjInit) : Supe
 void AMSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-    check(PlayerInputComponent);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &AMSPlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AMSPlayerCharacter::MoveRight);

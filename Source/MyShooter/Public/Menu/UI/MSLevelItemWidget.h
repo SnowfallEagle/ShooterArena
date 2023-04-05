@@ -36,7 +36,7 @@ private:
     FLevelData LevelData;
 
 public:
-    const FLevelData& GetLevelData() const { return LevelData; }
+    FORCEINLINE const FLevelData& GetLevelData() const { return LevelData; }
     void SetLevelData(const FLevelData& InLevelData);
 
     void ToggleLevelSelected(bool bSelected);

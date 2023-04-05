@@ -95,9 +95,9 @@ public:
     FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.ClipBullets <= 0; }
     FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo.ClipBullets == DefaultAmmo.ClipBullets && CurrentAmmo.StockBullets == DefaultAmmo.StockBullets; };
 
-    USoundCue* GetNoAmmoSound() const { return NoAmmoSound; }
+    FORCEINLINE USoundCue* GetNoAmmoSound() const { return NoAmmoSound; }
 
-    const FWeaponUIData& GetUIData() const { return UIData; }
+    FORCEINLINE const FWeaponUIData& GetUIData() const { return UIData; }
     void GetAmmoData(FAmmoData& InCurrentAmmo, FAmmoData& InDefaultAmmo) const;
 
 protected:
@@ -105,14 +105,12 @@ protected:
 
     virtual void MakeShot();
     bool MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
-    virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
-
     void DecreaseAmmo();
+    virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
     UNiagaraComponent* SpawnMuzzleFX();
 
     AController* GetController() const;
-
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
     FORCEINLINE FTransform GetMuzzleTransform() const { return WeaponMesh->GetSocketTransform(MuzzleSocketName); }
 };

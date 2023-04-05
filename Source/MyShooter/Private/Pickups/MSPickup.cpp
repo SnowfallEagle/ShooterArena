@@ -28,8 +28,6 @@ void AMSPickup::BeginPlay()
 {
     Super::BeginPlay();
 
-    check(CollisionComponent);
-
     GenerateRotation();
 }
 

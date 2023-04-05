@@ -32,8 +32,6 @@ void AMSWeapon::BeginPlay()
 {
     Super::BeginPlay();
 
-    check(WeaponMesh);
-
     CurrentAmmo = DefaultAmmo;
 }
 

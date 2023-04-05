@@ -25,12 +25,6 @@ void AMSCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
-    check(HealthComponent);
-    check(WeaponComponent);
-    check(GetCharacterMovement());
-    check(GetCapsuleComponent());
-    check(GetMesh());
-
     HealthComponent->OnDeath.AddUObject(this, &AMSCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &AMSCharacter::OnHealthChanged);
     // Set health text first time

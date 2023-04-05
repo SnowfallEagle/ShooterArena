@@ -140,7 +140,6 @@ void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater, TSub
         return;
     }
 
-    // TODO: Check if teamkill enabled
     if (Damage <= 0.0f || IsDead() || (Instigater && !FCoreUtils::AreEnemies(DamagedPawn->Controller, Instigater)))
     {
         return;

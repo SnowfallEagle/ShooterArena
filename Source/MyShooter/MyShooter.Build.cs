@@ -25,8 +25,6 @@ public class MyShooter : ModuleRules
 
         PublicIncludePaths.AddRange(new string[]
             {
-                "MyShooter/Public/Components",
-
                 "MyShooter/Public/Character",
                 "MyShooter/Public/Character/Components",
 
