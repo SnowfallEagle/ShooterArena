@@ -21,6 +21,9 @@ AMSProjectile::AMSProjectile()
     SetRootComponent(CollisionComponent);
 
     MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
+    MovementComponent->InitialSpeed = 2000.0f;
+    MovementComponent->ProjectileGravityScale = 0.0f;
+
     WeaponFXComponent = CreateDefaultSubobject<UMSWeaponFXComponent>("WeaponFXComponent");
 }
 
