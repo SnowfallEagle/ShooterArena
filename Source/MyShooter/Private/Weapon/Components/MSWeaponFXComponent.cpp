@@ -35,19 +35,19 @@ void UMSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult) const
 
     // Spawn niagara effect
     UNiagaraFunctionLibrary::SpawnSystemAtLocation(
-        World,                            //
-        ImpactData->NiagaraEffect,        //
-        HitResult.ImpactPoint,            //
-        HitResult.ImpactNormal.Rotation() //
+        World,
+        ImpactData->NiagaraEffect,
+        HitResult.ImpactPoint,
+        HitResult.ImpactNormal.Rotation()
     );
 
     // Spawn decal
     UDecalComponent* DecalComponent = UGameplayStatics::SpawnDecalAtLocation(
-        World,                            //
-        ImpactData->DecalData.Material,   //
-        ImpactData->DecalData.Size,       //
-        HitResult.ImpactPoint,            //
-        HitResult.ImpactNormal.Rotation() //
+        World,
+        ImpactData->DecalData.Material,
+        ImpactData->DecalData.Size,
+        HitResult.ImpactPoint,
+        HitResult.ImpactNormal.Rotation()
     );
 
     if (DecalComponent)

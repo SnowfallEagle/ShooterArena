@@ -21,9 +21,6 @@ AMSProjectile::AMSProjectile()
     SetRootComponent(CollisionComponent);
 
     MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
-    MovementComponent->InitialSpeed = 2000.0f;
-    MovementComponent->ProjectileGravityScale = 0.0f;
-
     WeaponFXComponent = CreateDefaultSubobject<UMSWeaponFXComponent>("WeaponFXComponent");
 }
 
@@ -43,9 +40,7 @@ void AMSProjectile::BeginPlay()
     SetLifeSpan(LifeSeconds);
 }
 
-void AMSProjectile::OnProjectileHit(
-    UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit
-)
+void AMSProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
     const UWorld* World = GetWorld();
     if (!World)
@@ -56,15 +51,15 @@ void AMSProjectile::OnProjectileHit(
     MovementComponent->StopMovementImmediately();
 
     UGameplayStatics::ApplyRadialDamage(
-        World,                      //
-        DamageAmount,               //
-        GetActorLocation(),         //
-        DamageRadius,               //
-        UDamageType::StaticClass(), //
-        { GetOwner() },             //
-        this,                       //
-        GetController(),            //
-        bDoFullDamage               //
+        World,
+        DamageAmount,
+        GetActorLocation(),
+        DamageRadius,
+        UDamageType::StaticClass(),
+        { GetOwner() },
+        this,
+        GetController(),
+        bDoFullDamage
     );
 
     WeaponFXComponent->PlayImpactFX(Hit);

@@ -40,10 +40,7 @@ void UMSHealthComponent::BeginPlay()
     SetHealth(MaxHealth);
 }
 
-void UMSHealthComponent::OnTakePointDamage(
-    AActor* DamagedActor, float Damage, class AController* InstigatedBy, FVector HitLocation, class UPrimitiveComponent* FHitComponent,
-    FName BoneName, FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser
-)
+void UMSHealthComponent::OnTakePointDamage(AActor* DamagedActor, float Damage, AController* InstigatedBy, FVector HitLocation, UPrimitiveComponent* FHitComponent, FName BoneName, FVector ShotFromDirection, const UDamageType* DamageType, AActor* DamageCauser)
 {
     float FinalDamage = Damage;
 
@@ -60,10 +57,7 @@ void UMSHealthComponent::OnTakePointDamage(
     ApplyDamage(FinalDamage, InstigatedBy, DamageCameraShakeClass);
 }
 
-void UMSHealthComponent::OnTakeRadialDamage(
-    AActor* DamagedActor, float Damage, const class UDamageType* DamageType, FVector Origin, FHitResult HitInfo,
-    class AController* InstigatedBy, AActor* DamageCauser
-)
+void UMSHealthComponent::OnTakeRadialDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, FVector Origin, FHitResult HitInfo, AController* InstigatedBy, AActor* DamageCauser)
 {
     UE_LOG(LogHealthComponent, Display, TEXT("Radial Damage %f"), Damage);
     ApplyDamage(Damage, InstigatedBy, ProjectileImpactShakeClass);
@@ -147,7 +141,7 @@ void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater, TSub
     }
 
     // TODO: Check if teamkill enabled
-    if (Damage <= 0.0f || IsDead() || !FCoreUtils::AreEnemies(DamagedPawn->Controller, Instigater))
+    if (Damage <= 0.0f || IsDead() || (Instigater && !FCoreUtils::AreEnemies(DamagedPawn->Controller, Instigater)))
     {
         return;
     }
@@ -158,9 +152,7 @@ void UMSHealthComponent::ApplyDamage(float Damage, AController* Instigater, TSub
     {
         if (const UWorld* World = GetWorld())
         {
-            World->GetTimerManager().SetTimer(
-                AutoHealTimer, this, &UMSHealthComponent::OnAutoHealUpdateTimerFired, AutoHealUpdateTime, true, AutoHealDelayTime
-            );
+            World->GetTimerManager().SetTimer(AutoHealTimer, this, &UMSHealthComponent::OnAutoHealUpdateTimerFired, AutoHealUpdateTime, true, AutoHealDelayTime);
         }
     }
     SetHealth(Health - Damage);

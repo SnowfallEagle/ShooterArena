@@ -99,7 +99,7 @@ void AMSCharacter::OnGroundLanded(const FHitResult& HitResult)
     }
 
     const float Damage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, ZFallVelocity);
-    TakeDamage(Damage, FDamageEvent(), nullptr, nullptr);
+    TakeDamage(Damage, FPointDamageEvent(), nullptr, nullptr);
 
     UE_LOG(LogCharacter, Display, TEXT("Damage by landing: %f"), Damage);
 }

@@ -82,13 +82,13 @@ bool AMSWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, const 
 UNiagaraComponent* AMSWeapon::SpawnMuzzleFX()
 {
     return UNiagaraFunctionLibrary::SpawnSystemAttached(
-        MuzzleFX,                      //
-        WeaponMesh,                    //
-        MuzzleSocketName,              //
-        FVector::ZeroVector,           //
-        FRotator::ZeroRotator,         //
-        EAttachLocation::SnapToTarget, //
-        true                           //
+        MuzzleFX,
+        WeaponMesh,
+        MuzzleSocketName,
+        FVector::ZeroVector,
+        FRotator::ZeroRotator,
+        EAttachLocation::SnapToTarget,
+        true
     );
 }
 
