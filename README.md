@@ -11,6 +11,13 @@ You can play it here: [Shooter Arena Itch Io](https://seregaengine.itch.io/shoot
 
 Watch 10 minutes of gameplay: [YouTube Video](https://www.youtube.com/watch?v=8moWYqnqtsU&t=171s).
 
+## Features
+- AI behavior using EQS, AI Sense, Behavior Tree
+- Player HUD: health, gun, ammo
+- Team Deathmatch
+- Pickups: health, rifle, rockets
+- Outline and cartoon shaders
+
 ## Levels
 
 ### Open Arena
