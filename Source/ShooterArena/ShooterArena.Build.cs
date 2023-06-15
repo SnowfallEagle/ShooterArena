@@ -27,9 +27,7 @@ public class ShooterArena : ModuleRules
             {
                 "ShooterArena/Public/Character",
                 "ShooterArena/Public/Character/Components",
-
                 "ShooterArena/Public/Player",
-                "ShooterArena/Public/Dev",
 
                 "ShooterArena/Public/Weapon",
                 "ShooterArena/Public/Weapon/Components",
